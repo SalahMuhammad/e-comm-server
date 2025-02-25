@@ -57,12 +57,14 @@ INSTALLED_APPS = [
     'items.apps.ItemsConfig',
     'repositories.apps.RepositoriesConfig',
     'users.apps.UsersConfig',
-    'owners.apps.OwnersConfig',
+    'invoices_owners.clients.apps.ClientsConfig',
+    'invoices_owners.suppliers.apps.SuppliersConfig',
     'transfer_items',
     'invoices',
     'rest_framework',
     "corsheaders",
     "money_vaults.apps.MoneyVaultsConfig",
+    "common",
 
     # "django_extensions",
 ]
