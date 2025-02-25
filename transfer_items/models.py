@@ -1,17 +1,14 @@
 from django.db import models
-from items.models import Items, Stock
+from items.models import Items
 from repositories.models import Repositories
-from users.models import User
 from rest_framework import serializers
-import datetime
+from common.models import UpdatedCreatedBy
 
-class Transfer(models.Model):
+
+class Transfer(UpdatedCreatedBy):
 	fromm = models.ForeignKey(Repositories, on_delete=models.PROTECT, related_name='fromm')
 	too = models.ForeignKey(Repositories, on_delete=models.PROTECT, related_name='too')
-	by = models.ForeignKey(User, on_delete=models.PROTECT)
 	date = models.DateField(null=False)
-	created = models.DateTimeField(auto_now_add=True)
-	updated = models.DateTimeField(auto_now=True)
 
 
 	def clean(self):
@@ -41,7 +38,7 @@ class Transfer(models.Model):
 	
 
 	class Meta:
-		ordering = ['-updated']
+		ordering = ['-updated_at']
 
 
 class TransferItem(models.Model):

@@ -1,12 +1,12 @@
 from django.db import models
 # from django.contrib.contenttypes.fields import GenericForeignKey
 # from django.contrib.contenttypes.models import ContentType
-from users.models import User
 from items.models import Items
 from repositories.models import Repositories
+from common.models import UpdatedCreatedBy
 
 
-class Invoice(models.Model):
+class Invoice(UpdatedCreatedBy):
     repository = models.ForeignKey(Repositories, on_delete=models.PROTECT)
     # owner = models.ForeignKey(Owner, on_delete=models.PROTECT)
     is_purchase_invoice = models.BooleanField(default=0)
@@ -15,13 +15,10 @@ class Invoice(models.Model):
     # content_object = GenericForeignKey("content_type", "object_id")
     paid = models.DecimalField(max_digits=8, decimal_places=2, blank=True)
     date = models.DateField(null=False)
-    by = models.ForeignKey(User, on_delete=models.PROTECT)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
 
 
     class Meta:
-        ordering = ['-updated']
+        ordering = ['-updated_at']
 
 
 class InvoiceItem(models.Model):
