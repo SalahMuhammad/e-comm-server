@@ -4,8 +4,7 @@ from .models import TransferItem, Transfer
 
 class ItemTransferSerializer(serializers.ModelSerializer):
     item_name = serializers.ReadOnlyField(source='item.name')
-    status = serializers.ChoiceField(choices=['new', 'edited', 'deleted'] , required=True, write_only=True)
-
+    
 
     class Meta:
         model = TransferItem

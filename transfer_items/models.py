@@ -9,7 +9,7 @@ class Transfer(models.Model):
 	fromm = models.ForeignKey(Repositories, on_delete=models.PROTECT, related_name='fromm')
 	too = models.ForeignKey(Repositories, on_delete=models.PROTECT, related_name='too')
 	by = models.ForeignKey(User, on_delete=models.PROTECT)
-	date = models.DateTimeField(null=False)
+	date = models.DateField(null=False)
 	created = models.DateTimeField(auto_now_add=True)
 	updated = models.DateTimeField(auto_now=True)
 
