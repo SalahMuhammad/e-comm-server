@@ -20,6 +20,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api/pp/', include('pp.urls')),
     path('api/transfer-items/', include('transfer_items.urls')),
+    path('api/money-vaults/', include('money_vaults.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
