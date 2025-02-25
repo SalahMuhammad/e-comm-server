@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import Invoice, InvoiceItem
 from django.db import transaction
-from owners.models import Owner
 from .utilities import compare_items
 from items.models import Stock
 from django.db.models import Q
