@@ -2,7 +2,7 @@ from django.db import models
 # from django.contrib.contenttypes.fields import GenericForeignKey
 # from django.contrib.contenttypes.models import ContentType
 from common.models import AbstractInvoice, AbstractInvoiceItems
-from invoices_owners.suppliers.models import Suppliers
+from invoices.owners.suppliers.models import Suppliers
 
 
 class PurchaseInvoices(AbstractInvoice):
