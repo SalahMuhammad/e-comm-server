@@ -1,19 +1,18 @@
 from rest_framework import serializers
-from .models import Invoice, InvoiceItem
+from .models import PurchaseInvoices as Invoice, PurchaseInvoiceItems
 from django.db import transaction
 from .utilities import compare_items
 from items.models import Stock
 from django.db.models import Q
 
 
-class InvoiceItemSerializer(serializers.ModelSerializer):
+class InvoiceItemsSerializer(serializers.ModelSerializer):
     item_name = serializers.ReadOnlyField(source='item.name')
 
 
     class Meta:
-        model = InvoiceItem
-        fields = ['id', 'item', 'item_name', 'quantity', 'unit_price']
-        # exclude = ['invoice']
+        model = PurchaseInvoiceItems
+        exclude = ['invoice']
 
 
 # class TaggedObjectRelatedField(serializers.RelatedField):
@@ -28,11 +27,11 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
 #         return serializer.data
 
 
-class InvoiceSerializer(serializers.ModelSerializer):
-    items = InvoiceItemSerializer(many=True, required=False)
+class InvoicesSerializer(serializers.ModelSerializer):
+    items = InvoiceItemsSerializer(many=True, required=False)
     by_username = serializers.ReadOnlyField(source='by.username')
     repository_name = serializers.ReadOnlyField(source='repository.name')
-    owner_name = serializers.ReadOnlyField(source='owner.name')
+    owner_name = serializers.ReadOnlyField(source='supplier.name')
 
 
     class Meta: 
@@ -45,14 +44,14 @@ class InvoiceSerializer(serializers.ModelSerializer):
         }
 
 
-    def __init__(self, *args, **kwargs):
-        fieldss = kwargs.pop('fieldss', None)
-        super(InvoiceSerializer, self).__init__(*args, **kwargs)
-        if fieldss:
-            allowed = set(fieldss.split(','))
-            existing = set(self.fields.keys())
-            for field_name in existing - allowed:
-                self.fields.pop(field_name)
+    # def __init__(self, *args, **kwargs):
+    #     fieldss = kwargs.pop('fieldss', None)
+    #     super(InvoiceSerializer, self).__init__(*args, **kwargs)
+    #     if fieldss:
+    #         allowed = set(fieldss.split(','))
+    #         existing = set(self.fields.keys())
+    #         for field_name in existing - allowed:
+    #             self.fields.pop(field_name)
 
     def validate_items(self, value):
         item_ids = [item['item'].id for item in value]
