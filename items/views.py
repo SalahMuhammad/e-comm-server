@@ -34,36 +34,36 @@ from django.db.utils import IntegrityError
 
 
 
-def read_barcode111(image):
-	barcodes = pyzbar.decode(Image.open(image))
+# def read_barcode111(image):
+# 	barcodes = pyzbar.decode(Image.open(image))
 	
-	for barcode in barcodes:
-		# Extract the barcode data
-		barcode_data = barcode.data.decode('utf-8')
-		barcode_type = barcode.type
-		return barcode_data
+# 	for barcode in barcodes:
+# 		# Extract the barcode data
+# 		barcode_data = barcode.data.decode('utf-8')
+# 		barcode_type = barcode.type
+# 		return barcode_data
 
-		# print(f"111Found {barcode_type} barcode: {barcode_data}")
-	return None
+# 		# print(f"111Found {barcode_type} barcode: {barcode_data}")
+# 	return None
 
 
 
-@api_view(['POST'])
-def handle_barcode_image(request, *args, **kwargs):
-	image = request.FILES.get('img')
+# @api_view(['POST'])
+# def handle_barcode_image(request, *args, **kwargs):
+# 	image = request.FILES.get('img')
 
-	barcode = read_barcode111(image)
+# 	barcode = read_barcode111(image)
 
-	if not barcode:
-		return Response({'detail': "لم يتم التعرف على الباركود... 😢"}, status=status.HTTP_404_NOT_FOUND)
+# 	if not barcode:
+# 		return Response({'detail': "لم يتم التعرف على الباركود... 😢"}, status=status.HTTP_404_NOT_FOUND)
 
-	try:
-		item = Items.objects.get(barcodes__barcode=barcode)
-		serializer = ItemsSerializer(item)
+# 	try:
+# 		item = Items.objects.get(barcodes__barcode=barcode)
+# 		serializer = ItemsSerializer(item)
 
-		return Response(serializer.data, status=status.HTTP_200_OK)
-	except Items.DoesNotExist:
-		return Response({'detail': f"لم يتم العثور على العنصر المطابق للباركود {barcode}... 😰"}, status=status.HTTP_404_NOT_FOUND)
+# 		return Response(serializer.data, status=status.HTTP_200_OK)
+# 	except Items.DoesNotExist:
+# 		return Response({'detail': f"لم يتم العثور على العنصر المطابق للباركود {barcode}... 😰"}, status=status.HTTP_404_NOT_FOUND)
 
 
 
@@ -160,7 +160,7 @@ class ItemDetail(mixins.RetrieveModelMixin,
   
 
 
-from invoices.models import Invoice, InvoiceItem
+# from invoices.models import Invoice, InvoiceItem
 from transfer_items.models import Transfer
 from repositories.models import Repositories
 from .models import Stock

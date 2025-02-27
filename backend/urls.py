@@ -15,15 +15,26 @@ urlpatterns = [
     path('api/items/', include('items.urls')),
     path('api/users/', include('users.urls')),
     path('api/repositories/', include('repositories.urls')),
-    path('api/owners/clients/', include('invoices_owners.clients.urls')),
-    path('api/owners/suppliers/', include('invoices_owners.suppliers.urls')),
-    path('api/invoices/', include('invoices.urls')),
+    path('api/transfer-items/', include('transfer_items.urls')),
+    ###################################################
     path('api-auth/', include('rest_framework.urls')),
     path('api/pp/', include('pp.urls')),
-    path('api/transfer-items/', include('transfer_items.urls')),
-    path('api/money-vaults/', include('money_vaults.urls')),
+    ###################################################
+    ################ payment #########################
+    ###################################################
+    path('api/payment/methods/', include('finance.payment_method.urls')),
+    ###################################################
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+urlpatterns += [
+  	###################################################
+    ################ invoices #########################
+    ###################################################
+	path('api/invoices/owners/clients/', include('invoices_owners.clients.urls')),
+    path('api/invoices/owners/suppliers/', include('invoices_owners.suppliers.urls')),
+    ###################################################
+    path('api/invoices/purchase/', include('invoices.purchase.urls')),
+]
 
 urlpatterns += [
   # re_path(r'^(?:.*)/?$', abc),

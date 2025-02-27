@@ -25,7 +25,7 @@ class Items(UpdatedCreatedBy):
 
 
 	class Meta:
-		ordering = ['name', '-updated_at']
+		ordering = ['name', '-created_at']
 
 
 class Images(models.Model):

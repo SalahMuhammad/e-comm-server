@@ -63,7 +63,7 @@ INSTALLED_APPS = [
     'invoices',
     'rest_framework',
     "corsheaders",
-    "money_vaults.apps.MoneyVaultsConfig",
+    "finance.payment_method.apps.PaymentMethodConfig",
     "common",
 
     # "django_extensions",
