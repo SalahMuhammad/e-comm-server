@@ -9,8 +9,8 @@ class JWTUtilities:
 # 30 dayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyes
 		payload = {
 			'id': user.id,
-			'exp': datetime.datetime.now() + datetime.timedelta(days=30),
-			'iat': datetime.datetime.now(),
+			'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=30),
+    		'iat': datetime.datetime.now(datetime.timezone.utc),
 			'permissions': {
                 'is_superuser': user.is_superuser,
                 'is_staff': user.is_staff,  # Note: it's "is_staff" not "is_stuff"
