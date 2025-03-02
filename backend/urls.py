@@ -15,7 +15,7 @@ urlpatterns = [
     path('api/items/', include('items.urls')),
     path('api/users/', include('users.urls')),
     path('api/repositories/', include('repositories.urls')),
-    path('api/transfer-items/', include('transfer_items.urls')),
+    # path('api/transfer-items/', include('transfer_items.urls')),
     ###################################################
     path('api-auth/', include('rest_framework.urls')),
     path('api/pp/', include('pp.urls')),
@@ -30,10 +30,9 @@ urlpatterns += [
   	###################################################
     ################ invoices #########################
     ###################################################
-	  path('api/invoices/owners/clients/', include('invoices.owners.clients.urls')),
-    path('api/invoices/owners/suppliers/', include('invoices.owners.suppliers.urls')),
+    path('api/invoices/owners/', include('invoices.owners_client_supplier_party.urls')),
     ###################################################
-    path('api/invoices/purchase/', include('invoices.purchase.urls')),
+    path('api/invoices/purchases/', include('invoices.purchase.urls')),
 ]
 
 urlpatterns += [
