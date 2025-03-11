@@ -57,16 +57,24 @@ INSTALLED_APPS = [
     'items.apps.ItemsConfig',
     'repositories.apps.RepositoriesConfig',
     'users.apps.UsersConfig',
-    'invoices.owners_client_supplier_party.apps.OwnersClientSupplierPartyConfig',
+    'invoices.buyer_supplier_party.apps.BuyerSupplierPartyConfig',
     'transfer_items',
     'invoices.purchase.apps.PurchaseConfig',
+    'invoices.sales.apps.SalesConfig',
     'rest_framework',
     "corsheaders",
     "finance.payment_method.apps.PaymentMethodConfig",
     "common",
 
-    # "django_extensions",
+    "django_extensions",
 ]
+
+#################################
+# regarding to run server as https
+#################################
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 
 MIDDLEWARE = [
     # my input

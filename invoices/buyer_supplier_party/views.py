@@ -1,5 +1,5 @@
-from .models import Owner
-from .serializers import OwnerSerializers
+from .models import Party
+from .serializers import PartySerializers
 from rest_framework import generics, mixins
 
 
@@ -8,8 +8,8 @@ class ListCreateView(
     mixins.CreateModelMixin,
     generics.GenericAPIView
 ):
-    queryset = Owner.objects.all()
-    serializer_class = OwnerSerializers
+    queryset = Party.objects.all()
+    serializer_class = PartySerializers
 
     def get_queryset(self):
         name_param = self.request.query_params.get('s')
@@ -33,8 +33,8 @@ class DetailView(
     mixins.DestroyModelMixin,
     generics.GenericAPIView
 ):
-    queryset = Owner.objects.all()
-    serializer_class = OwnerSerializers
+    queryset = Party.objects.all()
+    serializer_class = PartySerializers
 
 
     def get(self, request, *args, **kwargs):

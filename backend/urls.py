@@ -30,9 +30,10 @@ urlpatterns += [
   	###################################################
     ################ invoices #########################
     ###################################################
-    path('api/invoices/owners/', include('invoices.owners_client_supplier_party.urls')),
+    path('api/invoices/owners/', include('invoices.buyer_supplier_party.urls')),
     ###################################################
     path('api/invoices/purchases/', include('invoices.purchase.urls')),
+    path('api/invoices/sales/', include('invoices.sales.urls')),
 ]
 
 urlpatterns += [
