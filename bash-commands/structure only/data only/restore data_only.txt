@@ -1,0 +1,1 @@
+PGPASSWORD='BeWithAllah' sudo -u postgres psql -U postgres e-commerce < "$LATEST_BACKUP"

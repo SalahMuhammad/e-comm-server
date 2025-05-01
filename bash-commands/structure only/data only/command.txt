@@ -1,0 +1,1 @@
+PGPASSWORD='BeWithAllah' pg_dump --data-only -U postgres -d e-commerce -f $(( $(find . -type f | wc -l) + 1 )).sql

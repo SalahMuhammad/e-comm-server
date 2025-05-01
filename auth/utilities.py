@@ -26,10 +26,13 @@ class JWTUtilities:
 			payload = JWTUtilities.get_jwt_payload(token)
 			return payload, True
 		except jwt.ExpiredSignatureError as e:
+			print(e)
 			return f'jwt.ExpiredSignatureError: {str(e)}.', False
 		except jwt.InvalidSignatureError as e:
+			print(e)
 			return f'jwt.InvalidSignatureError: {str(e)}.', False
 		except Exception as e:
+			print(e)
 			return e, False
   
 

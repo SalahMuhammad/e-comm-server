@@ -1,68 +1,46 @@
-from .models import PurchaseInvoices as Invoice
-from items.models import Stock
-from .serializers import InvoicesSerializer, InvoiceItemsSerializer
-from rest_framework import mixins, generics
-from rest_framework.response import Response
-from rest_framework import status
-from django.db.utils import IntegrityError
-from .utilities import update_items_prices
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+
+from items.models import Items
+from .models import PurchaseInvoices
+from .serializers import InvoiceSerializer
+from common.views import AbstractInvoiceDetailView, AbstractInvoiceListCreateView
+from common.utilities import ValidateItemsStock, adjust_stock
+from rest_framework.decorators import api_view
 from django.db import transaction
 
 
-class ListCreateView(
-	mixins.ListModelMixin, 
-	mixins.CreateModelMixin,
-	generics.GenericAPIView
-):
-	serializer_class = InvoicesSerializer
+@api_view(['POST'])
+def toggle_repository_permit(request, *args, **kwargs):
+	"""
+		View to toggle the repository_permit field of an invoice.
+	"""
+	invoice = get_object_or_404(PurchaseInvoices, id=kwargs['pk'])
+
+	with transaction.atomic():
+		adjust_stock(invoice.p_invoice_items.all(), -1 if invoice.repository_permit else 1)
+		invoice.repository_permit = not invoice.repository_permit
+		invoice.save()
+
+	a = ValidateItemsStock()
+	items_ids = [item.item.id for item in invoice.p_invoice_items.all()]
+	a.validate_stock(items=Items.objects.filter(id__in=items_ids))
+
+	return JsonResponse({
+		"success": True,
+		"repository_permit": invoice.repository_permit
+	})
+
+class ListCreateView(AbstractInvoiceListCreateView):
+	queryset = PurchaseInvoices.objects.all()
+	serializer_class = InvoiceSerializer
+	adjust_stock_sign = 1
+	items_relation_name = 'p_invoice_items'
 
 
-	# def get_serializer(self, *args, **kwargs):
-	# 	kwargs['fieldss'] = self.request.query_params.get('fields', None)
-	# 	return super().get_serializer(*args, **kwargs)
+class DetailView(AbstractInvoiceDetailView):
+	queryset = PurchaseInvoices.objects.all()
+	serializer_class = InvoiceSerializer
+	adjust_stock_sign = 1
+	items_relation_name = 'p_invoice_items'
 
-	def get(self, request, *args, **kwargs):
-		return self.list(request, *args, **kwargs)
-
-	def post(self, request, *args, **kwargs):
-		try:
-			res =  self.create(request, *args, **kwargs)
-			update_items_prices(request, res.status_code)
-			return res
-		except IntegrityError as e:
-			return Response({'detail': str(e)+'fffffffffffff'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-class DetailView(mixins.RetrieveModelMixin,
-						 mixins.UpdateModelMixin,
-						 mixins.DestroyModelMixin,
-						 generics.GenericAPIView):
-	queryset = Invoice.objects.all()
-	serializer_class = InvoicesSerializer
-
-
-	def get_serializer(self, *args, **kwargs):
-		kwargs['fieldss'] = self.request.query_params.get('fields', None)
-		return super().get_serializer(*args, **kwargs)
-
-	def get(self, request, *args, **kwargs):
-		return self.retrieve(request, *args, **kwargs)
-
-	def patch(self, request, *args, **kwargs):
-		res = super().partial_update(request, *args, **kwargs)
-		update_items_prices(request, res.status_code)
-		return res
-  
-	def delete(self, request, *args, **kwargs):
-		invoice_instance = self.get_object()
-		sign = -1 if invoice_instance.is_purchase_invoice else 1
-
-		with transaction.atomic():
-			for item in invoice_instance.items.all():
-				stock = Stock.objects.get(repository=invoice_instance.repository, item=item.item)
-				stock.adjust_stock(item.quantity * sign)
-				item.delete()
-
-			invoice_instance.delete()
-			
-		return Response(status=status.HTTP_204_NO_CONTENT)

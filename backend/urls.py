@@ -23,6 +23,7 @@ urlpatterns = [
     ################ payment #########################
     ###################################################
     path('api/payment/methods/', include('finance.payment_method.urls')),
+    path('api/payment/payments/', include('finance.payments.urls')),
     ###################################################
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
@@ -30,10 +31,14 @@ urlpatterns += [
   	###################################################
     ################ invoices #########################
     ###################################################
-    path('api/invoices/owners/', include('invoices.buyer_supplier_party.urls')),
+    path('api/buyer-supplier-party/', include('invoices.buyer_supplier_party.urls')),
     ###################################################
-    path('api/invoices/purchases/', include('invoices.purchase.urls')),
-    path('api/invoices/sales/', include('invoices.sales.urls')),
+    path('api/purchases/', include('invoices.purchase.urls')),
+    path('api/sales/', include('invoices.sales.urls')),
+
+
+
+    path('api/refillable-sys/', include('refillable_items_system.urls')),
 ]
 
 urlpatterns += [

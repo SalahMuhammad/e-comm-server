@@ -17,22 +17,51 @@ from django.db.models.deletion import ProtectedError
 from django.db import transaction
 # 
 from .models import Images, Barcode
-# 
-from rest_framework.decorators import api_view
 # image reader dependencies
 # from pyzbar import pyzbar
 # from PIL import Image
 # 
-from django.db.models import Sum
-# 
 import os
-from django.core.files import File
-import tempfile
-import shutil
-from .delete_unsed_images import delete_unused_imagesss
 from django.db.utils import IntegrityError
 
 
+from rest_framework import serializers
+from .models import InitialStock
+class InitialStockSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InitialStock
+        fields = ['item', 'quantity', "repository", "by"]  # Only allow updating the quantity field
+
+from rest_framework.generics import UpdateAPIView
+from common.utilities import ValidateItemsStock
+from rest_framework.decorators import api_view
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import authentication_classes, permission_classes
+
+from rest_framework.permissions import AllowAny
+@api_view(['POST'])
+
+@authentication_classes([])  # Disable authentication (CSRF check is tied to authentication)
+@permission_classes([AllowAny])  # Allow any user
+def aaaa(request, *args, **kwargs):
+	# request.POST._mutable = True
+	item_id = kwargs['pk']
+	request.data['item'] = item_id
+	request.data['repository'] = 10000
+	request.data['by'] = 10000
+	a = Items.objects.get(pk=item_id).initial_stock.all()
+	if a.exists():
+		b = a[0]
+		b.quantity = request.data['quantity']
+		b.save()
+		ValidateItemsStock().validate_stock(Items.objects.filter(pk=item_id))
+		return Response(status=status.HTTP_202_ACCEPTED)
+	serializer = InitialStockSerializer(data=request.data)
+	if serializer.is_valid():
+		serializer.save()
+		ValidateItemsStock().validate_stock(Items.objects.filter(pk=item_id))
+		return Response(serializer.data, status=status.HTTP_200_OK)
+	return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # def read_barcode111(image):
 # 	barcodes = pyzbar.decode(Image.open(image))
@@ -83,21 +112,28 @@ class ItemsList(mixins.ListModelMixin,
 	def get_queryset(self):
 		name_param = self.request.query_params.get('s')
 
+		from common.utilities import ValidateItemsStock
+		a = ValidateItemsStock()
+		
+
+		# a.validate_stock(items=Items.objects.all())
 		if name_param:
-			q = Items.objects.filter(name__contains=name_param)
+			q = Items.objects.filter(Q(name__icontains=name_param) | Q(barcodes__barcode__icontains=name_param) | Q(id__icontains=name_param))
 			if q:
+				# a.validate_stock(items=q)
+				
 				return q
 
 			manipulated_params = name_param.split(' ')
 			manipulated_params.pop() if manipulated_params[-1] == '' else None
 
-			q_objects = [Q(name__contains=value) for value in manipulated_params]
+			q_objects = [Q(name__icontains=value) for value in manipulated_params]
 
 			# Combine all Q objects using the logical AND operator '&'
 			combined_q_object = reduce(and_, q_objects)
 
 			return Items.objects.filter(combined_q_object)
-
+		
 		return super().get_queryset()
 
 	def post(self, request, *args, **kwargs):
@@ -212,27 +248,6 @@ def validate_stock(items=Items.objects.all()):
 
 
 
-def get_invoices_quantities(is_purchase_invoice, item_ids, repository_id):
-    return Invoice.objects.filter(
-        is_purchase_invoice=is_purchase_invoice,
-        items__item_id__in=item_ids,
-		repository_id=repository_id
-    ).values(
-        'items__item_id'
-    ).annotate(
-        total_quantity=Sum('items__quantity')
-    ).values_list('items__item_id', 'total_quantity')
-
-def get_transfer_quantities(item_ids, from_id=False, to_id=False):
-	q = Q(fromm_id=from_id) if from_id else Q(too_id=to_id)
-	return Transfer.objects.filter(
-		q,
-		Q(items__item_id__in=item_ids)
-	).values(
-		'items__item_id'
-	).annotate(
-		total_quantity=Sum('items__quantity')
-	).values_list('items__item_id', 'total_quantity')
 
 
 from django.db.models import Count

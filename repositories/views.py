@@ -28,7 +28,7 @@ class ListCreateView(mixins.ListModelMixin,
         name_param = self.request.query_params.get('s')
 
         if name_param:
-            q = Repositories.objects.filter(name__contains=name_param)
+            q = Repositories.objects.filter(name__icontains=name_param)
             return q
 
         return self.queryset

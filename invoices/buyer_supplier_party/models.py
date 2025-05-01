@@ -1,5 +1,8 @@
 from django.db import models
+from django.forms import ValidationError
 from common.models import UpdatedCreatedBy
+from django.utils.timezone import now
+from items.models import Items
 
 
 class Party(UpdatedCreatedBy):
@@ -9,8 +12,22 @@ class Party(UpdatedCreatedBy):
 
 
     class Meta:
-        ordering = ['name']
+        ordering = ['created_at']
 
 
     def __str__(self) -> str:
         return self.name 
+
+
+class InitialCreditBalance(UpdatedCreatedBy):
+    party = models.ForeignKey(Party, on_delete=models.PROTECT)
+    amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    date = models.DateField(default=now)
+
+
+    class Meta:
+        ordering = ['created_at']
+
+
+    def __str__(self) -> str:
+        return f"{self.party.name} - {self.amount}"

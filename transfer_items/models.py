@@ -44,7 +44,7 @@ class Transfer(UpdatedCreatedBy):
 class TransferItem(models.Model):
 	transfer = models.ForeignKey(Transfer, on_delete=models.CASCADE, related_name='items')
 	item = models.ForeignKey(Items, on_delete=models.PROTECT)
-	quantity = models.PositiveSmallIntegerField(default=1)
+	quantity = models.DecimalField(max_digits=10, decimal_places=2, default=1)
 
 	
 	# def save(self, *args, **kwargs):

@@ -1,13 +1,13 @@
+from decimal import ROUND_HALF_UP, Decimal
 from rest_framework import serializers
-from .models import PurchaseInvoices as Invoice, PurchaseInvoiceItems
-from django.db import transaction
-from .utilities import compare_items
-from items.models import Stock
-from django.db.models import Q
+from .models import PurchaseInvoices, PurchaseInvoiceItems
+from common.utilities import set_request_items_totals, short_hash_number
+
 
 
 class InvoiceItemsSerializer(serializers.ModelSerializer):
     item_name = serializers.ReadOnlyField(source='item.name')
+    repository_name = serializers.ReadOnlyField(source='repository.name')
 
 
     class Meta:
@@ -27,21 +27,57 @@ class InvoiceItemsSerializer(serializers.ModelSerializer):
 #         return serializer.data
 
 
-class InvoicesSerializer(serializers.ModelSerializer):
-    items = InvoiceItemsSerializer(many=True, required=False)
+class InvoiceSerializer(serializers.ModelSerializer):
+    p_invoice_items = InvoiceItemsSerializer(many=True)
     by_username = serializers.ReadOnlyField(source='by.username')
-    repository_name = serializers.ReadOnlyField(source='repository.name')
-    owner_name = serializers.ReadOnlyField(source='supplier.name')
+    owner_name = serializers.ReadOnlyField(source='owner.name')
+    hashed_id = serializers.SerializerMethodField()
 
 
-    class Meta: 
-        model = Invoice
+    class Meta:
+        model = PurchaseInvoices
         fields = '__all__'
         extra_kwargs = {
             'by': {'write_only': True},
-            'repository': {'write_only': True},
-            'owner': {'write_only': True},
         }
+
+
+    def get_hashed_id(self, obj):
+        return short_hash_number(obj.id)
+
+    def validate_p_invoice_items(self, value):
+        if not value:
+            raise serializers.ValidationError("Items cannot be empty.")
+
+        return value
+
+    def create(self, validated_data):
+        items_data = validated_data.pop('p_invoice_items')
+        edited_items, sum_items_total = set_request_items_totals(items_data)
+        validated_data['total_amount'] = Decimal(str(sum_items_total)).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        
+        invoice = super().create(validated_data)
+
+        for item_data in edited_items:
+            PurchaseInvoiceItems.objects.create(
+                invoice=invoice,
+                **item_data
+            )
+
+        return invoice
+
+    def update(self, instance, validated_data):
+        items_data = validated_data.pop('p_invoice_items')
+
+
+        # for item_data in edited_items:
+        #     SalesInvoiceItem.objects.create(
+        #         invoice=invoice,
+        #         **item_data
+        #     )
+        
+        return super().update(instance, validated_data)
+    
 
 
     # def __init__(self, *args, **kwargs):
@@ -53,13 +89,38 @@ class InvoicesSerializer(serializers.ModelSerializer):
     #         for field_name in existing - allowed:
     #             self.fields.pop(field_name)
 
-    def validate_items(self, value):
-        item_ids = [item['item'].id for item in value]
-        if len(item_ids) != len(set(item_ids)):
-            raise serializers.ValidationError("Duplicate items are not allowed in the invoice...😵")
-        return value
 
-    def create(self, validated_data):
+    # def validate_items(self, value):
+    #     for i, item in enumerate(value):
+    #         quantity = item.get('quantity', 1)
+    #         unit_price = item['unit_price'] 
+    #         tax_rate = item.get('tax_rate', 0)
+    #         discount = item.get('discount', 0)
+            
+    #         item['total'] = quantity * unit_price + tax_rate - discount
+        
+    #     # item_ids = [item['item'].id for item in value]
+    #     # if len(item_ids) != len(set(item_ids)):
+    #     #     raise serializers.ValidationError("Duplicate items are not allowed in the invoice...😵")
+    #     # return value
+    #     return value
+    
+    # def validate(self, data):
+    #     items = data.get('items', [])
+        
+    #     # Calculate total from all items
+    #     total_amount = sum(item.get('total', 0) for item in items)
+        
+    #     # Set total_amount in the data
+    #     data['total_amount'] = total_amount
+        
+    #     # Call the parent's validate method
+    #     data = super().validate(data)
+        
+    #     return data
+        
+
+    # def create(self, validated_data):
         invoice_items_data = validated_data.pop('items', [])
         is_purchase_invoice = True if validated_data.get('is_purchase_invoice', 1) else False
 
@@ -81,7 +142,7 @@ class InvoicesSerializer(serializers.ModelSerializer):
                 
         return invoice
 
-    def update(self, instance, validated_data):
+    # def update(self, instance, validated_data):
         invoice_items_data = validated_data.pop('items', [])
         is_purchase_invoice = True if validated_data.get('is_purchase_invoice', instance.is_purchase_invoice) else False
         qty_times = 1 if is_purchase_invoice else -1

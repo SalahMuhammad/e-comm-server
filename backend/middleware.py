@@ -19,6 +19,15 @@ class JSONOnlyMiddleware:
 		if method in ('OPTIONS', 'DELETE'):
 			return self.get_response(request)
 		
+		if request.build_absolute_uri().__contains__('8000/api/refillable-sys/'):
+			return self.get_response(request)
+		
+		if request.build_absolute_uri().__contains__('8000/api/payment/'):
+			return self.get_response(request)
+		
+		if request.build_absolute_uri().__contains__('8000/api/sales/return/'):
+			return self.get_response(request)
+		
 		if not content_type == 'application/json' and method not in ['GET']:
 			return JsonResponse(
 				{

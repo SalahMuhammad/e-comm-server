@@ -1,9 +1,11 @@
 from django.db import models
 from repositories.models import Repositories
 from rest_framework import serializers
-from django.core.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError
+# from django.core.exceptions import ValidationError
 from common.models import UpdatedCreatedBy
 import os
+from django.utils.timezone import now
 
 
 class Items(UpdatedCreatedBy):
@@ -12,6 +14,7 @@ class Items(UpdatedCreatedBy):
 	price2 = models.DecimalField(max_digits=6, decimal_places=2, default=0)
 	price3 = models.DecimalField(max_digits=6, decimal_places=2, default=0)
 	price4 = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+	is_refillable = models.BooleanField(default=False)
 
 	# run on fly whenever accessed
 	# @property
@@ -44,7 +47,7 @@ class Images(models.Model):
 	
 
 class Stock(models.Model):
-	quantity = models.SmallIntegerField(default=0)
+	quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 	item = models.ForeignKey(Items, related_name='stock', on_delete=models.CASCADE)
 	repository = models.ForeignKey(Repositories, on_delete=models.PROTECT)
 	
@@ -55,12 +58,13 @@ class Stock(models.Model):
 			self.full_clean()  # Validate the model
 			self.save()
 		except ValidationError as e:
-			raise serializers.ValidationError({'detail': e.messages})
+			raise serializers.ValidationError({'detail': e})
+			# raise serializers.ValidationError({'detail': e.messages})
 		
 	def clean(self):
 		super().clean()
 		if self.quantity < 0:
-			raise ValidationError(f'لا توجد قطع كافيه من \'{self.item}\' في \'{self.repository}\'... 😵')
+			raise ValidationError(f'لا توجد قطع كافيه من \'{self.item}\' في \'{self.repository}\'. المتاح: {self.quantity}')
 
 	
 	class Meta:
@@ -70,7 +74,7 @@ class Stock(models.Model):
 
 
 	def __str__(self) -> str:
-		return self.item
+		return f"repository: {self.repository.name}, item: {self.item}"
 	
 
 	class Meta:
@@ -86,3 +90,14 @@ class Barcode(models.Model):
 		indexes = [
 			models.Index(fields=['barcode']),
 		]
+
+
+class InitialStock(UpdatedCreatedBy):
+	item = models.ForeignKey(Items, related_name='initial_stock', on_delete=models.CASCADE)
+	repository = models.ForeignKey(Repositories, on_delete=models.PROTECT)
+	quantity = models.DecimalField(max_digits=10, decimal_places=2)
+	date = models.DateField(default=now)
+
+
+	def __str__(self):
+		return f'item: {self.item.name}, repository: {self.repository.name}, quantity: {self.quantity}'

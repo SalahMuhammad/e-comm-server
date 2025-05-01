@@ -1,0 +1,1 @@
+pg_dump --schema-only -U postgres -d e-commerce -f schema_backup.sql

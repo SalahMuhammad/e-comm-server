@@ -64,8 +64,12 @@ INSTALLED_APPS = [
     'rest_framework',
     "corsheaders",
     "finance.payment_method.apps.PaymentMethodConfig",
+    "finance.payments.apps.PaymentsConfig",
     "common",
+    "employees.apps.EmployeesConfig",
+    "refillable_items_system",
 
+    
     "django_extensions",
 ]
 
