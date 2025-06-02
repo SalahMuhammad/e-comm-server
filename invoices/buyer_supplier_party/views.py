@@ -12,8 +12,9 @@ from refillable_items_system.views import calculateRefillableItemsClientHas
 
 @api_view(['GET'])
 def ownerView(request, *args, **kwargs):
+    datee = request.GET.get('date', None)
     client_id = kwargs['pk']
-    credit = calculate_client_credit_balance(client_id)
+    credit = calculate_client_credit_balance(client_id, datee)
     refillable_items = calculateRefillableItemsClientHas(client_id)
     return Response({
         'credit': credit,
@@ -24,11 +25,13 @@ def ownerView(request, *args, **kwargs):
 def listClientCredits(request, *args, **kwargs):
     l = []
     for client in Party.objects.all():
-        credit = calculate_client_credit_balance(client.id)
+        credit = calculate_client_credit_balance(client.id, None)
         
-        if credit < 0:
-            print(f"{client.name}: {credit}")
-            l.append({client.name: credit})
+        if credit != 0:
+            l.append({
+                "name": client.name,
+                "amount": credit
+            })
 
     return Response({
         'list': l
@@ -40,9 +43,9 @@ from invoices.sales.serializers import InvoiceSerializer, ReturnInvoiceSerialize
 from invoices.purchase.serializers import InvoiceSerializer as PurchaseInvoiceSerializer
 from invoices.buyer_supplier_party.models import InitialCreditBalance
 from invoices.buyer_supplier_party.serializers import InitialCreditBalanceSerializer
-from finance.payments.serializers import PaymentSerializer
+from finance.payments.serializers import PaymentSerializer, ExpensePaymentSerializer
 from invoices.purchase.models import PurchaseInvoices
-from finance.payments.models import Payment
+from finance.payments.models import Payment, ExpensePayment
 from itertools import chain
 from django.db.models import Sum
 
@@ -66,15 +69,18 @@ def customerAccountStatement(request, *args, **kwargs):
     return_sales_invs = ReturnSalesInvoice.objects.filter(owner_id=owner_id)
     purcahses_invs = PurchaseInvoices.objects.filter(owner_id=owner_id)
     payments = Payment.objects.filter(owner_id=owner_id)
+    revers_payments = ExpensePayment.objects.filter(owner_id=owner_id)
+
 
     initial_credit_balance_total_credit = initial_credit_balance.aggregate(total_amount=Sum('amount'))
     s_invs_total_credit = sales_invs.aggregate(total_amount=Sum('total_amount'))
     return_sales_invs_total_credit = return_sales_invs.aggregate(total_amount=Sum('total_amount'))
     purcahses_invs_total_credit = purcahses_invs.aggregate(total_amount=Sum('total_amount'))
     payments_total_credit = payments.aggregate(total_amount=Sum('amount'))
+    revers_payments_total = revers_payments.aggregate(total=Sum('amount'))
 
     result_list = sorted(
-        chain(sales_invs, return_sales_invs, purcahses_invs, payments, initial_credit_balance),
+        chain(sales_invs, return_sales_invs, purcahses_invs, payments, initial_credit_balance, revers_payments),
         key=get_date,
         # reverse=True,
     )
@@ -106,6 +112,11 @@ def customerAccountStatement(request, *args, **kwargs):
             data_dict = dict(serializer.data)
             data_dict['type'] = 'initial credit balance'
             list.append(data_dict)
+        elif isinstance(instance, ExpensePayment):
+            serializer = ExpensePaymentSerializer(instance)
+            data_dict = dict(serializer.data)
+            data_dict['type'] = 'reverse payment'
+            list.append(data_dict)
 
 
     return Response({
@@ -114,11 +125,12 @@ def customerAccountStatement(request, *args, **kwargs):
         'purcahses_invs': purcahses_invs.count(),
         'payments': payments.count(),
         'credit_totals': {
-            'initial_credit_balance': initial_credit_balance_total_credit['total_amount'] if initial_credit_balance_total_credit['total_amount'] else 0,
-            's_invs': s_invs_total_credit['total_amount'] if s_invs_total_credit['total_amount'] else 0,
-            'return_s_invs': return_sales_invs_total_credit['total_amount'] if return_sales_invs_total_credit['total_amount'] else 0,
-            'p_invs': purcahses_invs_total_credit['total_amount'] if purcahses_invs_total_credit['total_amount'] else 0,
-            'payments': payments_total_credit['total_amount'] if payments_total_credit['total_amount'] else 0,
+            'Initial Credit Balance': initial_credit_balance_total_credit['total_amount'] if initial_credit_balance_total_credit['total_amount'] else 0,
+            'Sales Invoices': s_invs_total_credit['total_amount'] if s_invs_total_credit['total_amount'] else 0,
+            'Return Sales Invoices': - return_sales_invs_total_credit['total_amount'] if return_sales_invs_total_credit['total_amount'] else 0,
+            'Purchase Invoices': - purcahses_invs_total_credit['total_amount'] if purcahses_invs_total_credit['total_amount'] else 0,
+            'payments': - payments_total_credit['total_amount'] if payments_total_credit['total_amount'] else 0,
+            'Revers Payments': revers_payments_total['total'] if revers_payments_total['total'] else 0,
         },
         "list": list,
     })

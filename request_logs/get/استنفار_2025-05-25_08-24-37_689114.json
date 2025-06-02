@@ -1,0 +1,247 @@
+{
+    "timestamp": "استنفار_2025-05-25_08-24-37_689114",
+    "url": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=24&s=+%40%40",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Origin": "http://localhost:5173",
+        "Sec-Fetch-Site": "same-site",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "http://localhost:5173/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "count": 121,
+        "next": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=36&s=+%40%40",
+        "previous": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=12&s=+%40%40",
+        "results": [
+            {
+                "id": 1000138,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 139,
+                        "repository_name": "الرئيسي",
+                        "quantity": "5.00",
+                        "item": 1000138,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Distance gauge 24 mm PRO (metal) ##USA, China, IR @@8",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000028,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 29,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000028,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Distance gauge 24 mm PRO ##USA, China, IR @@8",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000029,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 30,
+                        "repository_name": "الرئيسي",
+                        "quantity": "7.00",
+                        "item": 1000029,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Distance gauge 3x10 mm MGL ##USA, China, IR @@8",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000030,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 31,
+                        "repository_name": "الرئيسي",
+                        "quantity": "8.00",
+                        "item": 1000030,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Distance gauge 8 mm MGL ##USA, China, IR @@8",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000139,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 140,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000139,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Distance gauge 8 mm PRO ##USA, China, IR @@8",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000031,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 32,
+                        "repository_name": "الرئيسي",
+                        "quantity": "5.00",
+                        "item": 1000031,
+                        "repository": 10000
+                    }
+                ],
+                "name": "FAN FILTER DOOR DCD H/P PRO ##USA @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000148,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 149,
+                        "repository_name": "الرئيسي",
+                        "quantity": "24.00",
+                        "item": 1000148,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Fan fixing plastic ## @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000032,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 33,
+                        "repository_name": "الرئيسي",
+                        "quantity": "6.00",
+                        "item": 1000032,
+                        "repository": 10000
+                    }
+                ],
+                "name": "FAN, HP PRO ##USA @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000033,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 34,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000033,
+                        "repository": 10000
+                    }
+                ],
+                "name": "fiber 10/12/15 MGL (used) ##USA @@فوق الصف 4",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000037,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 38,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000037,
+                        "repository": 10000
+                    }
+                ],
+                "name": "fiber 12/15/18 Pro (used) ##USA @@فوق الصف 6",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000039,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 39,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000039,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Fiber 20/22/24 Pro (new) ##USA @@فوق الصف 3",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000038,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 40,
+                        "repository_name": "الرئيسي",
+                        "quantity": "2.00",
+                        "item": 1000038,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Fiber 20/22/24 Pro ( used) ##USA @@فوق الصف 6",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            }
+        ]
+    }
+}

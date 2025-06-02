@@ -30,3 +30,22 @@ class Payment(UpdatedCreatedBy):
 
     def __str__(self) -> str:
         return f"{self.owner} - {self.amount}"
+
+
+class ExpensePayment(UpdatedCreatedBy):
+    payment_types = (
+        ('invoice_payment', 'invoice_payment'),
+        ('refund', 'refund'),
+        ('expense', 'expense')
+    )
+
+    owner = models.ForeignKey(Party, on_delete=models.PROTECT, null=True, blank=True)
+    amount = models.DecimalField(max_digits=20, decimal_places=2)
+    paid = models.BooleanField(default=False)
+    payment_method = models.ForeignKey('payment_method.PaymentMethod', on_delete=models.PROTECT)
+    payment_type = models.CharField(max_length=20, choices=payment_types, default='invoice_payment')
+    date = models.DateField()
+    note = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ['-date', '-created_at']

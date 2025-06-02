@@ -1,0 +1,247 @@
+{
+    "timestamp": "استنفار_2025-05-25_08-26-09_114810",
+    "url": "http://localhost:8000/api/items/?s=s&fields=id,name,price1,price2,price3,price4,has_img,images,stock,",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Origin": "http://localhost:5173",
+        "Sec-Fetch-Site": "same-site",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "http://localhost:5173/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "count": 137,
+        "next": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=12&s=s",
+        "previous": null,
+        "results": [
+            {
+                "id": 1000000,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 1,
+                        "repository_name": "الرئيسي",
+                        "quantity": "8.00",
+                        "item": 1000000,
+                        "repository": 10000
+                    }
+                ],
+                "name": "12/15/18 LENS cap pro ##USA, Turkiye @@9",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000001,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 2,
+                        "repository_name": "الرئيسي",
+                        "quantity": "5.00",
+                        "item": 1000001,
+                        "repository": 10000
+                    }
+                ],
+                "name": "12/15/18MM  - lens cap MGL ##USA, Turkiye @@9",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000002,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 3,
+                        "repository_name": "الرئيسي",
+                        "quantity": "6.00",
+                        "item": 1000002,
+                        "repository": 10000
+                    }
+                ],
+                "name": "20/22/24MM  - lens cap Pro ##USA, Turkiye @@9",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000003,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 4,
+                        "repository_name": "الرئيسي",
+                        "quantity": "4.00",
+                        "item": 1000003,
+                        "repository": 10000
+                    }
+                ],
+                "name": "6/8/10 LENS cap pro ##USA @@9",
+                "price1": "4000.00",
+                "price2": "4400.00",
+                "price3": "4800.00",
+                "price4": "5200.00"
+            },
+            {
+                "id": 1000004,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 5,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000004,
+                        "repository": 10000
+                    }
+                ],
+                "name": "AC distribution pcb Pro ##Turkiye @@11",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000005,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 6,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000005,
+                        "repository": 10000
+                    }
+                ],
+                "name": "AIMING BEAM MIRROR PRO 7122-00-9456 ##USA @@10",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000006,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 7,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000006,
+                        "repository": 10000
+                    }
+                ],
+                "name": "AIMING BEAM PRO ##USA @@10",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000008,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 9,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000008,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Alex rod china coating ##USA @@24",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000009,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 10,
+                        "repository_name": "الرئيسي",
+                        "quantity": "3.00",
+                        "item": 1000009,
+                        "repository": 10000
+                    }
+                ],
+                "name": "beam block pro ##USA @@25",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000010,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 11,
+                        "repository_name": "الرئيسي",
+                        "quantity": "5.00",
+                        "item": 1000010,
+                        "repository": 10000
+                    }
+                ],
+                "name": "BEAM COMBINER PRO w holder ##USA @@10",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000011,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 12,
+                        "repository_name": "الرئيسي",
+                        "quantity": "2.00",
+                        "item": 1000011,
+                        "repository": 10000
+                    }
+                ],
+                "name": "beam splitter MGL WDO,FLAT,S1UV,UNCOAT,1\"Dx1/16T ##USA @@10",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000012,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 13,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000012,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Cal detector fiber pro ##USA @@18",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            }
+        ]
+    }
+}

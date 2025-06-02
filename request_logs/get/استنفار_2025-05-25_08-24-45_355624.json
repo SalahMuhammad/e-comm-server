@@ -1,0 +1,247 @@
+{
+    "timestamp": "استنفار_2025-05-25_08-24-45_355624",
+    "url": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=60&s=+%40%40",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Origin": "http://localhost:5173",
+        "Sec-Fetch-Site": "same-site",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "http://localhost:5173/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "count": 121,
+        "next": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=72&s=+%40%40",
+        "previous": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=48&s=+%40%40",
+        "results": [
+            {
+                "id": 1000147,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 148,
+                        "repository_name": "الرئيسي",
+                        "quantity": "6.00",
+                        "item": 1000147,
+                        "repository": 10000
+                    }
+                ],
+                "name": "HP spot size sensor MGL ##USA, @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000066,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 68,
+                        "repository_name": "الرئيسي",
+                        "quantity": "2.00",
+                        "item": 1000066,
+                        "repository": 10000
+                    }
+                ],
+                "name": "HVPS f.co2 ##China @@23",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000069,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 70,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000069,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Keyswitch,Diode,GL ##USA @@14",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000071,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 72,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000071,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Laser HD cavity ##China @@1 1",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000073,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 74,
+                        "repository_name": "الرئيسي",
+                        "quantity": "10.00",
+                        "item": 1000073,
+                        "repository": 10000
+                    }
+                ],
+                "name": "LENS 18 pro,PL/CX,11D,20FL,TRIBAND ##USA, Turkiye, China @@9",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000074,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 75,
+                        "repository_name": "الرئيسي",
+                        "quantity": "4.00",
+                        "item": 1000074,
+                        "repository": 10000
+                    }
+                ],
+                "name": "lens 20-22-24 Bot ##USA, UK, China @@9",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000075,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 76,
+                        "repository_name": "الرئيسي",
+                        "quantity": "5.00",
+                        "item": 1000075,
+                        "repository": 10000
+                    }
+                ],
+                "name": "lens 20-22-24 Med ##USA, UK, China @@9",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000076,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 77,
+                        "repository_name": "الرئيسي",
+                        "quantity": "8.00",
+                        "item": 1000076,
+                        "repository": 10000
+                    }
+                ],
+                "name": "lens 20-22-24 TOP ##USA, UK, China @@9",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000077,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 78,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000077,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Linecord, MGL, PRO ##USA @@14",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000078,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 79,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000078,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Mother Board Pro ##USA @@فوق الصف 1",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000079,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 80,
+                        "repository_name": "الرئيسي",
+                        "quantity": "11.00",
+                        "item": 1000079,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Nozzel DCD ##USA @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000082,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 81,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000082,
+                        "repository": 10000
+                    }
+                ],
+                "name": "O-RING, 13/16ID, 3/32W, BUNA-N HP PRO ##USA @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            }
+        ]
+    }
+}

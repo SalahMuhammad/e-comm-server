@@ -1,0 +1,247 @@
+{
+    "timestamp": "استنفار_2025-05-25_08-24-55_452838",
+    "url": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=108&s=+%40%40",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Origin": "http://localhost:5173",
+        "Sec-Fetch-Site": "same-site",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "http://localhost:5173/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "count": 121,
+        "next": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=120&s=+%40%40",
+        "previous": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=96&s=+%40%40",
+        "results": [
+            {
+                "id": 1000124,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 125,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000124,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Yag rod china coating ##USA @@24",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000125,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 126,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000125,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Yag rod used ##USA @@24",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000126,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 127,
+                        "repository_name": "الرئيسي",
+                        "quantity": "2.50",
+                        "item": 1000126,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Zapit Paper ##USA @@26",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000127,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 128,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000127,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Zimmer cryo6 hoze ##Turkiye @@17",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000129,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 130,
+                        "repository_name": "الرئيسي",
+                        "quantity": "3.00",
+                        "item": 1000129,
+                        "repository": 10000
+                    }
+                ],
+                "name": "بلاستيك حامل سلك الفلاش HV SHIELD, RAIL, GMAX PRO ##USA @@25",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000130,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 131,
+                        "repository_name": "الرئيسي",
+                        "quantity": "7.00",
+                        "item": 1000130,
+                        "repository": 10000
+                    }
+                ],
+                "name": "بورد يد برو تالف ## @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000132,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 133,
+                        "repository_name": "الرئيسي",
+                        "quantity": "3.00",
+                        "item": 1000132,
+                        "repository": 10000
+                    }
+                ],
+                "name": "حديد حامل سلك الفلاش برو ## @@25",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000133,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 134,
+                        "repository_name": "الرئيسي",
+                        "quantity": "2.00",
+                        "item": 1000133,
+                        "repository": 10000
+                    }
+                ],
+                "name": "سخان أسطوانات كبيرة سيليكون ##China @@6",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000134,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 135,
+                        "repository_name": "الرئيسي",
+                        "quantity": "4.50",
+                        "item": 1000134,
+                        "repository": 10000
+                    }
+                ],
+                "name": "وصلات خرطوم هيد برو ## @@25",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000135,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 136,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000135,
+                        "repository": 10000
+                    }
+                ],
+                "name": "وصلة تانك ميني بلاستيك ## @@27",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000161,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 154,
+                        "repository_name": "الرئيسي",
+                        "quantity": "4.00",
+                        "item": 1000161,
+                        "repository": 10000
+                    }
+                ],
+                "name": "وصلة خرطوم 5 سم ## @@5",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000136,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 137,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000136,
+                        "repository": 10000
+                    }
+                ],
+                "name": "وصلة فلو سينسور برو ## @@27",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            }
+        ]
+    }
+}

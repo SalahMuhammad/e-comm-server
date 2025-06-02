@@ -1,0 +1,81 @@
+{
+    "timestamp": "استنفار_2025-05-31_12-15-46_207481",
+    "url": "http://localhost:8000/api/sales/10000076/",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Origin": "http://localhost:5173",
+        "Sec-Fetch-Site": "same-site",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "http://localhost:5173/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "id": 10000076,
+        "s_invoice_items": [
+            {
+                "id": 87,
+                "item_name": "DCD Can v1",
+                "repository_name": "الرئيسي",
+                "description": "",
+                "quantity": "10.00",
+                "unit_price": "500.00",
+                "discount": "0.00",
+                "tax_rate": "0.00",
+                "total": "5000.00",
+                "item": 1000151,
+                "repository": 10000
+            },
+            {
+                "id": 88,
+                "item_name": "DCD Can v2",
+                "repository_name": "الرئيسي",
+                "description": "",
+                "quantity": "6.00",
+                "unit_price": "500.00",
+                "discount": "0.00",
+                "tax_rate": "0.00",
+                "total": "3000.00",
+                "item": 1000152,
+                "repository": 10000
+            },
+            {
+                "id": 89,
+                "item_name": "DCD Can v3",
+                "repository_name": "الرئيسي",
+                "description": "",
+                "quantity": "14.00",
+                "unit_price": "500.00",
+                "discount": "0.00",
+                "tax_rate": "0.00",
+                "total": "7000.00",
+                "item": 1000153,
+                "repository": 10000
+            }
+        ],
+        "by_username": "استنفار",
+        "owner_name": "NBD",
+        "hashed_id": "4137d640",
+        "created_at": "2025-05-06T08:18:42.647272Z",
+        "updated_at": "2025-05-06T08:21:12.483837Z",
+        "issue_date": "2025-05-06",
+        "due_date": "2025-05-20",
+        "total_amount": "15000.00",
+        "remaining_balance": "0.00",
+        "status": 3,
+        "repository_permit": true,
+        "notes": "",
+        "owner": 1000007
+    }
+}

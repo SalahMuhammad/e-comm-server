@@ -6,9 +6,11 @@ from invoices.sales.models import SalesInvoice, ReturnInvoice
 from refillable_items_system.models import ItemTransformer, OreItem, RefillableItemsInitialStockClientHas, RefundedRefillableItem, RefilledItem
 from items.models import Items, Stock
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin, DestroyModelMixin
-from .serializers import RefundedRefillableItemSerializer, RefilledItemSerializer
+from .serializers import RefundedRefillableItemSerializer, RefilledItemSerializer, ItemTransformerSerializer, OreItemSerializer
 from django.db import transaction
 from common.utilities import get_pagination_class
+from invoices.buyer_supplier_party.models import Party
+from rest_framework.decorators import api_view
 
 
 
@@ -34,6 +36,9 @@ def calculateRefillableItemsClientHas(client_id):
             q = 0
             ri = None
 
+            if invoice.notes.__contains__('#بدون حساب الفارغ'):
+                continue
+
             if invoice.repository_permit:
                 filled_item_qty = invoice.s_invoice_items.filter(item=item_visavis.transform).aggregate(Sum('quantity'))
                 ri = ReturnInvoice.objects.filter(
@@ -52,8 +57,31 @@ def calculateRefillableItemsClientHas(client_id):
                 # refillable_items_quantities[key] += (idle_item_qty_taken['quantity__sum'] or 0)
 
         refillable_items_quantities[key] = refillable_items_quantities.get(key, 0) + (initial_stock_client_has['quantity__sum'] or 0) - (refunded['quantity__sum'] or 0)
+
+        if refillable_items_quantities[key] == 0:
+            del refillable_items_quantities[key]
     
     return refillable_items_quantities
+
+
+@api_view(['GET'])
+def ownersHasRefillableItems(request, *args, **kwargs):
+    owners = Party.objects.all()
+
+    list = []
+    for owner in owners:
+        a = calculateRefillableItemsClientHas(client_id=owner.id)
+
+        if a:
+            list.append({
+                "id": owner.id,
+                "owner": owner.name,
+                "cylinders": a
+            })
+    
+    return Response({
+        "data": list
+    })
 
 
 class ListCreateRefundedRefillableItemsView(
@@ -216,4 +244,30 @@ class DetialRefilledItemsView(
             used_stock.adjust_stock(Decimal(instance.used_quantity))
             
             return super().destroy(request, *args, **kwargs)
+
+
+
+class ListItemTransformer(
+    ListModelMixin,
+    generics.GenericAPIView
+):
+    queryset = ItemTransformer.objects.all()
+    serializer_class = ItemTransformerSerializer
+
+
+    def get(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+
+
+class ListOreItem(
+    ListModelMixin,
+    generics.GenericAPIView
+):
+    queryset = OreItem.objects.all()
+    serializer_class = OreItemSerializer
+
+
+    def get(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 

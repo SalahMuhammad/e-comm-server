@@ -69,6 +69,10 @@ class RefundedRefillableItem(UpdatedCreatedBy):
             raise ValidationError({
                 'item': 'nooooooooooo Only refillable items can be used in RefundedRefillableItem.'
             })
+        if self.quantity <= 0:
+            raise ValidationError({
+                'quantity': 'Refunded quantity must be greater than zero.'
+            })
     
     def save(self, *args, **kwargs):
         self.full_clean()  # This calls the clean method

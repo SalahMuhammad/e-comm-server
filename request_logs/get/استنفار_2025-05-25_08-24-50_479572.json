@@ -1,0 +1,247 @@
+{
+    "timestamp": "استنفار_2025-05-25_08-24-50_479572",
+    "url": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=84&s=+%40%40",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Origin": "http://localhost:5173",
+        "Sec-Fetch-Site": "same-site",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "http://localhost:5173/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "count": 121,
+        "next": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=96&s=+%40%40",
+        "previous": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=72&s=+%40%40",
+        "results": [
+            {
+                "id": 1000096,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 96,
+                        "repository_name": "الرئيسي",
+                        "quantity": "2.00",
+                        "item": 1000096,
+                        "repository": 10000
+                    }
+                ],
+                "name": "PCB,HV Bleeder,MGL ##USA, Turkiye @@25",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000097,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 98,
+                        "repository_name": "الرئيسي",
+                        "quantity": "10.00",
+                        "item": 1000097,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Plunger LOCK SLIDER PRO ##USA @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000098,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 99,
+                        "repository_name": "الرئيسي",
+                        "quantity": "12.00",
+                        "item": 1000098,
+                        "repository": 10000
+                    }
+                ],
+                "name": "plunger MGL ##USA @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000101,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 102,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000101,
+                        "repository": 10000
+                    }
+                ],
+                "name": "PRO SERIES ACC HP W/O FIBER ##USA @@11",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000145,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 146,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000145,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Pumb cable PRO ##USA @@14",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000103,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 104,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000103,
+                        "repository": 10000
+                    }
+                ],
+                "name": "PUMP 5.3GPM 24VDC FL3000 30D Pro ##USA @@14",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000105,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 106,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000105,
+                        "repository": 10000
+                    }
+                ],
+                "name": "screw HD 8-32 X 3-1/2 ##USA @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000106,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 107,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000106,
+                        "repository": 10000
+                    }
+                ],
+                "name": "sergical HP 100mm F.CO2 ##China @@24",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000107,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 108,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000107,
+                        "repository": 10000
+                    }
+                ],
+                "name": "sergical HP adaptor 50mm F.CO2 ##China @@24",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000108,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 109,
+                        "repository_name": "الرئيسي",
+                        "quantity": "2.00",
+                        "item": 1000108,
+                        "repository": 10000
+                    }
+                ],
+                "name": "SHELL DCD H/P Pro (used) ##USA, Turkiye @@20",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000144,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 145,
+                        "repository_name": "الرئيسي",
+                        "quantity": "9.00",
+                        "item": 1000144,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Shutter blocking metal ##EG @@14",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000143,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 144,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000143,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Shutter MGL ##USA @@14",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            }
+        ]
+    }
+}

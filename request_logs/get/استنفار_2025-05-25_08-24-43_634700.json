@@ -1,0 +1,247 @@
+{
+    "timestamp": "استنفار_2025-05-25_08-24-43_634700",
+    "url": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=48&s=+%40%40",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Origin": "http://localhost:5173",
+        "Sec-Fetch-Site": "same-site",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "http://localhost:5173/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "count": 121,
+        "next": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=60&s=+%40%40",
+        "previous": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=36&s=+%40%40",
+        "results": [
+            {
+                "id": 1000051,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 52,
+                        "repository_name": "الرئيسي",
+                        "quantity": "3.00",
+                        "item": 1000051,
+                        "repository": 10000
+                    }
+                ],
+                "name": "GMAX PRO CALPORT ##USA @@27",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000052,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 53,
+                        "repository_name": "الرئيسي",
+                        "quantity": "6.00",
+                        "item": 1000052,
+                        "repository": 10000
+                    }
+                ],
+                "name": "GOGGLE OD6@532 OD6.8@755 OD6@1064 ##USA, China @@7 1,3",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000053,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 54,
+                        "repository_name": "الرئيسي",
+                        "quantity": "65.00",
+                        "item": 1000053,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Goggles, ALEX,OD7,755nm ##USA, China @@2,3",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000054,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 55,
+                        "repository_name": "الرئيسي",
+                        "quantity": "2.00",
+                        "item": 1000054,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Handpiece cartridge window holder ##USA, China, IR @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000150,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 151,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000150,
+                        "repository": 10000
+                    }
+                ],
+                "name": "HD cavity REFURBISHED candela ## @@فوق الصف 5",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000056,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 57,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000056,
+                        "repository": 10000
+                    }
+                ],
+                "name": "HD detector fiber pro ##USA @@18",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000057,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 58,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000057,
+                        "repository": 10000
+                    }
+                ],
+                "name": "HD detector Pro ##USA @@10",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000058,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 59,
+                        "repository_name": "الرئيسي",
+                        "quantity": "10.00",
+                        "item": 1000058,
+                        "repository": 10000
+                    }
+                ],
+                "name": "HD teflon water connector ##China @@1",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000059,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 60,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000059,
+                        "repository": 10000
+                    }
+                ],
+                "name": "heater MGL ##China @@14",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000060,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 61,
+                        "repository_name": "الرئيسي",
+                        "quantity": "2.00",
+                        "item": 1000060,
+                        "repository": 10000
+                    }
+                ],
+                "name": "HP cable MGL ##USA @@18",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000061,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 62,
+                        "repository_name": "الرئيسي",
+                        "quantity": "7.00",
+                        "item": 1000061,
+                        "repository": 10000
+                    }
+                ],
+                "name": "HP cable Pro (used) ##USA @@1 3",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000062,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 63,
+                        "repository_name": "الرئيسي",
+                        "quantity": "4.00",
+                        "item": 1000062,
+                        "repository": 10000
+                    }
+                ],
+                "name": "HP PCB MGL ##USA @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            }
+        ]
+    }
+}

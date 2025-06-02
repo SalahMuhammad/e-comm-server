@@ -1,0 +1,263 @@
+{
+    "timestamp": "استنفار_2025-05-25_08-58-59_721746",
+    "url": "http://localhost:8000/api/items/?fields=id,name,price1,price2,price3,price4,has_img,images,stock,origin,place,",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Origin": "http://localhost:5173",
+        "Sec-Fetch-Site": "same-site",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "http://localhost:5173/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "count": 165,
+        "next": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2Corigin%2Cplace%2C&limit=12&offset=12",
+        "previous": null,
+        "results": [
+            {
+                "id": 1000000,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 1,
+                        "repository_name": "الرئيسي",
+                        "quantity": "8.00",
+                        "item": 1000000,
+                        "repository": 10000
+                    }
+                ],
+                "name": "12/15/18 LENS cap pro",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "eeeeeeeUSA, Turkiye",
+                "place": "912"
+            },
+            {
+                "id": 1000001,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 2,
+                        "repository_name": "الرئيسي",
+                        "quantity": "5.00",
+                        "item": 1000001,
+                        "repository": 10000
+                    }
+                ],
+                "name": "12/15/18MM  - lens cap MGL",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA, Turkiye",
+                "place": "9"
+            },
+            {
+                "id": 1000002,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 3,
+                        "repository_name": "الرئيسي",
+                        "quantity": "6.00",
+                        "item": 1000002,
+                        "repository": 10000
+                    }
+                ],
+                "name": "20/22/24MM  - lens cap Pro",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA, Turkiye",
+                "place": "9"
+            },
+            {
+                "id": 1000003,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 4,
+                        "repository_name": "الرئيسي",
+                        "quantity": "4.00",
+                        "item": 1000003,
+                        "repository": 10000
+                    }
+                ],
+                "name": "6/8/10 LENS cap pro",
+                "price1": "4000.00",
+                "price2": "4400.00",
+                "price3": "4800.00",
+                "price4": "5200.00",
+                "origin": "USA",
+                "place": "9"
+            },
+            {
+                "id": 1000164,
+                "images": [],
+                "stock": [],
+                "name": "aaaaaaaa",
+                "price1": "1.00",
+                "price2": "1.10",
+                "price3": "1.20",
+                "price4": "1.30",
+                "origin": "dsdadsa",
+                "place": "23"
+            },
+            {
+                "id": 1000004,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 5,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000004,
+                        "repository": 10000
+                    }
+                ],
+                "name": "AC distribution pcb Pro",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "Turkiye",
+                "place": "11"
+            },
+            {
+                "id": 1000005,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 6,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000005,
+                        "repository": 10000
+                    }
+                ],
+                "name": "AIMING BEAM MIRROR PRO 7122-00-9456",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA",
+                "place": "10"
+            },
+            {
+                "id": 1000006,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 7,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000006,
+                        "repository": 10000
+                    }
+                ],
+                "name": "AIMING BEAM PRO",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA",
+                "place": "10"
+            },
+            {
+                "id": 1000007,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 8,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000007,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Air clip ACC pro",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "Turkiye",
+                "place": ""
+            },
+            {
+                "id": 1000008,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 9,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000008,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Alex rod china coating",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA",
+                "place": "24"
+            },
+            {
+                "id": 1000009,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 10,
+                        "repository_name": "الرئيسي",
+                        "quantity": "3.00",
+                        "item": 1000009,
+                        "repository": 10000
+                    }
+                ],
+                "name": "beam block pro",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA",
+                "place": "25"
+            },
+            {
+                "id": 1000010,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 11,
+                        "repository_name": "الرئيسي",
+                        "quantity": "5.00",
+                        "item": 1000010,
+                        "repository": 10000
+                    }
+                ],
+                "name": "BEAM COMBINER PRO w holder",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA",
+                "place": "10"
+            }
+        ]
+    }
+}

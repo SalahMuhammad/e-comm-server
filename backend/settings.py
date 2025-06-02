@@ -69,7 +69,7 @@ INSTALLED_APPS = [
     "employees.apps.EmployeesConfig",
     "refillable_items_system",
 
-    
+    "requests_logs",
     "django_extensions",
 ]
 
@@ -83,6 +83,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     # my input
     'backend.middleware.JSONOnlyMiddleware',
+    'backend.middleware.RequestLogMiddleware',
     # 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -194,7 +195,8 @@ REST_FRAMEWORK = {
         'auth.authentication.CustomAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'auth.permissions.IsStaff',
+        # 'auth.permissions.IsLoggedIn',
+        'auth.permissions.DynamicPermission',
     ),
 }
 

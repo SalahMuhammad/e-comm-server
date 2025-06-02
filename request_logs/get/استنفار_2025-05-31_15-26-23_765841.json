@@ -1,0 +1,71 @@
+{
+    "timestamp": "استنفار_2025-05-31_15-26-23_765841",
+    "url": "http://localhost:8000/api/items/?s=fil%20con&fields=id,name,price1,price2,price3,price4,has_img,images,stock,origin,place,",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Origin": "http://localhost:5173",
+        "Sec-Fetch-Site": "same-site",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "http://localhost:5173/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "count": 2,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "id": 1000159,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 152,
+                        "repository_name": "الرئيسي",
+                        "quantity": "6.00",
+                        "item": 1000159,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Filter connector ## @@5",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000160,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 153,
+                        "repository_name": "الرئيسي",
+                        "quantity": "6.00",
+                        "item": 1000160,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Filter L connector ## @@5",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            }
+        ]
+    }
+}

@@ -80,7 +80,7 @@ from invoices.sales.models import SalesInvoice, ReturnInvoiceItem
 from repositories.models import Repositories
 from transfer_items.models import Transfer
 from items.models import Stock
-from items.models import Items, InitialStock
+from items.models import Items, InitialStock, DamagedItems
 from django.db.models import Sum
 from django.db.models import Q
 import os, json, datetime
@@ -148,7 +148,11 @@ class ValidateItemsStock():
 						item_data,
 						repo
 					)
-				
+
+				damaged = self.get_quantity_of_damaged_item(
+					item_data, 
+					repo
+				)
 				# transfer_from = self.get_transfer_quantities(item_ids=[item_data.id], from_id=repo.id)
 				# transfer_to = self.get_transfer_quantities(item_ids=[item_data.id], to_id=repo.id)
 
@@ -167,6 +171,7 @@ class ValidateItemsStock():
 				exact_qty -= refunded_refilled
 				exact_qty -= used_items_qty
 				exact_qty += sales_invoice_refund
+				exact_qty -= damaged
 				
 				stock, created = Stock.objects.get_or_create(repository=repo, item=item_data)
 				
@@ -180,6 +185,7 @@ class ValidateItemsStock():
 					file_path = os.path.join(directory, safe_filename)
 
 					data = {
+						'date': datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S'),
 						'item_id': item_data.id,
 						'item_name': item_data.name,
 						'repo_id': repo.id,
@@ -251,7 +257,6 @@ class ValidateItemsStock():
 		).aggregate(
 			total=Sum('quantity'), 
 		)['total'] or 0
-	
 
 	def get_used_items_quantities(
 		self,
@@ -264,6 +269,18 @@ class ValidateItemsStock():
 		).aggregate(
 			total_used_quantity=Sum('used_quantity')
 		)['total_used_quantity'] or 0
+
+	def get_quantity_of_damaged_item(
+		self,
+		item,
+		repository
+	):
+		return DamagedItems.objects.filter(
+			item=item,
+			repository=repository,
+		).aggregate(
+			total=Sum('quantity')
+		)['total'] or 0
 
 	def get_transfer_quantities(self, item_ids, from_id=False, to_id=False):
 		q = Q(fromm_id=from_id) if from_id else Q(too_id=to_id)
@@ -299,4 +316,5 @@ class ValidateItemsStock():
 
 import hashlib
 def short_hash_number(num):
-    return hashlib.md5(str(num).encode()).hexdigest()[:8]  # first 8 chars
+	# Use a short hash: take the integer value of the md5 digest and encode in base36 for compactness
+	return hashlib.md5(str(num).encode()).hexdigest()[:8]  # first 8 chars

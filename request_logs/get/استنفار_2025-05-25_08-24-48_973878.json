@@ -1,0 +1,247 @@
+{
+    "timestamp": "استنفار_2025-05-25_08-24-48_973878",
+    "url": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=72&s=+%40%40",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Origin": "http://localhost:5173",
+        "Sec-Fetch-Site": "same-site",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "http://localhost:5173/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "count": 121,
+        "next": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=84&s=+%40%40",
+        "previous": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=60&s=+%40%40",
+        "results": [
+            {
+                "id": 1000080,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 83,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000080,
+                        "repository": 10000
+                    }
+                ],
+                "name": "O-ring HD candela triple pore sides ##IR @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000081,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 84,
+                        "repository_name": "الرئيسي",
+                        "quantity": "16.00",
+                        "item": 1000081,
+                        "repository": 10000
+                    }
+                ],
+                "name": "O-ring HD candela water side ##IR @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000083,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 85,
+                        "repository_name": "الرئيسي",
+                        "quantity": "200.00",
+                        "item": 1000083,
+                        "repository": 10000
+                    }
+                ],
+                "name": "O-RING, synsour 10mm ##EU @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000084,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 86,
+                        "repository_name": "الرئيسي",
+                        "quantity": "200.00",
+                        "item": 1000084,
+                        "repository": 10000
+                    }
+                ],
+                "name": "O-RING, synsour 7mm ##EU @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000086,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 87,
+                        "repository_name": "الرئيسي",
+                        "quantity": "20.00",
+                        "item": 1000086,
+                        "repository": 10000
+                    }
+                ],
+                "name": "O-RING,WHTSIL,3/8 ID,1/2OD (Flashlamp) ##EU @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000087,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 88,
+                        "repository_name": "الرئيسي",
+                        "quantity": "25.00",
+                        "item": 1000087,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Patient goggles metal ##USA, China @@4 2",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000088,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 89,
+                        "repository_name": "الرئيسي",
+                        "quantity": "44.00",
+                        "item": 1000088,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Patient goggles plastic ##China @@4 1,3",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000090,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 91,
+                        "repository_name": "الرئيسي",
+                        "quantity": "9.00",
+                        "item": 1000090,
+                        "repository": 10000
+                    }
+                ],
+                "name": "PCB HP BUBBLE sensor PRO ##Turkiye, USA @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000091,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 92,
+                        "repository_name": "الرئيسي",
+                        "quantity": "2.00",
+                        "item": 1000091,
+                        "repository": 10000
+                    }
+                ],
+                "name": "PCB HP SENSOR ACC 18 PRO ##USA, Turkiye @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000092,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 93,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000092,
+                        "repository": 10000
+                    }
+                ],
+                "name": "PCB HP SENSOR ACC 24 PRO ##USA, Turkiye @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000093,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 94,
+                        "repository_name": "الرئيسي",
+                        "quantity": "5.00",
+                        "item": 1000093,
+                        "repository": 10000
+                    }
+                ],
+                "name": "PCB HP SENSOR DCD 18 PRO ##USA, Turkiye @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000094,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 95,
+                        "repository_name": "الرئيسي",
+                        "quantity": "3.00",
+                        "item": 1000094,
+                        "repository": 10000
+                    }
+                ],
+                "name": "PCB HP SENSOR DCD 24 PRO ##USA, Turkiye @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            }
+        ]
+    }
+}

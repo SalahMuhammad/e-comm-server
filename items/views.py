@@ -1,6 +1,6 @@
 from rest_framework import generics, mixins
-from .models import Items
-from .serializers import ItemsSerializer
+from .models import Items, Images, ItemPriceLog, Types
+from .serializers import ItemsSerializer, TypesSerializer
 # 
 from operator import and_
 from functools import reduce
@@ -16,13 +16,10 @@ from django.db import IntegrityError
 from django.db.models.deletion import ProtectedError
 from django.db import transaction
 # 
-from .models import Images, Barcode
-# image reader dependencies
-# from pyzbar import pyzbar
-# from PIL import Image
-# 
 import os
 from django.db.utils import IntegrityError
+from decimal import Decimal, ROUND_HALF_UP
+
 
 
 from rest_framework import serializers
@@ -94,13 +91,41 @@ def aaaa(request, *args, **kwargs):
 # 	except Items.DoesNotExist:
 # 		return Response({'detail': f"لم يتم العثور على العنصر المطابق للباركود {barcode}... 😰"}, status=status.HTTP_404_NOT_FOUND)
 
+from common.utilities import ValidateItemsStock
+@api_view(['get'])
+def quantity_errors_corrector_view(request, *args, **kwargs):
+	a = ValidateItemsStock()
+	a.validate_stock(items=Items.objects.all())
+	return Response(status=status.HTTP_200_OK)
+
+@api_view(['get'])
+def quantity_errors_list_view(request, *args, **kwargs):
+	# Get the list of files in the directory
+	directory = 'quantity-errors'
+	files = os.listdir(directory)
+
+	# Create a list to store the file paths
+	errors_list = []
+	# Iterate through the files and create their full paths
+	for file in files:
+		file_path = os.path.join(directory, file)
+
+		if file.__contains__('json'):
+			with open(file_path, 'r') as file:
+				errors_list.append({file.name: json.load(file)})
+	
+	errors_list.sort(key=lambda d: datetime.strptime(list(d.values())[0]['date'], "%Y-%m-%d %H:%M:%S"), reverse=True)
+
+	return Response(errors_list, status=status.HTTP_200_OK)
 
 
 class ItemsList(mixins.ListModelMixin, 
-               mixins.CreateModelMixin,
-               generics.GenericAPIView):
+	mixins.CreateModelMixin,
+	generics.GenericAPIView,
+):
 	queryset = Items.objects.all()
 	serializer_class = ItemsSerializer
+	
 
 	def get_serializer(self, *args, **kwargs):
 		kwargs['fieldss'] = self.request.query_params.get('fields', None)
@@ -110,18 +135,25 @@ class ItemsList(mixins.ListModelMixin,
 		return self.list(request, *args, **kwargs)
 
 	def get_queryset(self):
+		queryset = self.queryset
+
 		name_param = self.request.query_params.get('s')
+		if not self.request.user.is_superuser:
+			a = self.request.user.groups.values_list('permissions__codename', flat=True)
+			print(a)
+			سيبسي
+			return queryset.filter(type__name__in=a)
 
-		from common.utilities import ValidateItemsStock
-		a = ValidateItemsStock()
 		
-
-		# a.validate_stock(items=Items.objects.all())
 		if name_param:
-			q = Items.objects.filter(Q(name__icontains=name_param) | Q(barcodes__barcode__icontains=name_param) | Q(id__icontains=name_param))
+			q = queryset.filter(
+				Q(name__icontains=name_param) | 
+				Q(barcodes__barcode__icontains=name_param) | 
+				Q(id__icontains=name_param) | 
+				Q(origin__icontains=name_param) | 
+				Q(place__icontains=name_param)
+			)
 			if q:
-				# a.validate_stock(items=q)
-				
 				return q
 
 			manipulated_params = name_param.split(' ')
@@ -137,10 +169,20 @@ class ItemsList(mixins.ListModelMixin,
 		return super().get_queryset()
 
 	def post(self, request, *args, **kwargs):
-		try:
-			return self.create(request, *args, **kwargs)
-		except IntegrityError as e:
-			return Response({'name': 'هذا الصنف موجود بالفعل...'}, status=status.HTTP_400_BAD_REQUEST)
+		with transaction.atomic():
+			try:
+				res = self.create(request, *args, **kwargs)
+
+				if not float(res.data['price1']) <= 0:
+					ItemPriceLog.objects.create(
+						item_id=res.data['id'], 
+						price=res.data['price1'], 
+						by_id=request.data['by']
+					)
+
+				return res
+			except IntegrityError as e:
+				return Response({'name': 'هذا الصنف موجود بالفعل...'}, status=status.HTTP_400_BAD_REQUEST)
 	# def perform_create(self, serializer):
 	# 	serializer.save(by=self.request.user)
 
@@ -179,6 +221,14 @@ class ItemDetail(mixins.RetrieveModelMixin,
 				for barcode in barcodes:
 					barcode.delete()
 			request.data.pop('barcodes', None)
+
+			if instance.price1 != Decimal(str(request.data.get('price1', instance.price1))).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP):
+				ItemPriceLog.objects.create(
+					item_id=instance.id, 
+					price=request.data.get('price1', instance.price1), 
+					by_id=request.data['by']
+				)
+
 			return super().partial_update(request, *args, **kwargs)
 
 	def delete(self, request, *args, **kwargs):
@@ -193,7 +243,20 @@ class ItemDetail(mixins.RetrieveModelMixin,
 		except ProtectedError as e:
 			return Response({'detail': 'لا يمكن حذف هذا العنصر قبل حذف المعاملات المرتبطه به اولا 😵...'}, status=status.HTTP_400_BAD_REQUEST)
 		return Response(status=status.HTTP_204_NO_CONTENT)
-  
+
+
+class TypesList(mixins.ListModelMixin,
+	mixins.CreateModelMixin,
+	generics.GenericAPIView
+):
+	queryset = Types.objects.all()
+	serializer_class = TypesSerializer
+
+	def get(self, request, *args, **kwargs):
+		return self.list(request, *args, **kwargs)
+
+	def post(self, request, *args, **kwargs):
+		return self.create(request, *args, **kwargs)
 
 
 # from invoices.models import Invoice, InvoiceItem

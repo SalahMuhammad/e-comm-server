@@ -1,9 +1,10 @@
 from items.models import Items
 from rest_framework.serializers import ValidationError
+from items.models import ItemPriceLog
 import json
 
 
-def update_items_prices(items):
+def update_items_prices(items, user_id):
     try:
         with open('pp/profitPercentage.json') as profit_percentage:
             pp = json.load(profit_percentage)
@@ -11,6 +12,11 @@ def update_items_prices(items):
             unit_price = float(dict['unit_price'])
             item = Items.objects.get(pk=dict['item'])
             if not item.price1 == unit_price:
+                ItemPriceLog.objects.create(
+					item=item, 
+					price=unit_price, 
+					by_id=user_id
+				)
                 item.price1 = unit_price
                 item.price2 = round(unit_price * float(pp['price2']) + unit_price, 2)
                 item.price3 = round(unit_price * float(pp['price3']) + unit_price, 2)

@@ -42,14 +42,14 @@
 #         #     return Response({'detail': 'لا يمكن حذف هذا العنصر قبل حذف المعاملات المرتبطه به اولا 😵...'}, status=status.HTTP_400_BAD_REQUEST)
   
 
-from invoices.sales.models import SalesInvoice
 from items.models import Stock
 from rest_framework import mixins, generics
 from rest_framework.response import Response
-from rest_framework import status, serializers
+from rest_framework import status
 from invoices.purchase.utilities import update_items_prices
 from common.utilities import set_request_items_totals, insert_invoice_items, adjust_stock
 from django.db import transaction
+from common.encoder import MixedRadixEncoder
 
 
 class AbstractInvoiceListCreateView(
@@ -73,6 +73,16 @@ class AbstractInvoiceListCreateView(
 		if name_param:
 			return queryset.filter(owner_id=name_param)
 		
+		name_param = self.request.query_params.get('no')
+		id = -1
+		if name_param:
+			try:
+				id = MixedRadixEncoder().decode(name_param)  # Validate the encoded ID
+			except:
+				print(f"Invalid encoded ID: {name_param}")
+				
+			return queryset.filter(pk=id)
+		
 		return queryset
 
 	def get(self, request, *args, **kwargs):
@@ -91,7 +101,7 @@ class AbstractInvoiceListCreateView(
 				)
 
 			if self.items_relation_name == 'p_invoice_items':
-				update_items_prices(request.data[self.items_relation_name])
+				update_items_prices(request.data[self.items_relation_name], request.data['by'])
 
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -170,19 +180,17 @@ class AbstractInvoiceDetailView(
 				item.delete()
 
 			if self.items_relation_name == 'p_invoice_items':
-				update_items_prices(request.data[self.items_relation_name])
+				update_items_prices(request.data[self.items_relation_name], request.data['by'])
 
 			return Response(serializer.data, status=status.HTTP_200_OK)
   
 	def delete(self, request, *args, **kwargs):
 		invoice_instance = self.get_object()
 
-		with transaction.atomic():
-			for item in getattr(invoice_instance, self.items_relation_name).all():
-				stock = Stock.objects.get(repository=item.repository, item=item.item)
-				stock.adjust_stock(- item.quantity * self.adjust_stock_sign)
-				item.delete()
+		if invoice_instance.repository_permit:
+			return Response(
+				{'detail': ['لا يمكن تعديل هذه الفاتورة بعد تصديرها (يجب ازاله الاذن المخزني اولا)...']}, 
+				status=status.HTTP_400_BAD_REQUEST
+			)
 
-			invoice_instance.delete()
-			
-		return Response(status=status.HTTP_204_NO_CONTENT)
+		return super().destroy(request, *args, **kwargs)

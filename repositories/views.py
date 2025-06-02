@@ -1,7 +1,6 @@
-from rest_framework import viewsets, mixins, generics, status
+from rest_framework import mixins, generics, status
 from rest_framework.response import Response
 
-from auth.permissions import RepositoryPermission
 from .models import Repositories
 from .serializers import RepositoriesSerializers
 from django.db import IntegrityError
@@ -19,7 +18,6 @@ from django.db.models.deletion import ProtectedError
 class ListCreateView(mixins.ListModelMixin, 
                mixins.CreateModelMixin,
                generics.GenericAPIView):
-    permission_classes = (RepositoryPermission, )
     queryset = Repositories.objects.all()
     serializer_class = RepositoriesSerializers
 
@@ -48,7 +46,6 @@ class DetailView(mixins.RetrieveModelMixin,
                  mixins.UpdateModelMixin,
                  mixins.DestroyModelMixin,
                  generics.GenericAPIView):
-    permission_classes = (RepositoryPermission, )
     queryset = Repositories.objects.all()
     serializer_class = RepositoriesSerializers
 

@@ -1,0 +1,231 @@
+{
+    "timestamp": "استنفار_2025-05-25_08-53-31_506042",
+    "url": "http://localhost:8000/api/items/?s=100004&fields=id,name,price1,price2,price3,price4,has_img,images,stock,origin,place,",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Origin": "http://localhost:5173",
+        "Sec-Fetch-Site": "same-site",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "http://localhost:5173/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "count": 10,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "id": 1000040,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 41,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000040,
+                        "repository": 10000
+                    }
+                ],
+                "name": "fiber 6/8/10 MGL",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA",
+                "place": ""
+            },
+            {
+                "id": 1000041,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 42,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000041,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Fiber kit HV side, HVPS",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA",
+                "place": "14"
+            },
+            {
+                "id": 1000042,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 43,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000042,
+                        "repository": 10000
+                    }
+                ],
+                "name": "FIBER RECEPTACLE PRO focus house",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA",
+                "place": "9"
+            },
+            {
+                "id": 1000043,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 44,
+                        "repository_name": "الرئيسي",
+                        "quantity": "7.00",
+                        "item": 1000043,
+                        "repository": 10000
+                    }
+                ],
+                "name": "FINGER SWITCH MGL",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA",
+                "place": "15"
+            },
+            {
+                "id": 1000044,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 45,
+                        "repository_name": "الرئيسي",
+                        "quantity": "5.00",
+                        "item": 1000044,
+                        "repository": 10000
+                    }
+                ],
+                "name": "FINGER SWITCH PRO pcb",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA",
+                "place": "15"
+            },
+            {
+                "id": 1000045,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 46,
+                        "repository_name": "الرئيسي",
+                        "quantity": "16.00",
+                        "item": 1000045,
+                        "repository": 10000
+                    }
+                ],
+                "name": "flashlamp,reartip,700t,4'arc,8",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA, UK",
+                "place": "28"
+            },
+            {
+                "id": 1000046,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 47,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000046,
+                        "repository": 10000
+                    }
+                ],
+                "name": "FLOW SWITCH 0.50 GPM, FS380P PRO",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA",
+                "place": "14"
+            },
+            {
+                "id": 1000047,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 48,
+                        "repository_name": "الرئيسي",
+                        "quantity": "6.00",
+                        "item": 1000047,
+                        "repository": 10000
+                    }
+                ],
+                "name": "focus lens pro LENS,PL/CX,25.4D,50.8FL, HE BBAR 8050-00-0010",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA, Turkiye, China",
+                "place": "9"
+            },
+            {
+                "id": 1000048,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 49,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000048,
+                        "repository": 10000
+                    }
+                ],
+                "name": "GL NEW QUARTZ LASER HEAD",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA",
+                "place": ""
+            },
+            {
+                "id": 1000049,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 50,
+                        "repository_name": "الرئيسي",
+                        "quantity": "7.00",
+                        "item": 1000049,
+                        "repository": 10000
+                    }
+                ],
+                "name": "GMAX pro Alex turning Mirror",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA",
+                "place": "10"
+            }
+        ]
+    }
+}

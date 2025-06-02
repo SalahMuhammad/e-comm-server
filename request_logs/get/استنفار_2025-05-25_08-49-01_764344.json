@@ -1,0 +1,271 @@
+{
+    "timestamp": "استنفار_2025-05-25_08-49-01_764344",
+    "url": "http://localhost:8000/api/items/?s=usa,%20t&fields=id,name,price1,price2,price3,price4,has_img,images,stock,origin,place,",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Origin": "http://localhost:5173",
+        "Sec-Fetch-Site": "same-site",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "http://localhost:5173/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "count": 16,
+        "next": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2Corigin%2Cplace%2C&limit=12&offset=12&s=usa%2C+t",
+        "previous": null,
+        "results": [
+            {
+                "id": 1000000,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 1,
+                        "repository_name": "الرئيسي",
+                        "quantity": "8.00",
+                        "item": 1000000,
+                        "repository": 10000
+                    }
+                ],
+                "name": "12/15/18 LENS cap pro",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA, Turkiye",
+                "place": "9"
+            },
+            {
+                "id": 1000001,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 2,
+                        "repository_name": "الرئيسي",
+                        "quantity": "5.00",
+                        "item": 1000001,
+                        "repository": 10000
+                    }
+                ],
+                "name": "12/15/18MM  - lens cap MGL",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA, Turkiye",
+                "place": "9"
+            },
+            {
+                "id": 1000002,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 3,
+                        "repository_name": "الرئيسي",
+                        "quantity": "6.00",
+                        "item": 1000002,
+                        "repository": 10000
+                    }
+                ],
+                "name": "20/22/24MM  - lens cap Pro",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA, Turkiye",
+                "place": "9"
+            },
+            {
+                "id": 1000018,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 19,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000018,
+                        "repository": 10000
+                    }
+                ],
+                "name": "DI Filter MGL",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA, Turkiye",
+                "place": ""
+            },
+            {
+                "id": 1000019,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 20,
+                        "repository_name": "الرئيسي",
+                        "quantity": "3.00",
+                        "item": 1000019,
+                        "repository": 10000
+                    }
+                ],
+                "name": "DI Filter PRO",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA, Turkiye",
+                "place": "20"
+            },
+            {
+                "id": 1000024,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 25,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000024,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Distance gauge 18 mm MGL",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA, Turkiye",
+                "place": ""
+            },
+            {
+                "id": 1000047,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 48,
+                        "repository_name": "الرئيسي",
+                        "quantity": "6.00",
+                        "item": 1000047,
+                        "repository": 10000
+                    }
+                ],
+                "name": "focus lens pro LENS,PL/CX,25.4D,50.8FL, HE BBAR 8050-00-0010",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA, Turkiye, China",
+                "place": "9"
+            },
+            {
+                "id": 1000064,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 65,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000064,
+                        "repository": 10000
+                    }
+                ],
+                "name": "HV DUMP ASSY, GMAX PRO",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA, Turkiye",
+                "place": ""
+            },
+            {
+                "id": 1000072,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 73,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000072,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Lens 18 MGL PL/CX,20mmFL,12.7mmOD",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA, Turkiye, China",
+                "place": ""
+            },
+            {
+                "id": 1000073,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 74,
+                        "repository_name": "الرئيسي",
+                        "quantity": "10.00",
+                        "item": 1000073,
+                        "repository": 10000
+                    }
+                ],
+                "name": "LENS 18 pro,PL/CX,11D,20FL,TRIBAND",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA, Turkiye, China",
+                "place": "9"
+            },
+            {
+                "id": 1000091,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 92,
+                        "repository_name": "الرئيسي",
+                        "quantity": "2.00",
+                        "item": 1000091,
+                        "repository": 10000
+                    }
+                ],
+                "name": "PCB HP SENSOR ACC 18 PRO",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA, Turkiye",
+                "place": "15"
+            },
+            {
+                "id": 1000092,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 93,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000092,
+                        "repository": 10000
+                    }
+                ],
+                "name": "PCB HP SENSOR ACC 24 PRO",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA, Turkiye",
+                "place": "15"
+            }
+        ]
+    }
+}

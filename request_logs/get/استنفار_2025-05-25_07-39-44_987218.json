@@ -1,0 +1,54 @@
+{
+    "timestamp": "استنفار_2025-05-25_07-39-44_987218",
+    "url": "http://localhost:8000/api/items/1000001/",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Auth": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAwMDAsImV4cCI6MTc0ODI0NTE2MSwiaWF0IjoxNzQ4MTU4NzYxLCJwZXJtaXNzaW9ucyI6eyJpc19zdXBlcnVzZXIiOnRydWUsImlzX3N0YWZmIjp0cnVlLCJ1c2VyX3Blcm1pc3Npb25zIjpbImF1dGgudmlld19ncm91cCIsIml0ZW1zLmFkZF9kYW1hZ2VkaXRlbXMiLCJwYXltZW50X21ldGhvZC52aWV3X3BheW1lbnRtZXRob2QiLCJhZG1pbi5hZGRfbG9nZW50cnkiLCJ0cmFuc2Zlcl9pdGVtcy5jaGFuZ2VfdHJhbnNmZXIiLCJzZXNzaW9ucy5jaGFuZ2Vfc2Vzc2lvbiIsImF1dGguYWRkX3Blcm1pc3Npb24iLCJyZXBvc2l0b3JpZXMuY2hhbmdlX3JlcG9zaXRvcmllcyIsInJlcXVlc3RzX2xvZ3Mudmlld19yZXF1ZXN0bG9nIiwic2FsZXMudmlld19yZXR1cm5pbnZvaWNlaXRlbSIsImJ1eWVyX3N1cHBsaWVyX3BhcnR5LmRlbGV0ZV9pbml0aWFsY3JlZGl0YmFsYW5jZSIsImVtcGxveWVlcy5jaGFuZ2VfZW1wbG95ZWUiLCJzYWxlcy5hZGRfcmV0dXJuaW52b2ljZSIsIml0ZW1zLnZpZXdfaW1hZ2VzIiwic2FsZXMudmlld19zYWxlc2ludm9pY2UiLCJpdGVtcy5kZWxldGVfaXRlbXByaWNlbG9nIiwiaXRlbXMuYWRkX2luaXRpYWxzdG9jayIsIml0ZW1zLmNoYW5nZV9pbml0aWFsc3RvY2siLCJyZXBvc2l0b3JpZXMuYWRkX3JlcG9zaXRvcmllcyIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLmRlbGV0ZV9pdGVtdHJhbnNmb3JtZXIiLCJyZWZpbGxhYmxlX2l0ZW1zX3N5c3RlbS52aWV3X3Byb2Nlc3NpbmdpdGVtIiwiYXV0aC5jaGFuZ2VfcGVybWlzc2lvbiIsImJ1eWVyX3N1cHBsaWVyX3BhcnR5LnZpZXdfaW5pdGlhbGNyZWRpdGJhbGFuY2UiLCJ0cmFuc2Zlcl9pdGVtcy5hZGRfdHJhbnNmZXJpdGVtIiwicmVmaWxsYWJsZV9pdGVtc19zeXN0ZW0uY2hhbmdlX3JlZmlsbGVkaXRlbSIsInBheW1lbnRzLnZpZXdfZXhwZW5zZXBheW1lbnQiLCJidXllcl9zdXBwbGllcl9wYXJ0eS5hZGRfaW5pdGlhbGNyZWRpdGJhbGFuY2UiLCJhZG1pbi52aWV3X2xvZ2VudHJ5IiwiaXRlbXMudmlld19pbml0aWFsc3RvY2siLCJ0cmFuc2Zlcl9pdGVtcy52aWV3X3RyYW5zZmVyaXRlbSIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLmFkZF9yZWZpbGxhYmxlaXRlbXNpbml0aWFsc3RvY2tjbGllbnRoYXMiLCJyZWZpbGxhYmxlX2l0ZW1zX3N5c3RlbS5jaGFuZ2Vfb3JlaXRlbSIsInBheW1lbnRzLmNoYW5nZV9leHBlbnNlcGF5bWVudCIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLmFkZF9yZWZ1bmRlZHJlZmlsbGFibGVpdGVtIiwicHVyY2hhc2Uudmlld19wdXJjaGFzZWludm9pY2VzIiwicmVxdWVzdHNfbG9ncy5hZGRfcmVxdWVzdGxvZyIsIml0ZW1zLmFkZF9pdGVtcHJpY2Vsb2ciLCJhdXRoLmRlbGV0ZV9wZXJtaXNzaW9uIiwidHJhbnNmZXJfaXRlbXMuZGVsZXRlX3RyYW5zZmVyIiwiYnV5ZXJfc3VwcGxpZXJfcGFydHkuZGVsZXRlX3BhcnR5IiwiYWRtaW4uZGVsZXRlX2xvZ2VudHJ5IiwicmVmaWxsYWJsZV9pdGVtc19zeXN0ZW0udmlld19yZWZpbGxlZGl0ZW0iLCJjb250ZW50dHlwZXMuY2hhbmdlX2NvbnRlbnR0eXBlIiwicmVmaWxsYWJsZV9pdGVtc19zeXN0ZW0uZGVsZXRlX3JlZmlsbGVkaXRlbSIsInNhbGVzLmNoYW5nZV9yZXR1cm5pbnZvaWNlaXRlbSIsImF1dGgudmlld19wZXJtaXNzaW9uIiwicmVxdWVzdHNfbG9ncy5kZWxldGVfcmVxdWVzdGxvZyIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLmFkZF9yZWZpbGxlZGl0ZW0iLCJwYXltZW50cy52aWV3X3BheW1lbnQiLCJyZWZpbGxhYmxlX2l0ZW1zX3N5c3RlbS5kZWxldGVfcHJvY2Vzc2luZ2l0ZW0iLCJpdGVtcy5jaGFuZ2VfaW1hZ2VzIiwiYXV0aC5hZGRfZ3JvdXAiLCJlbXBsb3llZXMuZGVsZXRlX2VtcGxveWVlIiwicGF5bWVudF9tZXRob2QuZGVsZXRlX3BheW1lbnRtZXRob2QiLCJidXllcl9zdXBwbGllcl9wYXJ0eS52aWV3X3JlZmlsbGFibGVpdGVtc2luaXRpYWxzdG9jayIsInVzZXJzLmRlbGV0ZV91c2VyIiwiaXRlbXMuYWRkX2ltYWdlcyIsIml0ZW1zLnZpZXdfYmFyY29kZSIsInJlcG9zaXRvcmllcy5kZWxldGVfcmVwb3NpdG9yaWVzIiwic2FsZXMuYWRkX3NhbGVzaW52b2ljZWl0ZW0iLCJyZWZpbGxhYmxlX2l0ZW1zX3N5c3RlbS5kZWxldGVfcmVmdW5kZWRyZWZpbGxhYmxlaXRlbSIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLmNoYW5nZV9pdGVtdHJhbnNmb3JtZXIiLCJpdGVtcy5hZGRfc3RvY2siLCJzYWxlcy52aWV3X3JldHVybmludm9pY2UiLCJzYWxlcy5jaGFuZ2Vfc2FsZXNpbnZvaWNlaXRlbSIsInB1cmNoYXNlLmNoYW5nZV9wdXJjaGFzZWludm9pY2VpdGVtcyIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLmNoYW5nZV9wcm9jZXNzaW5naXRlbSIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLmFkZF9vcmVpdGVtIiwicHVyY2hhc2UuZGVsZXRlX3B1cmNoYXNlaW52b2ljZXMiLCJzYWxlcy52aWV3X3NhbGVzaW52b2ljZWl0ZW0iLCJlbXBsb3llZXMuYWRkX2VtcGxveWVlIiwidHJhbnNmZXJfaXRlbXMuYWRkX3RyYW5zZmVyIiwiaXRlbXMudmlld19pdGVtcyIsInVzZXJzLmNoYW5nZV91c2VyIiwic2FsZXMuY2hhbmdlX3NhbGVzaW52b2ljZSIsImJ1eWVyX3N1cHBsaWVyX3BhcnR5LmNoYW5nZV9wYXJ0eSIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLmNoYW5nZV9yZWZ1bmRlZHJlZmlsbGFibGVpdGVtIiwicGF5bWVudHMuY2hhbmdlX3BheW1lbnQiLCJzYWxlcy5jaGFuZ2VfcmV0dXJuaW52b2ljZSIsIml0ZW1zLmFkZF9pdGVtcyIsInB1cmNoYXNlLnZpZXdfcHVyY2hhc2VpbnZvaWNlaXRlbXMiLCJzYWxlcy5kZWxldGVfc2FsZXNpbnZvaWNlaXRlbSIsIml0ZW1zLnZpZXdfZGFtYWdlZGl0ZW1zIiwidXNlcnMudmlld191c2VyIiwiaXRlbXMuY2hhbmdlX2l0ZW1zIiwiaXRlbXMuYWRkX2JhcmNvZGUiLCJidXllcl9zdXBwbGllcl9wYXJ0eS5jaGFuZ2VfcmVmaWxsYWJsZWl0ZW1zaW5pdGlhbHN0b2NrIiwicHVyY2hhc2UuY2hhbmdlX3B1cmNoYXNlaW52b2ljZXMiLCJyZWZpbGxhYmxlX2l0ZW1zX3N5c3RlbS52aWV3X3JlZnVuZGVkcmVmaWxsYWJsZWl0ZW0iLCJjb250ZW50dHlwZXMudmlld19jb250ZW50dHlwZSIsInNhbGVzLmFkZF9zYWxlc2ludm9pY2UiLCJhdXRoLmNoYW5nZV9ncm91cCIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLmFkZF9pdGVtdHJhbnNmb3JtZXIiLCJyZWZpbGxhYmxlX2l0ZW1zX3N5c3RlbS52aWV3X2l0ZW10cmFuc2Zvcm1lciIsIml0ZW1zLnZpZXdfc3RvY2siLCJidXllcl9zdXBwbGllcl9wYXJ0eS52aWV3X3BhcnR5IiwidXNlcnMuYWRkX3VzZXIiLCJhdXRoLmRlbGV0ZV9ncm91cCIsIml0ZW1zLmRlbGV0ZV9iYXJjb2RlIiwiY29udGVudHR5cGVzLmRlbGV0ZV9jb250ZW50dHlwZSIsImNvbnRlbnR0eXBlcy5hZGRfY29udGVudHR5cGUiLCJidXllcl9zdXBwbGllcl9wYXJ0eS5jaGFuZ2VfaW5pdGlhbGNyZWRpdGJhbGFuY2UiLCJwYXltZW50cy5hZGRfZXhwZW5zZXBheW1lbnQiLCJpdGVtcy52aWV3X2l0ZW1wcmljZWxvZyIsInNlc3Npb25zLnZpZXdfc2Vzc2lvbiIsIml0ZW1zLmRlbGV0ZV9zdG9jayIsIml0ZW1zLmRlbGV0ZV9kYW1hZ2VkaXRlbXMiLCJzYWxlcy5kZWxldGVfc2FsZXNpbnZvaWNlIiwiYWRtaW4uY2hhbmdlX2xvZ2VudHJ5Iiwic2FsZXMuYWRkX3JldHVybmludm9pY2VpdGVtIiwidHJhbnNmZXJfaXRlbXMuZGVsZXRlX3RyYW5zZmVyaXRlbSIsInNlc3Npb25zLmRlbGV0ZV9zZXNzaW9uIiwiaXRlbXMuY2hhbmdlX2l0ZW1wcmljZWxvZyIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLnZpZXdfcmVmaWxsYWJsZWl0ZW1zaW5pdGlhbHN0b2NrY2xpZW50aGFzIiwicGF5bWVudHMuYWRkX3BheW1lbnQiLCJyZXBvc2l0b3JpZXMudmlld19yZXBvc2l0b3JpZXMiLCJpdGVtcy5kZWxldGVfaXRlbXMiLCJpdGVtcy5jaGFuZ2VfYmFyY29kZSIsInBheW1lbnRfbWV0aG9kLmFkZF9wYXltZW50bWV0aG9kIiwicmVxdWVzdHNfbG9ncy5jaGFuZ2VfcmVxdWVzdGxvZyIsInB1cmNoYXNlLmFkZF9wdXJjaGFzZWludm9pY2VpdGVtcyIsInNhbGVzLmRlbGV0ZV9yZXR1cm5pbnZvaWNlaXRlbSIsInBheW1lbnRzLmRlbGV0ZV9wYXltZW50IiwiZW1wbG95ZWVzLnZpZXdfZW1wbG95ZWUiLCJyZWZpbGxhYmxlX2l0ZW1zX3N5c3RlbS52aWV3X29yZWl0ZW0iLCJyZWZpbGxhYmxlX2l0ZW1zX3N5c3RlbS5kZWxldGVfb3JlaXRlbSIsInRyYW5zZmVyX2l0ZW1zLnZpZXdfdHJhbnNmZXIiLCJpdGVtcy5jaGFuZ2VfZGFtYWdlZGl0ZW1zIiwicHVyY2hhc2UuZGVsZXRlX3B1cmNoYXNlaW52b2ljZWl0ZW1zIiwiYnV5ZXJfc3VwcGxpZXJfcGFydHkuYWRkX3JlZmlsbGFibGVpdGVtc2luaXRpYWxzdG9jayIsInNlc3Npb25zLmFkZF9zZXNzaW9uIiwic2FsZXMuZGVsZXRlX3JldHVybmludm9pY2UiLCJyZWZpbGxhYmxlX2l0ZW1zX3N5c3RlbS5kZWxldGVfcmVmaWxsYWJsZWl0ZW1zaW5pdGlhbHN0b2NrY2xpZW50aGFzIiwiaXRlbXMuZGVsZXRlX2ltYWdlcyIsInRyYW5zZmVyX2l0ZW1zLmNoYW5nZV90cmFuc2Zlcml0ZW0iLCJidXllcl9zdXBwbGllcl9wYXJ0eS5hZGRfcGFydHkiLCJpdGVtcy5kZWxldGVfaW5pdGlhbHN0b2NrIiwicHVyY2hhc2UuYWRkX3B1cmNoYXNlaW52b2ljZXMiLCJwYXltZW50X21ldGhvZC5jaGFuZ2VfcGF5bWVudG1ldGhvZCIsInBheW1lbnRzLmRlbGV0ZV9leHBlbnNlcGF5bWVudCIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLmFkZF9wcm9jZXNzaW5naXRlbSIsIml0ZW1zLmNoYW5nZV9zdG9jayIsImJ1eWVyX3N1cHBsaWVyX3BhcnR5LmRlbGV0ZV9yZWZpbGxhYmxlaXRlbXNpbml0aWFsc3RvY2siLCJyZWZpbGxhYmxlX2l0ZW1zX3N5c3RlbS5jaGFuZ2VfcmVmaWxsYWJsZWl0ZW1zaW5pdGlhbHN0b2NrY2xpZW50aGFzIl19fQ.hMPvqi4i_tW8bJeQEL0ptVD4R-AeJodKZvd8Eg_Gj5Y",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Origin": "http://localhost:5173",
+        "Sec-Fetch-Site": "same-site",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "http://localhost:5173/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "id": 1000001,
+        "by_username": "استنفار",
+        "images": [],
+        "stock": [
+            {
+                "id": 2,
+                "repository_name": "الرئيسي",
+                "quantity": "5.00",
+                "item": 1000001,
+                "repository": 10000
+            }
+        ],
+        "barcodes": [
+            {
+                "id": 2,
+                "barcode": "7122-00-3351"
+            }
+        ],
+        "created_at": "2025-03-13T08:57:32.741478Z",
+        "updated_at": "2025-04-06T12:21:48.252066Z",
+        "name": "12/15/18MM  - lens cap MGL ##USA, Turkiye @@9",
+        "price1": "0.00",
+        "price2": "0.00",
+        "price3": "0.00",
+        "price4": "0.00",
+        "is_refillable": false,
+        "by": 10000
+    }
+}

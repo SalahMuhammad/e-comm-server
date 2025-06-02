@@ -1,0 +1,271 @@
+{
+    "timestamp": "استنفار_2025-05-25_09-43-29_263724",
+    "url": "http://localhost:8000/api/items/?s=dcd%20&fields=id,name,price1,price2,price3,price4,has_img,images,stock,origin,place,",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Origin": "http://localhost:5173",
+        "Sec-Fetch-Site": "same-site",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "http://localhost:5173/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "count": 17,
+        "next": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2Corigin%2Cplace%2C&limit=12&offset=12&s=dcd+",
+        "previous": null,
+        "results": [
+            {
+                "id": 1000162,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 164,
+                        "repository_name": "الرئيسي",
+                        "quantity": "102.00",
+                        "item": 1000162,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Clarity DCD Can",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000163,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 156,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000163,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Clarity DCD Can (Empty)",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000151,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 161,
+                        "repository_name": "الرئيسي",
+                        "quantity": "62.00",
+                        "item": 1000151,
+                        "repository": 10000
+                    }
+                ],
+                "name": "DCD Can v1",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000154,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 158,
+                        "repository_name": "الرئيسي",
+                        "quantity": "46.00",
+                        "item": 1000154,
+                        "repository": 10000
+                    }
+                ],
+                "name": "DCD Can v1 (Empty)",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000152,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 162,
+                        "repository_name": "الرئيسي",
+                        "quantity": "10.00",
+                        "item": 1000152,
+                        "repository": 10000
+                    }
+                ],
+                "name": "DCD Can v2",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000155,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 163,
+                        "repository_name": "الرئيسي",
+                        "quantity": "3.00",
+                        "item": 1000155,
+                        "repository": 10000
+                    }
+                ],
+                "name": "DCD Can v2 (Empty)",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000153,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 157,
+                        "repository_name": "الرئيسي",
+                        "quantity": "280.00",
+                        "item": 1000153,
+                        "repository": 10000
+                    }
+                ],
+                "name": "DCD Can v3",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000156,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 155,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000156,
+                        "repository": 10000
+                    }
+                ],
+                "name": "DCD Can v3 (Empty)",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000015,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 16,
+                        "repository_name": "الرئيسي",
+                        "quantity": "5.00",
+                        "item": 1000015,
+                        "repository": 10000
+                    }
+                ],
+                "name": "DCD filter inside machine",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "IR",
+                "place": "15"
+            },
+            {
+                "id": 1000016,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 17,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000016,
+                        "repository": 10000
+                    }
+                ],
+                "name": "DCD MODULE heater PRO",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA",
+                "place": ""
+            },
+            {
+                "id": 1000146,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 147,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000146,
+                        "repository": 10000
+                    }
+                ],
+                "name": "DCD pressure sensor MGL",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA",
+                "place": "14"
+            },
+            {
+                "id": 1000017,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 18,
+                        "repository_name": "الرئيسي",
+                        "quantity": "4.00",
+                        "item": 1000017,
+                        "repository": 10000
+                    }
+                ],
+                "name": "DCD VALVE Parkar",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": "USA",
+                "place": "11"
+            }
+        ]
+    }
+}

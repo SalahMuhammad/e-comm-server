@@ -1,0 +1,398 @@
+{
+    "timestamp": "استنفار_2025-05-25_08-51-09_031624",
+    "url": "http://localhost:8000/api/items/?s=",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Origin": "http://localhost:5173",
+        "Sec-Fetch-Site": "same-site",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "http://localhost:5173/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "count": 164,
+        "next": "http://localhost:8000/api/items/?limit=12&offset=12&s=",
+        "previous": null,
+        "results": [
+            {
+                "id": 1000000,
+                "by_username": "استنفار",
+                "images": [],
+                "stock": [
+                    {
+                        "id": 1,
+                        "repository_name": "الرئيسي",
+                        "quantity": "8.00",
+                        "item": 1000000,
+                        "repository": 10000
+                    }
+                ],
+                "barcodes": [
+                    {
+                        "id": 1,
+                        "barcode": "7122-00-9552"
+                    }
+                ],
+                "created_at": "2025-03-13T08:57:32.718082Z",
+                "updated_at": "2025-05-25T08:50:28.630416Z",
+                "name": "12/15/18 LENS cap pro",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "is_refillable": false,
+                "origin": "USA, Turkiye",
+                "place": "9",
+                "by": 10000
+            },
+            {
+                "id": 1000001,
+                "by_username": "استنفار",
+                "images": [],
+                "stock": [
+                    {
+                        "id": 2,
+                        "repository_name": "الرئيسي",
+                        "quantity": "5.00",
+                        "item": 1000001,
+                        "repository": 10000
+                    }
+                ],
+                "barcodes": [
+                    {
+                        "id": 2,
+                        "barcode": "7122-00-3351"
+                    }
+                ],
+                "created_at": "2025-03-13T08:57:32.741478Z",
+                "updated_at": "2025-04-06T12:21:48.252066Z",
+                "name": "12/15/18MM  - lens cap MGL",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "is_refillable": false,
+                "origin": "USA, Turkiye",
+                "place": "9",
+                "by": 10000
+            },
+            {
+                "id": 1000002,
+                "by_username": "استنفار",
+                "images": [],
+                "stock": [
+                    {
+                        "id": 3,
+                        "repository_name": "الرئيسي",
+                        "quantity": "6.00",
+                        "item": 1000002,
+                        "repository": 10000
+                    }
+                ],
+                "barcodes": [
+                    {
+                        "id": 3,
+                        "barcode": "7122-00-9747"
+                    }
+                ],
+                "created_at": "2025-03-13T08:57:32.761881Z",
+                "updated_at": "2025-04-06T12:31:46.922308Z",
+                "name": "20/22/24MM  - lens cap Pro",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "is_refillable": false,
+                "origin": "USA, Turkiye",
+                "place": "9",
+                "by": 10000
+            },
+            {
+                "id": 1000003,
+                "by_username": "استنفار",
+                "images": [],
+                "stock": [
+                    {
+                        "id": 4,
+                        "repository_name": "الرئيسي",
+                        "quantity": "4.00",
+                        "item": 1000003,
+                        "repository": 10000
+                    }
+                ],
+                "barcodes": [
+                    {
+                        "id": 4,
+                        "barcode": "7122-00-9551"
+                    }
+                ],
+                "created_at": "2025-03-13T08:57:32.782167Z",
+                "updated_at": "2025-04-30T10:44:50.164422Z",
+                "name": "6/8/10 LENS cap pro",
+                "price1": "4000.00",
+                "price2": "4400.00",
+                "price3": "4800.00",
+                "price4": "5200.00",
+                "is_refillable": false,
+                "origin": "USA",
+                "place": "9",
+                "by": 10000
+            },
+            {
+                "id": 1000004,
+                "by_username": "استنفار",
+                "images": [],
+                "stock": [
+                    {
+                        "id": 5,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000004,
+                        "repository": 10000
+                    }
+                ],
+                "barcodes": [
+                    {
+                        "id": 5,
+                        "barcode": "7111-00-2793"
+                    }
+                ],
+                "created_at": "2025-03-13T08:57:32.811327Z",
+                "updated_at": "2025-04-06T12:41:21.886529Z",
+                "name": "AC distribution pcb Pro",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "is_refillable": false,
+                "origin": "Turkiye",
+                "place": "11",
+                "by": 10000
+            },
+            {
+                "id": 1000005,
+                "by_username": "استنفار",
+                "images": [],
+                "stock": [
+                    {
+                        "id": 6,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000005,
+                        "repository": 10000
+                    }
+                ],
+                "barcodes": [
+                    {
+                        "id": 6,
+                        "barcode": "7122-00-9450"
+                    }
+                ],
+                "created_at": "2025-03-13T08:57:32.829770Z",
+                "updated_at": "2025-04-06T12:54:39.518738Z",
+                "name": "AIMING BEAM MIRROR PRO 7122-00-9456",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "is_refillable": false,
+                "origin": "USA",
+                "place": "10",
+                "by": 10000
+            },
+            {
+                "id": 1000006,
+                "by_username": "استنفار",
+                "images": [],
+                "stock": [
+                    {
+                        "id": 7,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000006,
+                        "repository": 10000
+                    }
+                ],
+                "barcodes": [
+                    {
+                        "id": 7,
+                        "barcode": "7122-00-9432"
+                    }
+                ],
+                "created_at": "2025-03-13T08:57:32.847052Z",
+                "updated_at": "2025-04-06T12:53:38.528162Z",
+                "name": "AIMING BEAM PRO",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "is_refillable": false,
+                "origin": "USA",
+                "place": "10",
+                "by": 10000
+            },
+            {
+                "id": 1000007,
+                "by_username": "استنفار",
+                "images": [],
+                "stock": [
+                    {
+                        "id": 8,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000007,
+                        "repository": 10000
+                    }
+                ],
+                "barcodes": [
+                    {
+                        "id": 8,
+                        "barcode": "7122-00-9420"
+                    }
+                ],
+                "created_at": "2025-03-13T08:57:32.879611Z",
+                "updated_at": "2025-03-13T08:57:32.879683Z",
+                "name": "Air clip ACC pro",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "is_refillable": false,
+                "origin": "Turkiye",
+                "place": "",
+                "by": 10000
+            },
+            {
+                "id": 1000008,
+                "by_username": "استنفار",
+                "images": [],
+                "stock": [
+                    {
+                        "id": 9,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000008,
+                        "repository": 10000
+                    }
+                ],
+                "barcodes": [],
+                "created_at": "2025-03-13T08:57:32.911666Z",
+                "updated_at": "2025-04-06T14:38:56.199901Z",
+                "name": "Alex rod china coating",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "is_refillable": false,
+                "origin": "USA",
+                "place": "24",
+                "by": 10000
+            },
+            {
+                "id": 1000009,
+                "by_username": "استنفار",
+                "images": [],
+                "stock": [
+                    {
+                        "id": 10,
+                        "repository_name": "الرئيسي",
+                        "quantity": "3.00",
+                        "item": 1000009,
+                        "repository": 10000
+                    }
+                ],
+                "barcodes": [
+                    {
+                        "id": 9,
+                        "barcode": "1301-00-9596"
+                    }
+                ],
+                "created_at": "2025-03-13T08:57:32.926053Z",
+                "updated_at": "2025-04-06T14:46:27.785171Z",
+                "name": "beam block pro",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "is_refillable": false,
+                "origin": "USA",
+                "place": "25",
+                "by": 10000
+            },
+            {
+                "id": 1000010,
+                "by_username": "استنفار",
+                "images": [],
+                "stock": [
+                    {
+                        "id": 11,
+                        "repository_name": "الرئيسي",
+                        "quantity": "5.00",
+                        "item": 1000010,
+                        "repository": 10000
+                    }
+                ],
+                "barcodes": [
+                    {
+                        "id": 10,
+                        "barcode": "7122-00-9576"
+                    }
+                ],
+                "created_at": "2025-03-13T08:57:32.954039Z",
+                "updated_at": "2025-04-06T12:51:47.337380Z",
+                "name": "BEAM COMBINER PRO w holder",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "is_refillable": false,
+                "origin": "USA",
+                "place": "10",
+                "by": 10000
+            },
+            {
+                "id": 1000011,
+                "by_username": "استنفار",
+                "images": [],
+                "stock": [
+                    {
+                        "id": 12,
+                        "repository_name": "الرئيسي",
+                        "quantity": "2.00",
+                        "item": 1000011,
+                        "repository": 10000
+                    }
+                ],
+                "barcodes": [
+                    {
+                        "id": 11,
+                        "barcode": "8010-00-0020"
+                    }
+                ],
+                "created_at": "2025-03-13T08:57:32.979430Z",
+                "updated_at": "2025-04-06T12:49:14.979104Z",
+                "name": "beam splitter MGL WDO,FLAT,S1UV,UNCOAT,1\"Dx1/16T",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "is_refillable": false,
+                "origin": "USA",
+                "place": "10",
+                "by": 10000
+            }
+        ]
+    }
+}

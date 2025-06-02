@@ -1,7 +1,7 @@
 from django.db import transaction
 from django.forms import ValidationError
 from rest_framework import serializers
-from items.models import Items, Stock, Barcode
+from items.models import Items, Stock, Barcode, Types
 
 
 class Base64ImageField(serializers.ImageField):
@@ -130,7 +130,7 @@ class ItemsSerializer(serializers.ModelSerializer):
 
 			for img in images_data:
 				item.images.create(img=img)
-		return item
+			return item
 	
 	def update(self, instance, validated_data):
 		images_data = validated_data.pop('images_upload', None)
@@ -155,3 +155,12 @@ class ItemsSerializer(serializers.ModelSerializer):
 	
 	# def get_has_img(self, obj):
 	# 	return obj.images.exists()
+
+
+
+class TypesSerializer(serializers.ModelSerializer):
+	
+	
+	class Meta:
+		model = Types
+		fields = '__all__'

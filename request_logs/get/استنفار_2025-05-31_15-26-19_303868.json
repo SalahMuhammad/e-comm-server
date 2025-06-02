@@ -1,0 +1,271 @@
+{
+    "timestamp": "استنفار_2025-05-31_15-26-19_303868",
+    "url": "http://localhost:8000/api/items/?s=fi&fields=id,name,price1,price2,price3,price4,has_img,images,stock,origin,place,",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Origin": "http://localhost:5173",
+        "Sec-Fetch-Site": "same-site",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "http://localhost:5173/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "count": 24,
+        "next": "http://localhost:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2Corigin%2Cplace%2C&limit=12&offset=12&s=fi",
+        "previous": null,
+        "results": [
+            {
+                "id": 1000012,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 13,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000012,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Cal detector fiber pro ##USA @@18",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000015,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 16,
+                        "repository_name": "الرئيسي",
+                        "quantity": "5.00",
+                        "item": 1000015,
+                        "repository": 10000
+                    }
+                ],
+                "name": "DCD filter inside machine ##IR @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000018,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 19,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000018,
+                        "repository": 10000
+                    }
+                ],
+                "name": "DI Filter MGL ##USA, Turkiye",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000019,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 20,
+                        "repository_name": "الرئيسي",
+                        "quantity": "3.00",
+                        "item": 1000019,
+                        "repository": 10000
+                    }
+                ],
+                "name": "DI Filter PRO ##USA, Turkiye @@20",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000031,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 32,
+                        "repository_name": "الرئيسي",
+                        "quantity": "5.00",
+                        "item": 1000031,
+                        "repository": 10000
+                    }
+                ],
+                "name": "FAN FILTER DOOR DCD H/P PRO ##USA @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000148,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 149,
+                        "repository_name": "الرئيسي",
+                        "quantity": "24.00",
+                        "item": 1000148,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Fan fixing plastic ## @@15",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000033,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 34,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000033,
+                        "repository": 10000
+                    }
+                ],
+                "name": "fiber 10/12/15 MGL (used) ##USA @@فوق الصف 4",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000034,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 35,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000034,
+                        "repository": 10000
+                    }
+                ],
+                "name": "FIBER 12/15/18 MGL ##USA",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000035,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 36,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000035,
+                        "repository": 10000
+                    }
+                ],
+                "name": "fiber 12/15/18 MGL (used) ##USA",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000036,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 37,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000036,
+                        "repository": 10000
+                    }
+                ],
+                "name": "fiber 12/15/18 Pro ( New) ##USA",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000037,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 38,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000037,
+                        "repository": 10000
+                    }
+                ],
+                "name": "fiber 12/15/18 Pro (used) ##USA @@فوق الصف 6",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            },
+            {
+                "id": 1000039,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 39,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000039,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Fiber 20/22/24 Pro (new) ##USA @@فوق الصف 3",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00",
+                "origin": null,
+                "place": null
+            }
+        ]
+    }
+}

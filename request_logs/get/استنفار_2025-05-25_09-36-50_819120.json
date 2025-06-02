@@ -1,0 +1,68 @@
+{
+    "timestamp": "استنفار_2025-05-25_09-36-50_819120",
+    "url": "http://localhost:8000/api/sales/10000080/",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Origin": "http://localhost:5173",
+        "Sec-Fetch-Site": "same-site",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "http://localhost:5173/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "id": 10000080,
+        "s_invoice_items": [
+            {
+                "id": 95,
+                "item_name": "Patient goggles plastic",
+                "repository_name": "الرئيسي",
+                "description": "",
+                "quantity": "1.00",
+                "unit_price": "750.00",
+                "discount": "0.00",
+                "tax_rate": "0.00",
+                "total": "750.00",
+                "item": 1000088,
+                "repository": 10000
+            },
+            {
+                "id": 96,
+                "item_name": "GOGGLE OD6@532 OD6.8@755 OD6@1064",
+                "repository_name": "الرئيسي",
+                "description": "",
+                "quantity": "1.00",
+                "unit_price": "4000.00",
+                "discount": "0.00",
+                "tax_rate": "0.00",
+                "total": "4000.00",
+                "item": 1000052,
+                "repository": 10000
+            }
+        ],
+        "by_username": "استنفار",
+        "owner_name": "Laser Tech",
+        "hashed_id": "ff5d76e0",
+        "created_at": "2025-05-09T16:16:26.090682Z",
+        "updated_at": "2025-05-09T16:16:27.333082Z",
+        "issue_date": "2025-05-08",
+        "due_date": "2025-05-22",
+        "total_amount": "4750.00",
+        "remaining_balance": "0.00",
+        "status": 3,
+        "repository_permit": true,
+        "notes": "",
+        "owner": 1000025
+    }
+}

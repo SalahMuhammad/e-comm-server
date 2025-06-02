@@ -1,0 +1,250 @@
+{
+    "timestamp": "استنفار_2025-05-25_08-03-54_179568",
+    "url": "http://192.168.1.44:8000/api/items/?fields=id,name,price1,price2,price3,price4,has_img,images,stock,",
+    "headers": {
+        "Content-Length": "",
+        "Content-Type": "text/plain",
+        "Host": "192.168.1.44:8000",
+        "Connection": "keep-alive",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Referer": "http://192.168.1.44:8000/item/list",
+        "Accept-Encoding": "gzip, deflate",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7",
+        "Cookie": "auth_count=2; auth_0=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAwMDAsImV4cCI6MTc0ODI0NTg3NCwiaWF0IjoxNzQ4MTU5NDc0LCJwZXJtaXNzaW9ucyI6eyJpc19zdXBlcnVzZXIiOnRydWUsImlzX3N0YWZmIjp0cnVlLCJ1c2VyX3Blcm1pc3Npb25zIjpbInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLnZpZXdfcHJvY2Vzc2luZ2l0ZW0iLCJ0cmFuc2Zlcl9pdGVtcy5kZWxldGVfdHJhbnNmZXJpdGVtIiwicHVyY2hhc2Uudmlld19wdXJjaGFzZWludm9pY2VpdGVtcyIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLmRlbGV0ZV9wcm9jZXNzaW5naXRlbSIsInVzZXJzLmNoYW5nZV91c2VyIiwicmVwb3NpdG9yaWVzLmNoYW5nZV9yZXBvc2l0b3JpZXMiLCJidXllcl9zdXBwbGllcl9wYXJ0eS52aWV3X3BhcnR5IiwiaXRlbXMuYWRkX3N0b2NrIiwic2FsZXMuY2hhbmdlX3JldHVybmludm9pY2VpdGVtIiwiYXV0aC52aWV3X3Blcm1pc3Npb24iLCJ0cmFuc2Zlcl9pdGVtcy5kZWxldGVfdHJhbnNmZXIiLCJyZXF1ZXN0c19sb2dzLnZpZXdfcmVxdWVzdGxvZyIsInNlc3Npb25zLnZpZXdfc2Vzc2lvbiIsIml0ZW1zLmNoYW5nZV9iYXJjb2RlIiwicHVyY2hhc2UuY2hhbmdlX3B1cmNoYXNlaW52b2ljZXMiLCJlbXBsb3llZXMuY2hhbmdlX2VtcGxveWVlIiwiYnV5ZXJfc3VwcGxpZXJfcGFydHkuZGVsZXRlX3BhcnR5IiwicmVmaWxsYWJsZV9pdGVtc19zeXN0ZW0uY2hhbmdlX3JlZmlsbGVkaXRlbSIsImJ1eWVyX3N1cHBsaWVyX3BhcnR5LmNoYW5nZV9wYXJ0eSIsImNvbnRlbnR0eXBlcy5hZGRfY29udGVudHR5cGUiLCJ1c2Vycy5kZWxldGVfdXNlciIsInNhbGVzLmRlbGV0ZV9zYWxlc2ludm9pY2VpdGVtIiwicHVyY2hhc2UuZGVsZXRlX3B1cmNoYXNlaW52b2ljZWl0ZW1zIiwiaXRlbXMuYWRkX2l0ZW1wcmljZWxvZyIsImJ1eWVyX3N1cHBsaWVyX3BhcnR5LnZpZXdfaW5pdGlhbGNyZWRpdGJhbGFuY2UiLCJwYXltZW50cy5kZWxldGVfcGF5bWVudCIsIml0ZW1zLnZpZXdfc3RvY2siLCJidXllcl9zdXBwbGllcl9wYXJ0eS5hZGRfcmVmaWxsYWJsZWl0ZW1zaW5pdGlhbHN0b2NrIiwiZW1wbG95ZWVzLmRlbGV0ZV9lbXBsb3llZSIsInRyYW5zZmVyX2l0ZW1zLmNoYW5nZV90cmFuc2ZlciIsIml0ZW1zLmNoYW5nZV9pbml0aWFsc3RvY2siLCJhZG1pbi52aWV3X2xvZ2VudHJ5Iiwic2Vzc2lvbnMuZGVsZXRlX3Nlc3Npb24iLCJidXllcl9zdXBwbGllcl9wYXJ0eS5hZGRfaW5pdGlhbGNyZWRpdGJhbGFuY2UiLCJyZWZpbGxhYmxlX2l0ZW1zX3N5c3RlbS5kZWxldGVfaXRlbXRyYW5zZm9ybWVyIiwic2FsZXMuZGVsZXRlX3JldHVybmludm9pY2UiLCJyZXBvc2l0b3JpZXMuZGVsZXRlX3JlcG9zaXRvcmllcyIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLmRlbGV0ZV9yZWZpbGxlZGl0ZW0iLCJpdGVtcy52aWV3X2RhbWFnZWRpdGVtcyIsImF1dGguZGVsZXRlX2dyb3VwIiwiYWRtaW4uY2hhbmdlX2xvZ2VudHJ5IiwiYnV5ZXJfc3VwcGxpZXJfcGFydHkuY2hhbmdlX2luaXRpYWxjcmVkaXRiYWxhbmNlIiwicmVmaWxsYWJsZV9pdGVtc19zeXN0ZW0uYWRkX29yZWl0ZW0iLCJwdXJjaGFzZS5kZWxldGVfcHVyY2hhc2VpbnZvaWNlcyIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLmRlbGV0ZV9yZWZ1bmRlZHJlZmlsbGFibGVpdGVtIiwicmVmaWxsYWJsZV9pdGVtc19zeXN0ZW0udmlld19yZWZpbGxlZGl0ZW0iLCJyZWZpbGxhYmxlX2l0ZW1zX3N5c3RlbS52aWV3X3JlZmlsbGFibGVpdGVtc2luaXRpYWxzdG9ja2NsaWVudGhhcyIsIml0ZW1zLnZpZXdfaW5pdGlhbHN0b2NrIiwiaXRlbXMuZGVsZXRlX2luaXRpYWxzdG9jayIsImF1dGguY2hhbmdlX2dyb3VwIiwiY29udGVudHR5cGVzLmNoYW5nZV9jb250ZW50dHlwZSIsIml0ZW1zLmRlbGV0ZV9pdGVtcyIsImNvbnRlbnR0eXBlcy5kZWxldGVfY29udGVudHR5cGUiLCJzYWxlcy52aWV3X3JldHVybmludm9pY2UiLCJwYXltZW50cy5jaGFuZ2VfZXhwZW5zZXBheW1lbnQiLCJyZWZpbGxhYmxlX2l0ZW1zX3N5c3RlbS5hZGRfcmVmaWxsZWRpdGVtIiwicmVmaWxsYWJsZV9pdGVtc19zeXN0ZW0uYWRkX3Byb2Nlc3NpbmdpdGVtIiwiYXV0aC5kZWxldGVfcGVybWlzc2lvbiIsInNlc3Npb25zLmFkZF9zZXNzaW9uIiwic2FsZXMuYWRkX3NhbGVzaW52b2ljZWl0ZW0iLCJwYXltZW50X21ldGhvZC5jaGFuZ2VfcGF5bWVudG1ldGhvZCIsImJ1eWVyX3N1cHBsaWVyX3BhcnR5LmRlbGV0ZV9pbml0aWFsY3JlZGl0YmFsYW5jZSIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLnZpZXdfcmVmdW5kZWRyZWZpbGxhYmxlaXRlbSIsImFkbWluLmFkZF9sb2dlbnRyeSIsIml0ZW1zLmNoYW5nZV9pbWFnZXMiLCJyZWZpbGxhYmxlX2l0ZW1zX3N5c3RlbS5kZWxldGVfb3JlaXRlbSIsImJ1eWVyX3N1cHBsaWVyX3BhcnR5LmRlbGV0ZV9yZWZpbGxhYmxlaXRlbXNpbml0aWFsc3RvY2siLCJwdXJjaGFzZS5hZGRfcHVyY2hhc2VpbnZvaWNlaXRlbXMiLCJpdGVtcy5jaGFuZ2VfaXRlbXByaWNlbG9nIiwiYXV0aC5hZGRfZ3JvdXAiLCJ0cmFuc2Zlcl9pdGVtcy5hZGRfdHJhbnNmZXJpdGVtIiwidHJhbnNmZXJfaXRlbXMuY2hhbmdlX3RyYW5zZmVyaXRlbSIsInRyYW5zZmVyX2l0ZW1zLnZpZXdfdHJhbnNmZXI; auth_1=iLCJzYWxlcy5hZGRfcmV0dXJuaW52b2ljZSIsIml0ZW1zLmFkZF9pdGVtcyIsInNhbGVzLmRlbGV0ZV9yZXR1cm5pbnZvaWNlaXRlbSIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLmFkZF9yZWZ1bmRlZHJlZmlsbGFibGVpdGVtIiwic2FsZXMudmlld19yZXR1cm5pbnZvaWNlaXRlbSIsInJlcG9zaXRvcmllcy5hZGRfcmVwb3NpdG9yaWVzIiwicGF5bWVudF9tZXRob2QuZGVsZXRlX3BheW1lbnRtZXRob2QiLCJwYXltZW50X21ldGhvZC52aWV3X3BheW1lbnRtZXRob2QiLCJyZWZpbGxhYmxlX2l0ZW1zX3N5c3RlbS52aWV3X2l0ZW10cmFuc2Zvcm1lciIsInBheW1lbnRfbWV0aG9kLmFkZF9wYXltZW50bWV0aG9kIiwicmVmaWxsYWJsZV9pdGVtc19zeXN0ZW0uY2hhbmdlX3JlZmlsbGFibGVpdGVtc2luaXRpYWxzdG9ja2NsaWVudGhhcyIsInRyYW5zZmVyX2l0ZW1zLmFkZF90cmFuc2ZlciIsIml0ZW1zLmRlbGV0ZV9iYXJjb2RlIiwicGF5bWVudHMuZGVsZXRlX2V4cGVuc2VwYXltZW50IiwiaXRlbXMudmlld19iYXJjb2RlIiwic2FsZXMuYWRkX3JldHVybmludm9pY2VpdGVtIiwicHVyY2hhc2Uudmlld19wdXJjaGFzZWludm9pY2VzIiwidXNlcnMuYWRkX3VzZXIiLCJidXllcl9zdXBwbGllcl9wYXJ0eS5hZGRfcGFydHkiLCJwYXltZW50cy5hZGRfcGF5bWVudCIsIml0ZW1zLnZpZXdfaXRlbXMiLCJpdGVtcy5jaGFuZ2VfaXRlbXMiLCJyZXF1ZXN0c19sb2dzLmFkZF9yZXF1ZXN0bG9nIiwiaXRlbXMuY2hhbmdlX2RhbWFnZWRpdGVtcyIsInBheW1lbnRzLnZpZXdfcGF5bWVudCIsInB1cmNoYXNlLmNoYW5nZV9wdXJjaGFzZWludm9pY2VpdGVtcyIsInNhbGVzLmFkZF9zYWxlc2ludm9pY2UiLCJyZWZpbGxhYmxlX2l0ZW1zX3N5c3RlbS52aWV3X29yZWl0ZW0iLCJjb250ZW50dHlwZXMudmlld19jb250ZW50dHlwZSIsImVtcGxveWVlcy5hZGRfZW1wbG95ZWUiLCJwdXJjaGFzZS5hZGRfcHVyY2hhc2VpbnZvaWNlcyIsImF1dGguYWRkX3Blcm1pc3Npb24iLCJ1c2Vycy52aWV3X3VzZXIiLCJpdGVtcy5kZWxldGVfZGFtYWdlZGl0ZW1zIiwiaXRlbXMuZGVsZXRlX3N0b2NrIiwicGF5bWVudHMuY2hhbmdlX3BheW1lbnQiLCJ0cmFuc2Zlcl9pdGVtcy52aWV3X3RyYW5zZmVyaXRlbSIsInNlc3Npb25zLmNoYW5nZV9zZXNzaW9uIiwicmVmaWxsYWJsZV9pdGVtc19zeXN0ZW0uYWRkX3JlZmlsbGFibGVpdGVtc2luaXRpYWxzdG9ja2NsaWVudGhhcyIsInBheW1lbnRzLnZpZXdfZXhwZW5zZXBheW1lbnQiLCJyZWZpbGxhYmxlX2l0ZW1zX3N5c3RlbS5jaGFuZ2VfaXRlbXRyYW5zZm9ybWVyIiwicmVxdWVzdHNfbG9ncy5kZWxldGVfcmVxdWVzdGxvZyIsIml0ZW1zLmFkZF9pbWFnZXMiLCJyZXF1ZXN0c19sb2dzLmNoYW5nZV9yZXF1ZXN0bG9nIiwicmVmaWxsYWJsZV9pdGVtc19zeXN0ZW0uZGVsZXRlX3JlZmlsbGFibGVpdGVtc2luaXRpYWxzdG9ja2NsaWVudGhhcyIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLmNoYW5nZV9yZWZ1bmRlZHJlZmlsbGFibGVpdGVtIiwiYXV0aC5jaGFuZ2VfcGVybWlzc2lvbiIsIml0ZW1zLmRlbGV0ZV9pbWFnZXMiLCJyZXBvc2l0b3JpZXMudmlld19yZXBvc2l0b3JpZXMiLCJidXllcl9zdXBwbGllcl9wYXJ0eS52aWV3X3JlZmlsbGFibGVpdGVtc2luaXRpYWxzdG9jayIsInNhbGVzLnZpZXdfc2FsZXNpbnZvaWNlIiwicmVmaWxsYWJsZV9pdGVtc19zeXN0ZW0uYWRkX2l0ZW10cmFuc2Zvcm1lciIsInBheW1lbnRzLmFkZF9leHBlbnNlcGF5bWVudCIsInNhbGVzLmNoYW5nZV9zYWxlc2ludm9pY2UiLCJlbXBsb3llZXMudmlld19lbXBsb3llZSIsIml0ZW1zLmFkZF9pbml0aWFsc3RvY2siLCJzYWxlcy5jaGFuZ2VfcmV0dXJuaW52b2ljZSIsImJ1eWVyX3N1cHBsaWVyX3BhcnR5LmNoYW5nZV9yZWZpbGxhYmxlaXRlbXNpbml0aWFsc3RvY2siLCJzYWxlcy5jaGFuZ2Vfc2FsZXNpbnZvaWNlaXRlbSIsIml0ZW1zLmFkZF9iYXJjb2RlIiwicmVmaWxsYWJsZV9pdGVtc19zeXN0ZW0uY2hhbmdlX29yZWl0ZW0iLCJpdGVtcy5jaGFuZ2Vfc3RvY2siLCJhZG1pbi5kZWxldGVfbG9nZW50cnkiLCJzYWxlcy5kZWxldGVfc2FsZXNpbnZvaWNlIiwic2FsZXMudmlld19zYWxlc2ludm9pY2VpdGVtIiwiaXRlbXMudmlld19pbWFnZXMiLCJpdGVtcy5hZGRfZGFtYWdlZGl0ZW1zIiwiaXRlbXMuZGVsZXRlX2l0ZW1wcmljZWxvZyIsImF1dGgudmlld19ncm91cCIsInJlZmlsbGFibGVfaXRlbXNfc3lzdGVtLmNoYW5nZV9wcm9jZXNzaW5naXRlbSIsIml0ZW1zLnZpZXdfaXRlbXByaWNlbG9nIl19fQ.EfGt294aiU-Keq0IOZvLgkewlKsjXReO8xZVc-RGIMM"
+    },
+    "request_body": null,
+    "response_status": 200,
+    "response_body": {
+        "count": 164,
+        "next": "http://192.168.1.44:8000/api/items/?fields=id%2Cname%2Cprice1%2Cprice2%2Cprice3%2Cprice4%2Chas_img%2Cimages%2Cstock%2C&limit=12&offset=12",
+        "previous": null,
+        "results": [
+            {
+                "id": 1000000,
+                "images": [
+                    "http://192.168.1.44:8000/media/items-images/8ed0aad5-f9b.jpg"
+                ],
+                "stock": [
+                    {
+                        "id": 1,
+                        "repository_name": "الرئيسي",
+                        "quantity": "8.00",
+                        "item": 1000000,
+                        "repository": 10000
+                    }
+                ],
+                "name": "12/15/18 LENS cap pro ##USA, Turkiye @@9",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000001,
+                "images": [
+                    "http://192.168.1.44:8000/media/items-images/2e2f5723-681.png",
+                    "http://192.168.1.44:8000/media/items-images/584fb13d-9b0.png",
+                    "http://192.168.1.44:8000/media/items-images/42ecd5c6-9ba.png",
+                    "http://192.168.1.44:8000/media/items-images/f55890e7-51d.png"
+                ],
+                "stock": [
+                    {
+                        "id": 2,
+                        "repository_name": "الرئيسي",
+                        "quantity": "5.00",
+                        "item": 1000001,
+                        "repository": 10000
+                    }
+                ],
+                "name": "12/15/18MM  - lens cap MGL ##USA, Turkiye @@9",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000002,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 3,
+                        "repository_name": "الرئيسي",
+                        "quantity": "6.00",
+                        "item": 1000002,
+                        "repository": 10000
+                    }
+                ],
+                "name": "20/22/24MM  - lens cap Pro ##USA, Turkiye @@9",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000003,
+                "images": [
+                    "http://192.168.1.44:8000/media/items-images/3b888691-d09.png"
+                ],
+                "stock": [
+                    {
+                        "id": 4,
+                        "repository_name": "الرئيسي",
+                        "quantity": "4.00",
+                        "item": 1000003,
+                        "repository": 10000
+                    }
+                ],
+                "name": "6/8/10 LENS cap pro ##USA @@9",
+                "price1": "4000.00",
+                "price2": "4400.00",
+                "price3": "4800.00",
+                "price4": "5200.00"
+            },
+            {
+                "id": 1000004,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 5,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000004,
+                        "repository": 10000
+                    }
+                ],
+                "name": "AC distribution pcb Pro ##Turkiye @@11",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000005,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 6,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000005,
+                        "repository": 10000
+                    }
+                ],
+                "name": "AIMING BEAM MIRROR PRO 7122-00-9456 ##USA @@10",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000006,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 7,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000006,
+                        "repository": 10000
+                    }
+                ],
+                "name": "AIMING BEAM PRO ##USA @@10",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000007,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 8,
+                        "repository_name": "الرئيسي",
+                        "quantity": "0.00",
+                        "item": 1000007,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Air clip ACC pro ##Turkiye",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000008,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 9,
+                        "repository_name": "الرئيسي",
+                        "quantity": "1.00",
+                        "item": 1000008,
+                        "repository": 10000
+                    }
+                ],
+                "name": "Alex rod china coating ##USA @@24",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000009,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 10,
+                        "repository_name": "الرئيسي",
+                        "quantity": "3.00",
+                        "item": 1000009,
+                        "repository": 10000
+                    }
+                ],
+                "name": "beam block pro ##USA @@25",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000010,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 11,
+                        "repository_name": "الرئيسي",
+                        "quantity": "5.00",
+                        "item": 1000010,
+                        "repository": 10000
+                    }
+                ],
+                "name": "BEAM COMBINER PRO w holder ##USA @@10",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            },
+            {
+                "id": 1000011,
+                "images": [],
+                "stock": [
+                    {
+                        "id": 12,
+                        "repository_name": "الرئيسي",
+                        "quantity": "2.00",
+                        "item": 1000011,
+                        "repository": 10000
+                    }
+                ],
+                "name": "beam splitter MGL WDO,FLAT,S1UV,UNCOAT,1\"Dx1/16T ##USA @@10",
+                "price1": "0.00",
+                "price2": "0.00",
+                "price3": "0.00",
+                "price4": "0.00"
+            }
+        ]
+    }
+}

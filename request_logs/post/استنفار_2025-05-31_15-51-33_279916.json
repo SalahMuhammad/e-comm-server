@@ -1,0 +1,78 @@
+{
+    "timestamp": "استنفار_2025-05-31_15-51-33_279916",
+    "url": "http://localhost:8000/admin/users/user/10001/change/",
+    "headers": {
+        "Content-Length": "1868",
+        "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary243XfQG1I8FuurNX",
+        "Host": "localhost:8000",
+        "Connection": "keep-alive",
+        "Cache-Control": "max-age=0",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": "\"Linux\"",
+        "Origin": "http://localhost:8000",
+        "Upgrade-Insecure-Requests": "1",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+        "Sec-Fetch-Site": "same-origin",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-User": "?1",
+        "Sec-Fetch-Dest": "document",
+        "Referer": "http://localhost:8000/admin/users/user/10001/change/",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9,ar-EG;q=0.8,ar;q=0.7",
+        "Cookie": "pp={\"price2\":\".10\",\"price3\":\".20\",\"price4\":\".30\",\"by\":1}; tabstyle=html-tab; csrftoken=GE4sqJFeqQCVVPiDMphQEAgvcYNHJXTo; sessionid=jpb2jigev3hmcvt55aezmimpe4xwc0jx; auth_count=1; auth_0=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAwMDEsImV4cCI6MTc0ODc5MzA2NywiaWF0IjoxNzQ4NzA2NjY3LCJwZXJtaXNzaW9ucyI6eyJpc19zdXBlcnVzZXIiOmZhbHNlLCJpc19zdGFmZiI6ZmFsc2UsInVzZXJfcGVybWlzc2lvbnMiOltdfX0.eB88ID81FJcfVyYQL9_KcdKhV8kndBFXdVFoj6LWA4k"
+    },
+    "request_body": {
+        "csrfmiddlewaretoken": [
+            "ixD4ElL08RaHlQve1K07SJQfwi510lsEO1xmUUg4oxCs6vDHDZ7Nm9WAy6Iyz8bS"
+        ],
+        "password": [
+            "pbkdf2_sha256$870000$v6R6O2TLtXkjw2yer3JgrL$ZbXG6xyNKws2p9i6WvlIdsPr4/U/h0jv9vXCMF95W+M="
+        ],
+        "last_login_0": [
+            ""
+        ],
+        "last_login_1": [
+            ""
+        ],
+        "groups": [
+            "1"
+        ],
+        "username": [
+            "ali"
+        ],
+        "first_name": [
+            ""
+        ],
+        "last_name": [
+            ""
+        ],
+        "email": [
+            ""
+        ],
+        "is_active": [
+            "on"
+        ],
+        "date_joined_0": [
+            "2025-05-31"
+        ],
+        "date_joined_1": [
+            "15:50:14"
+        ],
+        "initial-date_joined_0": [
+            "2025-05-31"
+        ],
+        "initial-date_joined_1": [
+            "15:50:14"
+        ],
+        "avatar": [
+            ""
+        ],
+        "_save": [
+            "احفظ"
+        ]
+    },
+    "response_status": 302,
+    "response_body": ""
+}

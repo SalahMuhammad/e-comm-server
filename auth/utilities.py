@@ -6,10 +6,10 @@ class JWTUtilities:
 	@staticmethod
 	def generate_jwt(user):
 		permissions_list = list(user.get_all_permissions())
-# 30 dayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyes
+
 		payload = {
 			'id': user.id,
-			'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=30),
+			'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=1),
     		'iat': datetime.datetime.now(datetime.timezone.utc),
 			'permissions': {
                 'is_superuser': user.is_superuser,
