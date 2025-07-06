@@ -50,7 +50,8 @@ class LoginView(APIView):
     response = Response()
     # response.set_cookie(key='jwt', value=token, expires=datetime.datetime.utcnow() + datetime.timedelta(days=7))
     response.data = {
-      'jwt': token
+      'jwt': token,
+      "username": username
     }
     response.status_code = status.HTTP_200_OK
 
