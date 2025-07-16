@@ -27,7 +27,19 @@ SECRET_KEY = 'django-insecure-yky45*rz(_#(lrg&ul5askffrikqb5z#n-n-$5sxyci)!n*c1%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.10:8000', '*']
+ALLOWED_HOSTS = [
+    # '192.168.1.10:8000', 
+    # 'http://localhost:3000',
+    # 'http://127.0.0.1:3000',
+    # 'your-domain.com',
+    # 'api.your-domain.com',
+    # '192.168.1.10',
+    'localhost',
+    '127.0.0.1',
+    'localhost:8000',  # Add this line
+    '127.0.0.1:8000',  # And this one for good measure
+    # '*',
+]
 
 CORS_ALLOW_HEADERS = [
     "accept",
@@ -82,19 +94,18 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     # my input
-    'backend.middleware.JSONOnlyMiddleware',
-    'backend.middleware.RequestLogMiddleware',
-    # 
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # my input
-    "corsheaders.middleware.CorsMiddleware",
-    # 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # my input
+    'backend.middleware.JSONOnlyMiddleware',
+    'backend.middleware.RequestLogMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -215,10 +226,27 @@ CORS_ALLOW_ALL_ORIGINS = True
 #     "https://example.com",
 #     "https://sub.example.com",
 #     "http://localhost:5173",
+#     "http://localhost:3000",
 #     "http://127.0.0.1:5173",
+#     "http://127.0.0.1:3000",
 # ]
 # if we dont set this the client side won't be able to get cookies that we set in server side
-# CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = True
+
+# CSRF_TRUSTED_ORIGINS = [
+#     'http://localhost:3000',
+#     'http://127.0.0.1:3000',
+# ]
+
+# CSRF_COOKIE_SECURE = False
+# CSRF_COOKIE_HTTPONLY = False
+# CSRF_COOKIE_SAMESITE = 'Lax'
+
+# Add this line to your existing CSRF settings
+# CSRF_COOKIE_NAME = 'csrftoken'  # Make sure this matches what you're looking for
+# CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
+# CSRF_USE_SESSIONS = False  # Use cookies, not sessions
+# CSRF_COOKIE_AGE = 31449600  # One year
 
 
 AUTH_USER_MODEL = 'users.User'

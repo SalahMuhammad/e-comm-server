@@ -118,13 +118,14 @@ def quantity_errors_list_view(request, *args, **kwargs):
 
 	return Response(errors_list, status=status.HTTP_200_OK)
 
-
+# from rest_framework.parsers import MultiPartParser, FormParser
 class ItemsList(mixins.ListModelMixin, 
 	mixins.CreateModelMixin,
 	generics.GenericAPIView,
 ):
 	queryset = Items.objects.all()
 	serializer_class = ItemsSerializer
+	# parser_classes = (MultiPartParser, FormParser)
 	
 
 	def get_serializer(self, *args, **kwargs):
@@ -136,23 +137,18 @@ class ItemsList(mixins.ListModelMixin,
 
 	def get_queryset(self):
 		queryset = self.queryset
+		
+		type_param = Q()
+		if not self.request.user.is_superuser:
+			permissions = self.request.user.groups.values_list('permissions__codename', flat=True)
+			type_param = Q(type__name__in=permissions)
+
+			queryset = queryset.filter(type_param)
 
 		name_param = self.request.query_params.get('s')
-		if not self.request.user.is_superuser:
-			a = self.request.user.groups.values_list('permissions__codename', flat=True)
-			print(a)
-			سيبسي
-			return queryset.filter(type__name__in=a)
-
-		
+		aa = Q(name__icontains=name_param) | Q(barcodes__barcode__icontains=name_param) | Q(id__icontains=name_param) | Q(origin__icontains=name_param) | Q(place__icontains=name_param) if name_param else Q()
 		if name_param:
-			q = queryset.filter(
-				Q(name__icontains=name_param) | 
-				Q(barcodes__barcode__icontains=name_param) | 
-				Q(id__icontains=name_param) | 
-				Q(origin__icontains=name_param) | 
-				Q(place__icontains=name_param)
-			)
+			q = queryset.filter(aa)
 			if q:
 				return q
 
@@ -164,9 +160,9 @@ class ItemsList(mixins.ListModelMixin,
 			# Combine all Q objects using the logical AND operator '&'
 			combined_q_object = reduce(and_, q_objects)
 
-			return Items.objects.filter(combined_q_object)
+			return queryset.filter(combined_q_object)
 		
-		return super().get_queryset()
+		return queryset
 
 	def post(self, request, *args, **kwargs):
 		with transaction.atomic():
@@ -186,16 +182,27 @@ class ItemsList(mixins.ListModelMixin,
 	# def perform_create(self, serializer):
 	# 	serializer.save(by=self.request.user)
 
-class ItemDetail(mixins.RetrieveModelMixin, 
-                 mixins.UpdateModelMixin,
-                 mixins.DestroyModelMixin,
-                 generics.GenericAPIView):
+class ItemDetail(
+	mixins.RetrieveModelMixin, 
+	mixins.UpdateModelMixin,
+	mixins.DestroyModelMixin,
+	generics.GenericAPIView
+):
 	queryset = Items.objects.all()
 	serializer_class = ItemsSerializer
 
 	def get_serializer(self, *args, **kwargs):
 		kwargs['fieldss'] = self.request.query_params.get('fields', None)
 		return super().get_serializer(*args, **kwargs)
+
+	def get_queryset(self):
+		queryset = self.queryset
+
+		if not self.request.user.is_superuser:
+			a = self.request.user.groups.values_list('permissions__codename', flat=True)
+			return queryset.filter(type__name__in=a)
+		
+		return queryset
 
 	def get(self, request, *args, **kwargs):
 		return self.retrieve(request, *args, **kwargs)

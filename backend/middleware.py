@@ -15,6 +15,9 @@ class JSONOnlyMiddleware:
 		if request.build_absolute_uri().__contains__('/logout/'):
 			return self.get_response(request)
 		
+		if request.build_absolute_uri().__contains__('/api/items/'):
+			return self.get_response(request)
+		
 		if request.build_absolute_uri().__contains__('8000/admin') or request.build_absolute_uri().__contains__('89/admin'):
 			return self.get_response(request)
 
@@ -150,13 +153,15 @@ class RequestLogMiddleware:
 					if k.lower() != 'auth'}
         
         # Capture request body
-		try:
-			body = json.loads(request.body) if request.body else None
-		except json.JSONDecodeError:
-			body = dict(request.POST)
-		except:
-			body = 'an exception occurred while decoding the body.'
-
+		if request.content_type == 'application/json':
+			try:
+				body = json.loads(request.body) if request.body else None
+			except json.JSONDecodeError:
+				body = dict(request.POST)
+			except:
+				body = 'an exception occurred while decoding the body.'
+		else:
+			body = None
         # Get response
 		response = self.get_response(request)
 

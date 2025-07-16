@@ -4,4 +4,4 @@ docker-compose.yml
 Dockerfile
 env/
 ./env/
-
+selftest-cert.*

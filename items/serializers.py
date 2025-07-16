@@ -93,14 +93,20 @@ class ImageURLField(serializers.RelatedField):
 class ItemsSerializer(serializers.ModelSerializer):
 	by_username = serializers.ReadOnlyField(source='by.username')
 	# has_img = serializers.SerializerMethodField()
-	images_upload = serializers.ListField(
-			required=False,
-			child=Base64ImageField(),
-			write_only=True,
-		)
+	# images_upload = serializers.ListField(
+	# 		required=False,
+	# 		child=Base64ImageField(),
+	# 		write_only=True,
+	# 	)
+	images_upload = serializers.ListField( 
+		required=False,
+		child=serializers.ImageField(),
+		write_only=True,
+	)
 	images = ImageURLField(many=True, read_only=True)
 	stock = StockSerializer(many=True, read_only=True)
 	barcodes = BarcodeSerializer(many=True, required=False)
+	type_name = serializers.ReadOnlyField(source='type.name')
 
 
 	class Meta:
@@ -129,6 +135,7 @@ class ItemsSerializer(serializers.ModelSerializer):
 					item.barcodes.create(barcode=barcode['barcode'])
 
 			for img in images_data:
+				print(img)
 				item.images.create(img=img)
 			return item
 	

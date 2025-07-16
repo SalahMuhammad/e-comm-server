@@ -6,6 +6,14 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+*.sql
+*.crt
+*.key
+quantity-errors
+certs
+bash-commands/logs.txt
+bash-commands/sudo
+request_logs/
 
 media
 media/aa

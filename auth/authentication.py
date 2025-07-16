@@ -9,9 +9,10 @@ from users.models import User
 class CustomAuthentication(BaseAuthentication):
     def authenticate(self, request):
         # return (None, None)
+
         if request.build_absolute_uri().__contains__('8000/api/users/login/') or request.build_absolute_uri().__contains__('89/api/users/login/'):
             return (None, None)
-
+        
         token = request.headers.get('auth', '')
         token = request.COOKIES.get('auth_0', '') + request.COOKIES.get('auth_1', '') if not token else token
         

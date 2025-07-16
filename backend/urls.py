@@ -53,7 +53,25 @@ urlpatterns += [
     path('api/requests-logs/', include('requests_logs.urls')),
 ]
 
+
+from django.middleware.csrf import get_token
+from django.http import JsonResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.http import require_http_methods
+
+
+# @ensure_csrf_cookie
+# @require_http_methods(["GET"])
+# def get_csrf_token(request, *args, **kwargs):
+#     return JsonResponse({'csrfToken': get_token(request)})
+
+# # In your urls.py
+# urlpatterns += [
+#     path('auth/csrf/', get_csrf_token, name='csrf'),
+# ]
+
 urlpatterns += [
   # re_path(r'^(?:.*)/?$', abc),
-    re_path(r'', abc),
+    re_path(r'^(?!api/).*$', abc),
 ]
+

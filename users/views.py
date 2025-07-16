@@ -51,8 +51,20 @@ class LoginView(APIView):
     # response.set_cookie(key='jwt', value=token, expires=datetime.datetime.utcnow() + datetime.timedelta(days=7))
     response.data = {
       'jwt': token,
-      "username": username
+      'username': username
     }
+
+    # response.set_cookie(
+    #   key='jwt',
+    #   value=token,
+    #   httponly=True,
+    #   expires=datetime.datetime.utcnow() + datetime.timedelta(days=7),
+    #   # expires= datetime.datetime.utcnow() + datetime.timedelta(seconds=30),  # 7 days in seconds
+    #   # samesite='Lax',
+    #   samesite='strict', # Use 'strict' for better security, 'Lax' if you need cross-site requests
+    #   # secure=False  # Set to True in production with HTTPS
+    # )
+
     response.status_code = status.HTTP_200_OK
 
     return response
