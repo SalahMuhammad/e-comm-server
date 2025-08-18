@@ -115,7 +115,7 @@ class RequestLogMiddleware:
 
 	def save_request_log(self, user, method, url, headers, body, response_status, response_body):
 		username = user.username if user else ''
-		timestamp = datetime.now().strftime(f"{username}_%Y-%m-%d_%H-%M-%S_%f")
+		timestamp = datetime.now().strftime(f"{username}_%Y-%m-%d_%H:%M:%S_%f")
 		method_dir = self.base_log_dir / method.lower()
 		filename = f"{timestamp}.json"
         

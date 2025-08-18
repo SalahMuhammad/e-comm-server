@@ -192,5 +192,12 @@ class AbstractInvoiceDetailView(
 				{'detail': ['لا يمكن تعديل هذه الفاتورة بعد تصديرها (يجب ازاله الاذن المخزني اولا)...']}, 
 				status=status.HTTP_400_BAD_REQUEST
 			)
-
-		return super().destroy(request, *args, **kwargs)
+		try:
+			res = super().destroy(request, *args, **kwargs)
+		except Exception as e:
+			return Response(
+				{'detail': str(e)}, 
+				status=status.HTTP_400_BAD_REQUEST
+			)
+		
+		return res

@@ -34,11 +34,12 @@ class CustomAuthentication(BaseAuthentication):
             raise AuthenticationFailed(f'not superuser. {payload}')
 
         if request.method.lower() in ('post', 'put', 'patch'):
-            # request.data['by'] = payload['id']
-            mutable_data = request.data.copy()
+            # Get existing data or use empty dict as fallback
+            existing_data = request.data if request.data is not None else {}
+            mutable_data = existing_data.copy() if hasattr(existing_data, 'copy') else dict(existing_data)
             mutable_data['by'] = payload['id']
             request._full_data = mutable_data
-        
+            
         user = User.objects.get(pk=payload['id'])
         
         return (user, payload)

@@ -51,7 +51,7 @@ class AbstractInvoice(UpdatedCreatedBy):
             raise ValidationError({"detail": "Due date must be after issue date."})
     
     def __str__(self):
-        return f'{self.owner.name} - {self.issue_date} - {self.total_amount} - {self.status} - {self.repository_permit}'
+        return f'{self.id} - {self.owner.name} - {self.issue_date} - {self.total_amount} - {self.status} - {self.repository_permit}'
 
 
     class Meta:

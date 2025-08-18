@@ -11,6 +11,8 @@ from django.db import transaction
 from common.utilities import ValidateItemsStock
 from items.models import Items
 
+from rest_framework import mixins, generics
+
 
 @api_view(['POST'])
 def toggle_repository_permit(request, *args, **kwargs):
@@ -52,3 +54,16 @@ class ReturnListCreateView(AbstractInvoiceListCreateView):
 	serializer_class = ReturnInvoiceSerializer
 	adjust_stock_sign = 1
 	items_relation_name = 's_invoice_items'
+
+
+class RefundDetailView(
+	mixins.RetrieveModelMixin,
+	generics.GenericAPIView
+):
+    queryset = ReturnInvoice.objects.all()
+    serializer_class = ReturnInvoiceSerializer
+    
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+	

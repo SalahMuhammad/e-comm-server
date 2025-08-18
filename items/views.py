@@ -273,6 +273,7 @@ from .models import Stock
 from datetime import datetime
 import json
 
+
 def validate_stock(items=Items.objects.all()):
 	repositories = Repositories.objects.all()
 

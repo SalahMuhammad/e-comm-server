@@ -33,7 +33,7 @@ class JWTUtilities:
 			return f'jwt.InvalidSignatureError: {str(e)}.', False
 		except Exception as e:
 			print(e)
-			return e, False
+			return f'jwt.generic: {str(e)}.', False
   
 
 	@staticmethod

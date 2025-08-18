@@ -16,10 +16,27 @@ def ownerView(request, *args, **kwargs):
     client_id = kwargs['pk']
     credit = calculate_client_credit_balance(client_id, datee)
     refillable_items = calculateRefillableItemsClientHas(client_id)
-    return Response({
+    ownerDetail = Party.objects.filter(id=client_id).first().detail
+    
+    owner_detail_json = None
+    try:
+        owner_detail_json = json.loads(ownerDetail)
+    except (TypeError, ValueError):
+        pass
+
+    if owner_detail_json:
+        owner_details = owner_detail_json
+    else:
+        owner_details = { 'details': ownerDetail }
+
+    response_data = {
         'credit': credit,
-        'refillable_items_client_has': refillable_items
-    })
+        'refillable_items_client_has': refillable_items,
+        **owner_details,
+    }
+    
+    return Response(response_data)
+
 
 @api_view(['GET'])
 def listClientCredits(request, *args, **kwargs):
@@ -48,6 +65,7 @@ from invoices.purchase.models import PurchaseInvoices
 from finance.payments.models import Payment, ExpensePayment
 from itertools import chain
 from django.db.models import Sum
+import json
 
 def get_date(obj):
         if hasattr(obj, 'date'):

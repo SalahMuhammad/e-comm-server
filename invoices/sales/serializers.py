@@ -36,7 +36,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
     
     def validate_s_invoice_items(self, value):
         if not value:
-            raise serializers.ValidationError("Items cannot be empty.")
+            raise serializers.ValidationError({"detail": "Items cannot be empty."})
         
         return value
 
@@ -94,6 +94,15 @@ class ReturnInvoiceSerializer(serializers.ModelSerializer):
         }
 
 
+    def to_internal_value(self, data):
+        try:
+            return super().to_internal_value(data)
+        except serializers.ValidationError as e:
+            # Transform error key from oringinal_invoice to detail
+            if 'original_invoice' in e.detail:
+                e.detail['detail'] = e.detail.pop('original_invoice')
+            raise e
+
     def get_hashed_id(self, obj):
         return MixedRadixEncoder().encode(obj.id)
     
@@ -102,7 +111,7 @@ class ReturnInvoiceSerializer(serializers.ModelSerializer):
 
     def validate_s_invoice_items(self, value):
         if not value:
-            raise serializers.ValidationError("Items cannot be empty.")
+            raise serializers.ValidationError({"detail": "Items cannot be empty."})
 
         return value
     
@@ -122,8 +131,9 @@ class ReturnInvoiceSerializer(serializers.ModelSerializer):
 
             # i assume that invoice's item is not duplicated in the original invoice
             if not original_invoice_items.get(rii.item.id, None):
-                raise serializers.ValidationError({f"Item {rii.item.name} not found in original invoice items."})
+                raise serializers.ValidationError({"detail": f"Item \"{rii.item.name}\" not found in original invoice items."})
             if rii.quantity > original_invoice_items[rii.item.id]:
-                raise serializers.ValidationError({f"Quantity of item {rii.item.name} cannot be greater than the original invoice quantity."})
+                raise serializers.ValidationError({"detail": f"Quantity of item \"{rii.item.name}\" cannot be greater than the original invoice quantity."})
 
         return invoice
+    
