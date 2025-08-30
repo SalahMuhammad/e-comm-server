@@ -1,8 +1,6 @@
 from django.db import models
-from django.forms import ValidationError
 from common.models import UpdatedCreatedBy
 from django.utils.timezone import now
-from items.models import Items
 
 
 class Party(UpdatedCreatedBy):

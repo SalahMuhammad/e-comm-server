@@ -45,3 +45,9 @@ class OreItemSerializer(serializers.ModelSerializer):
         model = OreItem
         fields = '__all__'
     
+
+class CustomDataSerializer(serializers.Serializer):
+    date = serializers.DateField()
+    qty = serializers.IntegerField()
+    description = serializers.CharField(max_length=100)
+    remaining = serializers.IntegerField()

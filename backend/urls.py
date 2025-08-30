@@ -1,17 +1,27 @@
+import json
 from django.contrib import admin
 from django.urls import path, re_path, include
 from django.conf import settings
 from django.conf.urls.static import static
 # 
 from django.shortcuts import render
+from django.http import JsonResponse
+
 
 
 def abc(request):
-  return render(request=request, template_name='index.html', context={})
+    return render(request=request, template_name='index.html', context={})
+
+def companyDetails(request):
+    with open('companyDetails.json', 'r') as file:
+        return JsonResponse(json.load(file))
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('company-details/', companyDetails),
+
     path('api/items/', include('items.urls')),
     path('api/users/', include('users.urls')),
     path('api/repositories/', include('repositories.urls')),

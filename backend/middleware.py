@@ -51,7 +51,9 @@ import json
 import os
 from datetime import datetime
 from pathlib import Path
-class RequestLogMiddleware:
+# ليةعلاقة بمعرفة ما اذا كان الطلب من كلاس ولا فنكشن
+# class RequestLogMiddleware(MiddlewareMixin):
+class RequestLogMiddleware():
 	# def __init__(self, get_response):
 	# 	self.get_response = get_response
 
@@ -149,8 +151,10 @@ class RequestLogMiddleware:
 		
 
 		method = request.method
-		headers = {k: v for k, v in request.headers.items() 
-					if k.lower() != 'auth'}
+		headers = 'none'
+		if hasattr(request, 'headers'):
+			headers = {k: v for k, v in request.headers.items() 
+				if k.lower() != 'auth'}
         
         # Capture request body
 		if request.content_type == 'application/json':
@@ -166,10 +170,13 @@ class RequestLogMiddleware:
 		response = self.get_response(request)
 
         # Capture response data
+		response_body = 'none'
 		try:
 			response_body = json.loads(response.content.decode('utf-8'))
 		except json.JSONDecodeError:
 			response_body = response.content.decode('utf-8')
+		except Exception as e:
+			pass
 
         # Save to file
 		if method in ['GET', 'POST', 'PATCH', 'PUT', 'DELETE']:
@@ -181,7 +188,7 @@ class RequestLogMiddleware:
 				url=url,
 				headers=headers,
 				body=body,
-				response_status=response.status_code,
+				response_status=response.status_code if hasattr(response, 'status_code') else None,
 				response_body=response_body
 			)
 

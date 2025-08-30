@@ -69,9 +69,9 @@ class AbstractInvoiceListCreateView(
 	def get_queryset(self):
 		queryset = self.queryset
 
-		name_param = self.request.query_params.get('ownerid')
-		if name_param:
-			return queryset.filter(owner_id=name_param)
+		owner = self.request.query_params.get('owner')
+		if owner:
+			return queryset.filter(owner_id__name__icontains=owner)
 		
 		name_param = self.request.query_params.get('no')
 		id = -1

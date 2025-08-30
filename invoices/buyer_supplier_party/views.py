@@ -4,10 +4,13 @@ from rest_framework import generics, mixins
 from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import ProtectedError
+from finance.payments.models import Payment
 
 from rest_framework.decorators import api_view
 from finance.payments.views import calculate_client_credit_balance
 from refillable_items_system.views import calculateRefillableItemsClientHas
+
+from django.db.models import Sum
 
 
 @api_view(['GET'])
@@ -16,21 +19,24 @@ def ownerView(request, *args, **kwargs):
     client_id = kwargs['pk']
     credit = calculate_client_credit_balance(client_id, datee)
     refillable_items = calculateRefillableItemsClientHas(client_id)
-    ownerDetail = Party.objects.filter(id=client_id).first().detail
+    paid = Payment.objects.filter(date__range=[datee, datee], paid=True).aggregate(total=Sum('amount'),)['total'] or 0
+    owner = Party.objects.filter(id=client_id).first()
     
     owner_detail_json = None
     try:
-        owner_detail_json = json.loads(ownerDetail)
+        owner_detail_json = json.loads(owner.detail)
     except (TypeError, ValueError):
         pass
 
     if owner_detail_json:
         owner_details = owner_detail_json
     else:
-        owner_details = { 'details': ownerDetail }
+        owner_details = { 'details': owner.detail }
 
     response_data = {
+        "owner_name": owner.name,
         'credit': credit,
+        'paid': paid,
         'refillable_items_client_has': refillable_items,
         **owner_details,
     }
