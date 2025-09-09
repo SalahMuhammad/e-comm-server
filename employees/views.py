@@ -8,7 +8,7 @@ class ListCreate(
     mixins.CreateModelMixin,
     generics.GenericAPIView
 ):
-    queryset = Employee.objects.all()
+    queryset = Employee.objects.select_related('by').all()
     serializer_class = EmployeeSerializers
 
 

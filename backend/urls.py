@@ -6,21 +6,23 @@ from django.conf.urls.static import static
 # 
 from django.shortcuts import render
 from django.http import JsonResponse
+# 
+from debug_toolbar.toolbar import debug_toolbar_urls
 
 
 
-def abc(request):
-    return render(request=request, template_name='index.html', context={})
+# def abc(request):
+#     return render(request=request, template_name='index.html', context={})
 
 def companyDetails(request):
-    with open('companyDetails.json', 'r') as file:
+    with open('media/companyDetails.json', 'r') as file:
         return JsonResponse(json.load(file))
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('company-details/', companyDetails),
+    path('api/company-details/', companyDetails),
 
     path('api/items/', include('items.urls')),
     path('api/users/', include('users.urls')),
@@ -61,7 +63,13 @@ urlpatterns += [
 
 
     path('api/requests-logs/', include('requests_logs.urls')),
-]
+
+
+    path('api/reports/', include('reports.urls')),
+
+
+    path('__debug__/', include('debug_toolbar.urls')),
+] + debug_toolbar_urls()
 
 
 from django.middleware.csrf import get_token
@@ -82,6 +90,6 @@ from django.views.decorators.http import require_http_methods
 
 urlpatterns += [
   # re_path(r'^(?:.*)/?$', abc),
-    re_path(r'^(?!api/).*$', abc),
+    # re_path(r'^(?!api/).*$', abc),
 ]
 

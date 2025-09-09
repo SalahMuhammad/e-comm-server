@@ -32,14 +32,26 @@ def toggle_repository_permit(request, *args, **kwargs):
 	})
 
 class ListCreateView(AbstractInvoiceListCreateView):
-	queryset = PurchaseInvoices.objects.all()
+	queryset = PurchaseInvoices.objects.select_related(
+		'by', 
+		'owner', 
+	).prefetch_related(
+		'p_invoice_items__item', 
+		'p_invoice_items__repository'
+	)
 	serializer_class = InvoiceSerializer
 	adjust_stock_sign = 1
 	items_relation_name = 'p_invoice_items'
 
 
 class DetailView(AbstractInvoiceDetailView):
-	queryset = PurchaseInvoices.objects.all()
+	queryset = PurchaseInvoices.objects.select_related(
+		'by', 
+		'owner', 
+	).prefetch_related(
+		'p_invoice_items__item', 
+		'p_invoice_items__repository'
+	)
 	serializer_class = InvoiceSerializer
 	adjust_stock_sign = 1
 	items_relation_name = 'p_invoice_items'

@@ -36,21 +36,40 @@ def toggle_repository_permit(request, *args, **kwargs):
 	})
 
 class ListCreateView(AbstractInvoiceListCreateView):
-	queryset = SalesInvoice.objects.all()
+	queryset = SalesInvoice.objects.select_related(
+		'by', 
+		'owner'
+	).prefetch_related(
+		's_invoice_items__item', 
+		's_invoice_items__repository'
+	)
 	serializer_class = InvoiceSerializer
 	adjust_stock_sign = -1
 	items_relation_name = 's_invoice_items'
 
 
 class DetailView(AbstractInvoiceDetailView):
-	queryset = SalesInvoice.objects.all()
+	queryset = SalesInvoice.objects.select_related(
+		'by', 
+		'owner'
+	).prefetch_related(
+		's_invoice_items__item', 
+		's_invoice_items__repository'
+	)
 	serializer_class = InvoiceSerializer
 	adjust_stock_sign = -1
 	items_relation_name = 's_invoice_items'
 
 
 class ReturnListCreateView(AbstractInvoiceListCreateView):
-	queryset = ReturnInvoice.objects.all()
+	queryset = ReturnInvoice.objects.select_related(
+		'by', 
+		'owner', 
+		'original_invoice'
+	).prefetch_related(
+		's_invoice_items__item', 
+		's_invoice_items__repository'
+	)
 	serializer_class = ReturnInvoiceSerializer
 	adjust_stock_sign = 1
 	items_relation_name = 's_invoice_items'
@@ -60,7 +79,11 @@ class RefundDetailView(
 	mixins.RetrieveModelMixin,
 	generics.GenericAPIView
 ):
-    queryset = ReturnInvoice.objects.all()
+    queryset = ReturnInvoice.objects.select_related(
+		'by', 
+		'owner', 
+		'original_invoice'
+	).all()
     serializer_class = ReturnInvoiceSerializer
     
 

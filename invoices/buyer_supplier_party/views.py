@@ -89,11 +89,32 @@ def get_date(obj):
 def customerAccountStatement(request, *args, **kwargs):
     owner_id = kwargs['pk']
     initial_credit_balance = InitialCreditBalance.objects.filter(party_id=owner_id)
-    sales_invs = SalesInvoice.objects.filter(owner_id=owner_id)
-    return_sales_invs = ReturnSalesInvoice.objects.filter(owner_id=owner_id)
-    purcahses_invs = PurchaseInvoices.objects.filter(owner_id=owner_id)
-    payments = Payment.objects.filter(owner_id=owner_id)
-    revers_payments = ExpensePayment.objects.filter(owner_id=owner_id)
+    sales_invs = SalesInvoice.objects.select_related('by', 'owner').filter(owner_id=owner_id).prefetch_related(
+        's_invoice_items__item', 
+		's_invoice_items__repository'
+    )
+    return_sales_invs = ReturnSalesInvoice.objects.select_related(
+		'by', 
+		'owner', 
+		'original_invoice'
+	).filter(owner_id=owner_id).prefetch_related(
+		's_invoice_items__item', 
+		's_invoice_items__repository'
+	)
+    purcahses_invs = PurchaseInvoices.objects.select_related('by', 'owner').filter(owner_id=owner_id).prefetch_related(
+        'p_invoice_items__item', 
+		'p_invoice_items__repository'
+    )
+    payments = Payment.objects.select_related(
+        'owner',
+        'by',
+        'payment_method'
+    ).filter(owner_id=owner_id)
+    revers_payments = ExpensePayment.objects.select_related(
+        'owner',
+        'by',
+        'payment_method'
+    ).filter(owner_id=owner_id)
 
 
     initial_credit_balance_total_credit = initial_credit_balance.aggregate(total_amount=Sum('amount'))
@@ -168,7 +189,9 @@ class ListCreateView(
     mixins.CreateModelMixin,
     generics.GenericAPIView
 ):
-    queryset = Party.objects.all()
+    queryset = Party.objects.select_related(
+        'by'
+    ).all()
     serializer_class = PartySerializers
 
     def get_queryset(self):
@@ -197,7 +220,9 @@ class DetailView(
     mixins.DestroyModelMixin,
     generics.GenericAPIView
 ):
-    queryset = Party.objects.all()
+    queryset = Party.objects.select_related(
+        'by'
+    ).all()
     serializer_class = PartySerializers
 
 

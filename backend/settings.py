@@ -83,6 +83,8 @@ INSTALLED_APPS = [
 
     "requests_logs",
     "django_extensions",
+
+    'debug_toolbar'
 ]
 
 #################################
@@ -98,6 +100,9 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -211,10 +216,11 @@ REST_FRAMEWORK = {
     ),
 }
 
-STATIC_URL = 'dist/'
+# STATIC_URL = 'dist/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "dist",
+    BASE_DIR / "static",
 ]
 
 MEDIA_URL = '/media/'
@@ -287,3 +293,10 @@ APPEND_SLASH = False
 #         }
 #     }
 # }
+
+# debug_toolbar app config
+
+# The Debug Toolbar is shown only if your IP address is listed in Django’s INTERNAL_IPS setting.
+INTERNAL_IPS = [
+    "127.0.0.1",
+]

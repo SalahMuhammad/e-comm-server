@@ -6,7 +6,7 @@ from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveMode
 from rest_framework.generics import GenericAPIView
 from .models import Payment, ExpensePayment
 from .serializers import PaymentSerializer, ExpensePaymentSerializer
-from invoices.buyer_supplier_party.models import InitialCreditBalance, Party
+from invoices.buyer_supplier_party.models import InitialCreditBalance
 from django.db.models import Sum
 from django.db.models import Q
 from rest_framework.response import Response
@@ -80,7 +80,11 @@ class ListCreateView(
     CreateModelMixin,
     GenericAPIView
 ):
-    queryset = Payment.objects.all()
+    queryset = Payment.objects.select_related(
+        'owner',
+        'by',
+        'payment_method'
+    ).all()
     serializer_class = PaymentSerializer
 
 
@@ -129,7 +133,11 @@ class DetailPaymentView(
     DestroyModelMixin,
     GenericAPIView
 ):
-    queryset = Payment.objects.all()
+    queryset = Payment.objects.select_related(
+        'owner',
+        'by',
+        'payment_method'
+    ).all()
     serializer_class = PaymentSerializer
 
     def get(self, request, *args, **kwargs):
@@ -147,7 +155,11 @@ class ListCreateExpensePaymentView(
     CreateModelMixin,
     GenericAPIView
 ):
-    queryset = ExpensePayment.objects.all()
+    queryset = ExpensePayment.objects.select_related(
+        'owner',
+        'by',
+        'payment_method'
+    ).all()
     serializer_class = ExpensePaymentSerializer
 
 
@@ -179,7 +191,11 @@ class DetailExpensePaymentView(
     DestroyModelMixin,
     GenericAPIView
 ):
-    queryset = ExpensePayment.objects.all()
+    queryset = ExpensePayment.objects.select_related(
+        'owner',
+        'by',
+        'payment_method'
+    ).all()
     serializer_class = ExpensePaymentSerializer
 
     def get(self, request, *args, **kwargs):

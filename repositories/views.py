@@ -18,7 +18,7 @@ from django.db.models.deletion import ProtectedError
 class ListCreateView(mixins.ListModelMixin, 
                mixins.CreateModelMixin,
                generics.GenericAPIView):
-    queryset = Repositories.objects.all()
+    queryset = Repositories.objects.select_related('by').all()
     serializer_class = RepositoriesSerializers
 
 
@@ -46,7 +46,7 @@ class DetailView(mixins.RetrieveModelMixin,
                  mixins.UpdateModelMixin,
                  mixins.DestroyModelMixin,
                  generics.GenericAPIView):
-    queryset = Repositories.objects.all()
+    queryset = Repositories.objects.select_related('by').all()
     serializer_class = RepositoriesSerializers
 
     def get(self, request, *args, **kwargs):

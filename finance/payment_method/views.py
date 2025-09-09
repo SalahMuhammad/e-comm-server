@@ -9,7 +9,9 @@ class PaymentMethodListCreateView(
     mixins.CreateModelMixin,
     generics.GenericAPIView
 ):
-    queryset = PaymentMethod.objects.all()
+    queryset = PaymentMethod.objects.select_related(
+        'by'
+    ).all()
     serializer_class = PaymentMethodSerializer
 
 
@@ -26,7 +28,9 @@ class PaymentMethodDetailView(
     mixins.DestroyModelMixin,
     generics.GenericAPIView
 ):
-    queryset = PaymentMethod.objects.all()
+    queryset = PaymentMethod.objects.select_related(
+        'by'
+    ).all()
     serializer_class = PaymentMethodSerializer
 
     def get(self, request, *args, **kwargs):

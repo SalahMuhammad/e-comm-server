@@ -189,7 +189,12 @@ class ListCreateRefundedRefillableItemsView(
     generics.GenericAPIView
 ):
     serializer_class = RefundedRefillableItemSerializer
-    queryset = RefundedRefillableItem.objects.all()
+    queryset = RefundedRefillableItem.objects.select_related(
+        'item',
+        'repository',
+        'owner',
+        'by'
+    ).all()
     
     def get_queryset(self):
         queryset = self.queryset
@@ -223,7 +228,12 @@ class DetialRefundedRefillableItemsView(
     DestroyModelMixin,
     generics.GenericAPIView
 ):
-    queryset = RefundedRefillableItem.objects.all()
+    queryset = RefundedRefillableItem.objects.select_related(
+        'item',
+        'repository',
+        'owner',
+        'by'
+    ).all()
     serializer_class = RefundedRefillableItemSerializer
 
 
@@ -250,7 +260,13 @@ class ListCreateRefilledItemsView(
     CreateModelMixin,
     generics.GenericAPIView
 ):
-    queryset = RefilledItem.objects.all()
+    queryset = RefilledItem.objects.select_related(
+        'refilled_item',
+        'used_item__item',
+        'repository',
+        'by',
+        'employee'
+    ).all()
     serializer_class = RefilledItemSerializer
 
 
@@ -301,7 +317,13 @@ class DetialRefilledItemsView(
     DestroyModelMixin,
     generics.GenericAPIView
 ):
-    queryset = RefilledItem.objects.all()
+    queryset = RefilledItem.objects.select_related(
+        'refilled_item',
+        'used_item__item',
+        'repository',
+        'by',
+        'employee'
+    ).all()
     serializer_class = RefilledItemSerializer
 
 
@@ -350,7 +372,10 @@ class ListItemTransformer(
     ListModelMixin,
     generics.GenericAPIView
 ):
-    queryset = ItemTransformer.objects.all()
+    queryset = ItemTransformer.objects.select_related(
+        'item',
+        'transform'
+    ).all()
     serializer_class = ItemTransformerSerializer
 
 
@@ -363,7 +388,10 @@ class ListOreItem(
     ListModelMixin,
     generics.GenericAPIView
 ):
-    queryset = OreItem.objects.all()
+    queryset = OreItem.objects.select_related(
+        'item',
+        'by',
+    ).all()
     serializer_class = OreItemSerializer
 
 

@@ -123,7 +123,36 @@ class ItemsList(mixins.ListModelMixin,
 	mixins.CreateModelMixin,
 	generics.GenericAPIView,
 ):
-	queryset = Items.objects.all()
+	queryset = Items.objects.select_related(
+		'by', 
+		'type'
+	).prefetch_related(
+		'images', 
+		'barcodes', 
+		'stock__repository'
+	)
+	# .only(
+	# 	# 'by',
+	# 	'by__username',
+	# 	# 'type',
+	# 	'type__name',
+	# 	# 'images__img',
+	# 	# 'barcodes', 
+	# 	# 'barcodes__barcode', 
+	# 	# 'stock__repository__name',
+    #         "created_at",
+    #         "updated_at",
+    #         "name",
+    #         "price1",
+    #         "price2",
+    #         "price3",
+    #         "price4",
+    #         "is_refillable",
+    #         "origin",
+    #         "place",
+    #         "by",
+    #         "type",
+    # )
 	serializer_class = ItemsSerializer
 	# parser_classes = (MultiPartParser, FormParser)
 	
@@ -188,7 +217,7 @@ class ItemDetail(
 	mixins.DestroyModelMixin,
 	generics.GenericAPIView
 ):
-	queryset = Items.objects.all()
+	queryset = Items.objects.select_related('by', 'type').prefetch_related('images', 'barcodes', 'stock__repository')
 	serializer_class = ItemsSerializer
 
 	def get_serializer(self, *args, **kwargs):
