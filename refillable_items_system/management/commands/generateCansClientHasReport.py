@@ -185,7 +185,7 @@ def create_cans_client_has_pdf_matplotlib(owner_id):
         ax.add_patch(header_rect)
         
         # Add company information to header
-        json_file_path = 'companyDetails.json'
+        json_file_path = 'media/companyDetails.json'
 
         with open(json_file_path, 'r') as file:
             company_info = json.load(file)
@@ -200,22 +200,26 @@ def create_cans_client_has_pdf_matplotlib(owner_id):
         ax.text(0.02, 0.92, company_info['addressDetails'] + company_info['address'], transform=ax.transAxes, 
                    fontsize=7, color='#D3D3D3', va='top')
         
-        ax.text(0.02, 0.90, company_info['website'], transform=ax.transAxes, 
-                   fontsize=7, color='#D3D3D3', va='top')
+        if hasattr(company_info, 'website'):
+            ax.text(0.02, 0.90, company_info['website'], transform=ax.transAxes, 
+                    fontsize=7, color='#D3D3D3', va='top')
         
         """
             contact info section
         """
-        ax.text(0.33, 1, company_info['contact']['phone'], transform=ax.transAxes, 
-                   fontsize=7, color='#D3D3D3', va='top')
+        if 'phone' in company_info['contact']:
+            ax.text(0.33, 1, company_info['contact']['phone'], transform=ax.transAxes, 
+                    fontsize=7, color='#D3D3D3', va='top')
         
-        for i, info in enumerate(company_info['contact']['mobiles']):
-            ax.text(0.33, .975 - (i * 0.025), info, transform=ax.transAxes, 
-                   fontsize=7, color='#D3D3D3', va='top')
-            
-        for i, info in enumerate(company_info['contact']['emails']):
-            ax.text(0.48, 1 - (i * 0.025), info, transform=ax.transAxes, 
-                   fontsize=7, color='#D3D3D3', va='top')
+        if 'mobiles' in company_info['contact']:
+            for i, info in enumerate(company_info['contact']['mobiles']):
+                ax.text(0.33, .975 - (i * 0.025), info, transform=ax.transAxes, 
+                    fontsize=7, color='#D3D3D3', va='top')
+
+        if 'emails' in company_info['contact']:
+            for i, info in enumerate(company_info['contact']['emails']):
+                ax.text(0.48, 1 - (i * 0.025), info, transform=ax.transAxes, 
+                    fontsize=7, color='#D3D3D3', va='top')
         
         logo_path = "./media/logo/01.jpeg"
         if os.path.exists(logo_path):
@@ -282,8 +286,9 @@ def create_cans_client_has_pdf_matplotlib(owner_id):
                 transform=ax.transAxes, fontsize=16, fontweight='bold', 
                 color='#2c3e50', ha='center', va='center')
         
-        # Add timestamp
-        plt.figtext(0.5, 0 if table_height <= 1 else - (table_height - float(str(table_height).split('.')[0])), f"Generated on {date}", 
+        # Add timestamp at the bottom of the page - position calculated based on table height
+        timestamp_y = table_y_position - 0.05  # Position it slightly below the table
+        plt.figtext(0.5, timestamp_y, f"Generated on {date}", 
                    ha='center', fontsize=8, style='italic', color='gray')
         
         pdf.savefig(fig, bbox_inches='tight', dpi=300)
