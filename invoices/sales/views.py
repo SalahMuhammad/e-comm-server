@@ -1,5 +1,7 @@
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404
+
+from common.encoder import MixedRadixEncoder
 from .models import SalesInvoice, ReturnInvoice
 from .serializers import InvoiceSerializer, ReturnInvoiceSerializer
 from common.views import AbstractInvoiceDetailView, AbstractInvoiceListCreateView
@@ -85,7 +87,17 @@ class RefundDetailView(
 		'original_invoice'
 	).all()
     serializer_class = ReturnInvoiceSerializer
-    
+
+    def get_object(self):
+        encoded_pk = self.kwargs.get('pk')
+        try:
+            # Decode the encoded ID from URL parameter
+            decoded_id = MixedRadixEncoder().decode(str(encoded_pk))
+            # Use the decoded ID to get the object
+            return self.get_queryset().get(id=decoded_id)
+        except Exception as e:
+            print(f"Invalid encoded ID: {self.kwargs['pk']}")
+            raise Http404("Object not found")    
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)

@@ -42,7 +42,7 @@
 #         #     return Response({'detail': 'لا يمكن حذف هذا العنصر قبل حذف المعاملات المرتبطه به اولا 😵...'}, status=status.HTTP_400_BAD_REQUEST)
   
 
-from items.models import Stock
+from django.http import Http404
 from rest_framework import mixins, generics
 from rest_framework.response import Response
 from rest_framework import status
@@ -71,7 +71,7 @@ class AbstractInvoiceListCreateView(
 
 		owner = self.request.query_params.get('owner')
 		if owner:
-			return queryset.filter(owner_id__name__icontains=owner)
+			queryset = queryset.filter(owner_id__name__icontains=owner)
 		
 		name_param = self.request.query_params.get('no')
 		id = -1
@@ -81,7 +81,7 @@ class AbstractInvoiceListCreateView(
 			except:
 				print(f"Invalid encoded ID: {name_param}")
 				
-			return queryset.filter(pk=id)
+			queryset = queryset.filter(pk=id)
 		
 		return queryset
 
@@ -111,6 +111,18 @@ class AbstractInvoiceDetailView(
 	mixins.DestroyModelMixin,
 	generics.GenericAPIView
 ):
+
+	def get_object(self):
+		encoded_pk = self.kwargs.get('pk')
+		try:
+            # Decode the encoded ID from URL parameter
+			decoded_id = MixedRadixEncoder().decode(str(encoded_pk))
+            # Use the decoded ID to get the object
+			return self.get_queryset().get(id=decoded_id)
+		except Exception as e:
+			print(f"Invalid encoded ID: {self.kwargs['pk']}")
+			raise Http404("Object not found")
+
 	def get(self, request, *args, **kwargs):
 		return self.retrieve(request, *args, **kwargs)
 

@@ -1,3 +1,5 @@
+from django.http import Http404
+from common.encoder import MixedRadixEncoder
 from common.utilities import get_pagination_class
 from invoices.purchase.models import PurchaseInvoices
 from invoices.sales.models import SalesInvoice, ReturnInvoice
@@ -98,6 +100,16 @@ class ListCreateView(
         if owner:
             queryset = queryset.filter(owner_id__name__icontains=owner)
 
+        Payment_no = self.request.query_params.get('no')
+        id = -1
+        if Payment_no:
+            try:
+                id = MixedRadixEncoder().decode(Payment_no)  # Validate the encoded ID
+            except:
+                print(f"Invalid encoded ID: {Payment_no}")
+				
+            queryset = queryset.filter(pk=id)
+
         if from_date and to_date:
             queryset = queryset.filter(date__range=[from_date, to_date])
 
@@ -139,6 +151,17 @@ class DetailPaymentView(
         'payment_method'
     ).all()
     serializer_class = PaymentSerializer
+
+    def get_object(self):
+        encoded_pk = self.kwargs.get('pk')
+        try:
+            # Decode the encoded ID from URL parameter
+            decoded_id = MixedRadixEncoder().decode(str(encoded_pk))
+            # Use the decoded ID to get the object
+            return self.get_queryset().get(id=decoded_id)
+        except Exception as e:
+            print(f"Invalid encoded ID: {self.kwargs['pk']}")
+            raise Http404("Object not found")
 
     def get(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
