@@ -141,16 +141,19 @@ def customerAccountStatement(request, *args, **kwargs):
             serializer = ReturnSalesInvoiceSerializer(instance)
             data_dict = dict(serializer.data)
             data_dict['type'] = 'sales invoice refund'
+            data_dict['total_amount'] = f'-{data_dict["total_amount"]}'
             list.append(data_dict)
         elif isinstance(instance, PurchaseInvoices):
             serializer = PurchaseInvoiceSerializer(instance)
             data_dict = dict(serializer.data)
             data_dict['type'] = 'purchase invoice'
+            data_dict['total_amount'] = f'-{data_dict["total_amount"]}'
             list.append(data_dict)
         elif isinstance(instance, Payment):
             serializer = PaymentSerializer(instance)
             data_dict = dict(serializer.data)
             data_dict['type'] = 'payment'
+            data_dict['amount'] = f'-{data_dict["amount"]}'
             list.append(data_dict)
         elif isinstance(instance, InitialCreditBalance):
             serializer = InitialCreditBalanceSerializer(instance)
