@@ -155,7 +155,7 @@ def customerAccountStatement(request, *args, **kwargs):
         elif isinstance(instance, InitialCreditBalance):
             serializer = InitialCreditBalanceSerializer(instance)
             data_dict = dict(serializer.data)
-            data_dict['type'] = 'initial credit balance'
+            data_dict['type'] = 'due from last year'
             list.append(data_dict)
         elif isinstance(instance, ExpensePayment):
             serializer = ExpensePaymentSerializer(instance)
