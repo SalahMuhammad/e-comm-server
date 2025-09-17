@@ -175,7 +175,7 @@ class ItemRepositoryMovementReport(ListAPIView):
             start_date = request.GET.get('start_date')
             end_date = request.GET.get('end_date')
 
-            if not item and not repository: 
+            if not item: # and not repository: 
                 return JsonResponse({'details': 'you should send item or repository...'}, status=400)
             
             # Parse dates

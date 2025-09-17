@@ -30,7 +30,7 @@ class ItemMovementService:
         repositoryyy = repository if hasattr(repository, 'id') else None
         
         # Get all movements
-        movements = self._get_all_movements(start_date, end_date, repositoryyy.id if hasattr(repositoryyy, 'id') else None)
+        movements = self._get_all_movements(start_date, end_date, None)# repositoryyy.id if hasattr(repositoryyy, 'id') else None)
         
         # Calculate totals
         # totals = self._calculate_totals(movements)
@@ -137,7 +137,9 @@ class ItemMovementService:
         """Get sales movements."""
         from invoices.sales.models import SalesInvoice, SalesInvoiceItem
                 
-        queryset = SalesInvoice.objects.filter(Q(s_invoice_items__item=self.item) if self.item else Q())
+        queryset = SalesInvoice.objects.select_related(
+            'owner'
+        ).filter(Q(s_invoice_items__item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)
 
         # queryset = SalesInvoiceItem.objects.filter(
@@ -167,7 +169,7 @@ class ItemMovementService:
                 # 'repository': sale.repository.name if sale.repository else None,
                 # 'repository_id': sale.repository_id,
                 # 'notes': getattr(sale, 'notes', ''),
-                'owner': sale.owner if sale.owner else None,
+                'owner': sale.owner.id if hasattr(sale.owner, 'id') else None,
                 'owner_name': sale.owner.name if sale.owner.name else None
             })
 
@@ -177,7 +179,9 @@ class ItemMovementService:
         """Get purchase movements."""
         from invoices.purchase.models import PurchaseInvoices, PurchaseInvoiceItems
         
-        queryset = PurchaseInvoices.objects.filter(Q(p_invoice_items__item=self.item) if self.item else Q())
+        queryset = PurchaseInvoices.objects.select_related(
+            'owner'
+        ).filter(Q(p_invoice_items__item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)
 
         # queryset = PurchaseInvoiceItems.objects.filter(
@@ -207,7 +211,7 @@ class ItemMovementService:
                 # 'repository': purchase.repository.name if purchase.repository else None,
                 # 'repository_id': purchase.repository_id,
                 # 'notes': getattr(purchase, 'notes', ''),
-                'owner': purchase.owner if purchase.owner else None,
+                'owner': purchase.owner.id if hasattr(purchase.owner, 'id') else None,
                 'owner_name': purchase.owner.name if purchase.owner.name else None
             })
         
@@ -217,7 +221,10 @@ class ItemMovementService:
         """Get sales refund movements."""
         from invoices.sales.models import ReturnInvoice
         
-        queryset = ReturnInvoice.objects.filter(Q(s_invoice_items__item=self.item) if self.item else Q())
+        queryset = ReturnInvoice.objects.select_related(
+            'owner',
+            'original_invoice'
+        ).filter(Q(s_invoice_items__item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)
         
         if repository_id:
@@ -247,7 +254,9 @@ class ItemMovementService:
         """Get sales refund movements."""
         from refillable_items_system.models import RefundedRefillableItem
         
-        queryset = RefundedRefillableItem.objects.filter(Q(item=self.item) if self.item else Q())
+        queryset = RefundedRefillableItem.objects.select_related(
+            'owner',
+        ).filter(Q(item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)
         
         if repository_id:
@@ -276,7 +285,9 @@ class ItemMovementService:
         """Get sales refund movements."""
         from refillable_items_system.models import RefilledItem
         # has an issue you should solve
-        queryset = RefilledItem.objects.filter(Q(refilled_item=self.item) if self.item else Q())
+        queryset = RefilledItem.objects.select_related(
+            'employee',
+        ).filter(Q(refilled_item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)
         
         if repository_id:
@@ -304,7 +315,9 @@ class ItemMovementService:
         """Get sales refund movements."""
         from refillable_items_system.models import RefilledItem
 
-        queryset = RefilledItem.objects.filter(Q(used_item__item=self.item) if self.item else Q())
+        queryset = RefilledItem.objects.select_related(
+            'employee',
+        ).filter(Q(used_item__item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)
         
         if repository_id:
@@ -332,7 +345,9 @@ class ItemMovementService:
         """Get sales refund movements."""
         from items.models import DamagedItems
 
-        queryset = DamagedItems.objects.filter(Q(item=self.item) if self.item else Q())
+        queryset = DamagedItems.objects.select_related(
+            'owner',
+        ).filter(Q(item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)
         
         if repository_id:
