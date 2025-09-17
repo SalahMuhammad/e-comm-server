@@ -140,7 +140,7 @@ def customerAccountStatement(request, *args, **kwargs):
         elif isinstance(instance, ReturnSalesInvoice):
             serializer = ReturnSalesInvoiceSerializer(instance)
             data_dict = dict(serializer.data)
-            data_dict['type'] = 'return sales invoice'
+            data_dict['type'] = 'sales invoice refund'
             list.append(data_dict)
         elif isinstance(instance, PurchaseInvoices):
             serializer = PurchaseInvoiceSerializer(instance)
