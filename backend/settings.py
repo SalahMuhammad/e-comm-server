@@ -36,8 +36,7 @@ ALLOWED_HOSTS = [
     # '192.168.1.10',
     'localhost',
     '127.0.0.1',
-    'localhost:8000',  # Add this line
-    '127.0.0.1:8000',  # And this one for good measure
+    '192.168.1.254'
     # '*',
 ]
 

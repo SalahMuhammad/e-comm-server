@@ -318,3 +318,55 @@ import hashlib
 def short_hash_number(num):
 	# Use a short hash: take the integer value of the md5 digest and encode in base36 for compactness
 	return hashlib.md5(str(num).encode()).hexdigest()[:8]  # first 8 chars
+
+
+
+from PIL import Image
+import imghdr
+from rest_framework.serializers import ValidationError
+
+
+def comprehensive_image_validation(file, max_size_mb=5):
+    """
+    Comprehensive image validation
+    """
+    # Check file size
+    if file.size > max_size_mb * 1024 * 1024:
+        raise ValidationError({'detail': f'File size exceeds {max_size_mb}MB limit'})
+    
+    # Check MIME type
+    allowed_mime_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+    if hasattr(file, 'content_type') and file.content_type not in allowed_mime_types:
+        raise ValidationError({'detail': 'Invalid file type. Only JPEG, JPG, PNG, GIF, and WebP are allowed.'})
+    
+    # Check file signature
+    file.seek(0)
+    image_type = imghdr.what(file)
+    if image_type not in ['jpeg', 'jpg', 'png', 'gif', 'webp']:
+        raise ValidationError({'detail': 'File is not a valid image.'})
+    
+    # Use PIL to validate and check image properties
+    try:
+        file.seek(0)
+        with Image.open(file) as img:
+            img.verify()  # Verify it's a complete image
+            
+            # Additional checks
+            file.seek(0)
+            with Image.open(file) as img:
+                width, height = img.size
+                
+                # Check dimensions if needed
+                if width > 4000 or height > 4000:
+                    raise ValidationError({'detail': 'Image dimensions too large (max 4000x4000)'})
+                
+                if width < 50 or height < 50:
+                    raise ValidationError({'detail': 'Image dimensions too small (min 50x50)'})
+    
+    except (IOError, SyntaxError) as e:
+        raise ValidationError({'detail': 'Invalid image file'})
+    
+    finally:
+        file.seek(0)  # Reset file pointer
+    
+    return True

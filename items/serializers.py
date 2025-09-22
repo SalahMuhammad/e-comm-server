@@ -1,7 +1,7 @@
 from django.db import transaction
 from django.forms import ValidationError
 from rest_framework import serializers
-from items.models import Items, Stock, Barcode, Types
+from items.models import Items, Stock, Barcode, Types, Images
 
 
 class Base64ImageField(serializers.ImageField):
@@ -90,6 +90,14 @@ class ImageURLField(serializers.RelatedField):
         # return f'{settings.MEDIA_URL}{value.img}'
 
 
+
+class ImagesSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Images
+		fields = ['img']
+
+
+
 class ItemsSerializer(serializers.ModelSerializer):
 	by_username = serializers.ReadOnlyField(source='by.username')
 	# has_img = serializers.SerializerMethodField()
@@ -98,12 +106,13 @@ class ItemsSerializer(serializers.ModelSerializer):
 	# 		child=Base64ImageField(),
 	# 		write_only=True,
 	# 	)
-	images_upload = serializers.ListField( 
-		required=False,
-		child=serializers.ImageField(),
-		write_only=True,
-	)
-	images = ImageURLField(many=True, read_only=True)
+	# images_upload = serializers.ListField( 
+	# 	required=False,
+	# 	child=serializers.ImageField(),
+	# 	write_only=True,
+	# )
+	# images = ImageURLField(many=True, read_only=True)
+	images = ImagesSerializer(many=True, read_only=True)
 	stock = StockSerializer(many=True, read_only=True)
 	barcodes = BarcodeSerializer(many=True, required=False)
 	type_name = serializers.ReadOnlyField(source='type.name')
@@ -124,7 +133,6 @@ class ItemsSerializer(serializers.ModelSerializer):
 				self.fields.pop(field_name)
 
 	def create(self, validated_data):
-		images_data = validated_data.pop('images_upload', [])
 		barcodes_data = validated_data.pop('barcodes', None)
 
 		with transaction.atomic():
@@ -134,24 +142,21 @@ class ItemsSerializer(serializers.ModelSerializer):
 				for barcode in barcodes_data:
 					item.barcodes.create(barcode=barcode['barcode'])
 
-			for img in images_data:
-				print(img)
-				item.images.create(img=img)
 			return item
 	
 	def update(self, instance, validated_data):
-		images_data = validated_data.pop('images_upload', None)
+		# images_data = validated_data.pop('images_upload', None)
 
 		with transaction.atomic():
 			item = super().update(instance, validated_data)
 			
-			if images_data != None:
-				for img in instance.images.all():
-					img.img.delete()
-					img.delete()
+			# if images_data != None:
+			# 	for img in instance.images.all():
+			# 		img.img.delete()
+			# 		img.delete()
 
-				for img in images_data:
-					item.images.create(img=img)
+			# 	for img in images_data:
+			# 		item.images.create(img=img)
 		return item
 
 	# def get_stock(self, obj):

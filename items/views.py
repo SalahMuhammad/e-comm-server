@@ -20,7 +20,7 @@ import os
 from django.db.utils import IntegrityError
 from decimal import Decimal, ROUND_HALF_UP
 
-
+from common.utilities import comprehensive_image_validation 
 
 from rest_framework import serializers
 from .models import InitialStock
@@ -196,7 +196,11 @@ class ItemsList(mixins.ListModelMixin,
 	def post(self, request, *args, **kwargs):
 		with transaction.atomic():
 			try:
+				images = request.FILES.getlist('images')
+
 				res = self.create(request, *args, **kwargs)
+
+				http_request_images_handler(res.data['id'], images)
 
 				if not float(res.data['price1']) <= 0:
 					ItemPriceLog.objects.create(
@@ -293,6 +297,27 @@ class TypesList(mixins.ListModelMixin,
 
 	def post(self, request, *args, **kwargs):
 		return self.create(request, *args, **kwargs)
+
+
+
+def http_request_images_handler(item_id, images):
+    for image_file in images:
+        if isinstance(image_file, str):
+            continue
+
+        # Skip empty files
+        if hasattr(image_file, 'size') and image_file.size == 0:
+            continue
+
+        # Skip if not a proper file object
+        if not hasattr(image_file, 'read'):
+            continue
+
+        comprehensive_image_validation(image_file)
+        Images.objects.create(
+            item_id=item_id, 
+            img=image_file
+        )
 
 
 # from invoices.models import Invoice, InvoiceItem
