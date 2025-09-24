@@ -1,7 +1,8 @@
 from decimal import ROUND_HALF_UP, Decimal
 from rest_framework import serializers
 from .models import PurchaseInvoices, PurchaseInvoiceItems
-from common.utilities import set_request_items_totals, short_hash_number
+from common.utilities import set_request_items_totals
+from common.encoder import MixedRadixEncoder
 
 
 
@@ -43,7 +44,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
 
     def get_hashed_id(self, obj):
-        return short_hash_number(obj.id)
+        return MixedRadixEncoder().encode(obj.id)
 
     def validate_p_invoice_items(self, value):
         if not value:
