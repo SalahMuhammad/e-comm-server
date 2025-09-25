@@ -1,4 +1,5 @@
 from rest_framework import generics, mixins
+from rest_framework.views import APIView
 from .models import Items, Images, ItemPriceLog, Types
 from .serializers import ItemsSerializer, TypesSerializer
 # 
@@ -28,6 +29,8 @@ class InitialStockSerializer(serializers.ModelSerializer):
     class Meta:
         model = InitialStock
         fields = ['item', 'quantity', "repository", "by"]  # Only allow updating the quantity field
+
+from .services.item_fluctuation import get_item_fluctuation
 
 from rest_framework.generics import UpdateAPIView
 from common.utilities import ValidateItemsStock
@@ -298,6 +301,11 @@ class TypesList(mixins.ListModelMixin,
 	def post(self, request, *args, **kwargs):
 		return self.create(request, *args, **kwargs)
 
+
+class ItemFluctuation(APIView):
+    def get(self, request, pk):
+        data = get_item_fluctuation(pk)
+        return Response(data, status=status.HTTP_200_OK)
 
 
 def http_request_images_handler(item_id, images):
