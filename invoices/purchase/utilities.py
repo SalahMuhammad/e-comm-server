@@ -23,7 +23,7 @@ def update_items_prices(items, user_id):
                 item.price4 = round(unit_price * float(pp['price4']) + unit_price, 2)
                 item.save()
     except Exception as e:
-        raise ValidationError(f"an error occurred while updating items prices: {e}")
+        raise ValidationError({"detail": f"an error occurred in update_items_prices(): {e}"})
 
 def compare_items(instance_items, validated_items):
     instance_items_set = set(

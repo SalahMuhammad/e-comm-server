@@ -22,10 +22,10 @@ class Types(UpdatedCreatedBy):
 class Items(UpdatedCreatedBy):
 	type = models.ForeignKey(Types, related_name='items', on_delete=models.PROTECT, null=True, blank=True)
 	name = models.CharField(max_length=150, unique=True)
-	price1 = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-	price2 = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-	price3 = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-	price4 = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+	price1 = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+	price2 = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+	price3 = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+	price4 = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 	is_refillable = models.BooleanField(default=False)
 	origin = models.CharField(max_length=100, blank=True, null=True)
 	place = models.CharField(max_length=100, blank=True, null=True)
@@ -134,7 +134,7 @@ class DamagedItems(UpdatedCreatedBy):
 
 class ItemPriceLog(UpdatedCreatedBy):
 	item = models.ForeignKey(Items, related_name='item_price_log', on_delete=models.CASCADE)
-	price = models.DecimalField(max_digits=10, decimal_places=2)
+	price = models.DecimalField(max_digits=20, decimal_places=2)
 	date = models.DateField(default=now)
 	notes = models.TextField(blank=True)
 
