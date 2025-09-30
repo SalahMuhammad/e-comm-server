@@ -92,9 +92,20 @@ class ImageURLField(serializers.RelatedField):
 
 
 class ImagesSerializer(serializers.ModelSerializer):
+	# id = serializers.IntegerField(required=False)
+	# img = serializers.ImageField(required=False)
+
+
 	class Meta:
 		model = Images
 		fields = ['img']
+
+
+	# def validate_img(self, value):
+	# 	if value:
+	# 		from common.utilities import comprehensive_image_validation
+	# 		comprehensive_image_validation(value)
+	# 	return value
 
 
 
@@ -123,14 +134,14 @@ class ItemsSerializer(serializers.ModelSerializer):
 		fields = '__all__'
 
 
-	def __init__(self, *args, **kwargs):
-		fieldss = kwargs.pop('fieldss', None)
-		super(ItemsSerializer, self).__init__(*args, **kwargs)
-		if fieldss:
-			allowed = set(fieldss.split(','))
-			existing = set(self.fields.keys())
-			for field_name in existing - allowed:
-				self.fields.pop(field_name)
+	# def __init__(self, *args, **kwargs):
+	# 	fieldss = kwargs.pop('fieldss', None)
+	# 	super(ItemsSerializer, self).__init__(*args, **kwargs)
+	# 	if fieldss:
+	# 		allowed = set(fieldss.split(','))
+	# 		existing = set(self.fields.keys())
+	# 		for field_name in existing - allowed:
+	# 			self.fields.pop(field_name)
 
 	def create(self, validated_data):
 		barcodes_data = validated_data.pop('barcodes', None)
@@ -143,21 +154,38 @@ class ItemsSerializer(serializers.ModelSerializer):
 					item.barcodes.create(barcode=barcode['barcode'])
 
 			return item
-	
-	def update(self, instance, validated_data):
-		# images_data = validated_data.pop('images_upload', None)
 
-		with transaction.atomic():
-			item = super().update(instance, validated_data)
-			
-			# if images_data != None:
-			# 	for img in instance.images.all():
-			# 		img.img.delete()
-			# 		img.delete()
+    # def update(self, instance, validated_data):
+    #     images_data = validated_data.pop('images', [])
+        
+    #     with transaction.atomic():
+    #         # Update the item instance
+    #         instance = super().update(instance, validated_data)
 
-			# 	for img in images_data:
-			# 		item.images.create(img=img)
-		return item
+    #         # Handle images
+    #         existing_images = {img.id: img for img in instance.images.all()}
+            
+    #         # Process each image in the request
+    #         for image_data in images_data:
+    #             image_id = image_data.get('id')
+                
+    #             if image_id and image_id in existing_images:
+    #                 # Update existing image if new file provided
+    #                 if 'img' in image_data:
+    #                     existing_image = existing_images[image_id]
+    #                     existing_image.img = image_data['img']
+    #                     existing_image.save()
+    #                 existing_images.pop(image_id)
+    #             else:
+    #                 # Create new image
+    #                 if 'img' in image_data:
+    #                     Images.objects.create(item=instance, **image_data)
+
+    #         # Delete any remaining old images
+    #         for image in existing_images.values():
+    #             image.delete()
+
+    #         return instance
 
 	# def get_stock(self, obj):
 	# 	return [f'{i.repository}: {i.quantity}, ' for i in obj.stock.all()]
