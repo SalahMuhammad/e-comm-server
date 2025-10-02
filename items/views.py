@@ -160,9 +160,9 @@ class ItemsList(mixins.ListModelMixin,
 	# parser_classes = (MultiPartParser, FormParser)
 	
 
-	def get_serializer(self, *args, **kwargs):
-		kwargs['fieldss'] = self.request.query_params.get('fields', None)
-		return super().get_serializer(*args, **kwargs)
+	# def get_serializer(self, *args, **kwargs):
+	# 	kwargs['fieldss'] = self.request.query_params.get('fields', None)
+	# 	return super().get_serializer(*args, **kwargs)
 
 	def get(self, request, *args, **kwargs):
 		return self.list(request, *args, **kwargs)
@@ -227,9 +227,9 @@ class ItemDetail(
 	queryset = Items.objects.select_related('by', 'type').prefetch_related('images', 'barcodes', 'stock__repository')
 	serializer_class = ItemsSerializer
 
-	def get_serializer(self, *args, **kwargs):
-		kwargs['fieldss'] = self.request.query_params.get('fields', None)
-		return super().get_serializer(*args, **kwargs)
+	# def get_serializer(self, *args, **kwargs):
+	# 	kwargs['fieldss'] = self.request.query_params.get('fields', None)
+	# 	return super().get_serializer(*args, **kwargs)
 
 	def get_queryset(self):
 		queryset = self.queryset
@@ -247,6 +247,12 @@ class ItemDetail(
 		instance = self.get_object()
 		with transaction.atomic():
 			barcodes_data = request.data.get('barcodes', None)
+			request.data.pop('barcodes', None)
+			images = request.FILES.getlist('images')
+			price1 = request.data.get('price1', instance.price1)
+			print(request.data)
+			res = super().partial_update(request, *args, **kwargs)
+
 			barcodes = instance.barcodes.all()
 			if barcodes_data:
 				for b in barcodes_data:
@@ -263,16 +269,32 @@ class ItemDetail(
 							return Response({'detail': f'باركود مكرر \"{b.get("barcode")}\"'}, status=status.HTTP_400_BAD_REQUEST)
 				for barcode in barcodes:
 					barcode.delete()
-			request.data.pop('barcodes', None)
+			print(images)
+			for img in instance.images.all():
+					img.img.delete()
+					img.delete()
+			http_request_images_handler(instance.id, images)
 
-			if instance.price1 != Decimal(str(request.data.get('price1', instance.price1))).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP):
+# # Prepare images data for serializer
+#     images_data = []
+#     for img in images:
+#         images_data.append({'img': img})
+    
+#     request.data['images'] = images_data
+    
+#     serializer = self.get_serializer(instance, data=request.data, partial=True)
+#     serializer.is_valid(raise_exception=True)
+#     self.perform_update(serializer)
+
+
+			if instance.price1 != Decimal(str(price1)).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP):
 				ItemPriceLog.objects.create(
 					item_id=instance.id, 
-					price=request.data.get('price1', instance.price1), 
-					by_id=request.data['by']
+					price=res.data['price1'], 
+					by_id=res.data['by']
 				)
 
-			return super().partial_update(request, *args, **kwargs)
+			return res
 
 	def delete(self, request, *args, **kwargs):
 		instance = self.get_object()
