@@ -1,11 +1,11 @@
 from django.conf import settings
 import jwt, datetime
 
-
 class JWTUtilities:
 	@staticmethod
 	def generate_jwt(user):
 		permissions_list = list(user.get_all_permissions())
+		group_names = list(user.groups.values_list('name', flat=True))
 
 		payload = {
 			'id': user.id,
@@ -14,7 +14,8 @@ class JWTUtilities:
 			'permissions': {
                 'is_superuser': user.is_superuser,
                 'is_staff': user.is_staff,  # Note: it's "is_staff" not "is_stuff"
-				'user_permissions': permissions_list
+				'user_permissions': permissions_list, 
+				'roles': group_names
             }
 		}
 		
