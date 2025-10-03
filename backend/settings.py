@@ -146,8 +146,8 @@ DATABASES = {
         'NAME': 'e-commerce',
         'USER': 'postgres',
         'PASSWORD': 'BeWithAllah',
-        # 'HOST': 'db',
-        'HOST': 'localhost',
+        'HOST': 'db',
+        # 'HOST': 'localhost',
         'PORT': '5432'
     }
 }
