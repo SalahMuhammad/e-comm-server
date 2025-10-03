@@ -1,3 +1,33 @@
+from datetime import datetime
+import os, json
+
+from django.core.management.base import BaseCommand
+
+
+
+class Command(BaseCommand):
+    help = 'Generate cans client report'
+
+    def handle(self, *args, **options):
+        self.stdout.write(f'Generating items')
+
+        try:
+            file_neame = create_items_excel_from_django_data()
+        except Exception as e: 
+            self.stdout.write(e)
+
+        self.stdout.write(
+            self.style.SUCCESS(file_neame)
+        )
+
+
+
+
+
+
+
+
+
 from openpyxl import Workbook
 from openpyxl.styles import PatternFill, Font, Border, Side, Alignment
 from openpyxl.utils import get_column_letter
@@ -126,10 +156,11 @@ def create_items_excel_from_django_data(data = Items.objects.all(), filename="it
     # Auto-adjust column widths
     adjust_column_widths(ws)
     
+    path = f'media/shared/{datetime.now()}-{filename}'
     # Save workbook
-    wb.save(filename)
-    print(f"Excel file created successfully: {filename}")
-    return filename
+    wb.save(path)
+    # print(f"Excel file created successfully: {path}")
+    return path
 
 def format_datetime(datetime_obj):
     """Format Django datetime object to readable format"""
