@@ -5,8 +5,8 @@ from invoices.purchase.models import PurchaseInvoices
 from invoices.sales.models import SalesInvoice, ReturnInvoice
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.generics import GenericAPIView
-from .models import Payment, ExpensePayment, Debtsettlement
-from .serializers import PaymentSerializer, ExpensePaymentSerializer, DebtsettlementSerializer
+from .models import Payment, ExpensePayment
+from .serializers import PaymentSerializer, ExpensePaymentSerializer
 from invoices.buyer_supplier_party.models import InitialCreditBalance
 from django.db.models import Sum
 from django.db.models import Q
