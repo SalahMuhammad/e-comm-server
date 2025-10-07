@@ -76,6 +76,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "finance.payment_method.apps.PaymentMethodConfig",
     "finance.payments.apps.PaymentsConfig",
+    'finance.debt_settlement.apps.DebtSettlementConfig',
     "common",
     "employees.apps.EmployeesConfig",
     "refillable_items_system",

@@ -17,6 +17,9 @@ class JSONOnlyMiddleware:
 		
 		if request.build_absolute_uri().__contains__('/api/items/'):
 			return self.get_response(request)
+
+		if request.build_absolute_uri().__contains__('/api/finance/debt-settlement/'):
+			return self.get_response(request)
 		
 		if request.build_absolute_uri().__contains__('8000/admin') or request.build_absolute_uri().__contains__('89/admin'):
 			return self.get_response(request)

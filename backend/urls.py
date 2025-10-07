@@ -36,6 +36,7 @@ urlpatterns = [
     ###################################################
     path('api/payment/methods/', include('finance.payment_method.urls')),
     path('api/payment/', include('finance.payments.urls')),
+    path('api/finance/debt-settlement/', include('finance.debt_settlement.urls')),
     ###################################################
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
