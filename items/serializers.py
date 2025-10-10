@@ -1,7 +1,7 @@
-from django.db import transaction
+# from django.db import transaction
 from django.forms import ValidationError
 from rest_framework import serializers
-from items.models import Items, Stock, Barcode, Types, Images
+from items.models import Items, Stock, Barcode, Types, Images,InitialStock
 
 
 class Base64ImageField(serializers.ImageField):
@@ -66,6 +66,13 @@ class Base64ImageField(serializers.ImageField):
 			raise ValidationError(f"Invalid image file: {file_name}")
 	
 
+
+
+# _____________________________________________________________________________________#
+
+
+
+
 class StockSerializer(serializers.ModelSerializer):
 	repository_name = serializers.ReadOnlyField(source='repository.name')
 
@@ -75,10 +82,23 @@ class StockSerializer(serializers.ModelSerializer):
 		fields = '__all__'
 
 
+
+
+# _____________________________________________________________________________________#
+
+
+
+
 class BarcodeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Barcode
 		fields = ['id', 'barcode']
+
+
+
+
+# _____________________________________________________________________________________#
+
 
 
 
@@ -109,6 +129,12 @@ class ImagesSerializer(serializers.ModelSerializer):
 
 
 
+
+# _____________________________________________________________________________________#
+
+
+
+
 class ItemsSerializer(serializers.ModelSerializer):
 	by_username = serializers.ReadOnlyField(source='by.username')
 	# has_img = serializers.SerializerMethodField()
@@ -125,7 +151,7 @@ class ItemsSerializer(serializers.ModelSerializer):
 	# images = ImageURLField(many=True, read_only=True)
 	images = ImagesSerializer(many=True, read_only=True)
 	stock = StockSerializer(many=True, read_only=True)
-	barcodes = BarcodeSerializer(many=True, required=False)
+	barcodes = BarcodeSerializer(many=True, required=False, read_only=True)
 	type_name = serializers.ReadOnlyField(source='type.name')
 
 
@@ -143,17 +169,17 @@ class ItemsSerializer(serializers.ModelSerializer):
 	# 		for field_name in existing - allowed:
 	# 			self.fields.pop(field_name)
 
-	def create(self, validated_data):
-		barcodes_data = validated_data.pop('barcodes', None)
+	# def create(self, validated_data):
+	# 	barcodes_data = validated_data.pop('barcodes', None)
 
-		with transaction.atomic():
-			item = super().create(validated_data)
+	# 	with transaction.atomic():
+	# 		item = super().create(validated_data)
 
-			if barcodes_data:
-				for barcode in barcodes_data:
-					item.barcodes.create(barcode=barcode['barcode'])
+	# 		if barcodes_data:
+	# 			for barcode in barcodes_data:
+	# 				item.barcodes.create(barcode=barcode['barcode'])
 
-			return item
+	# 		return item
 
     # def update(self, instance, validated_data):
     #     images_data = validated_data.pop('images', [])
@@ -198,9 +224,29 @@ class ItemsSerializer(serializers.ModelSerializer):
 
 
 
+
+# _____________________________________________________________________________________#
+
+
+
+
 class TypesSerializer(serializers.ModelSerializer):
 	
 	
 	class Meta:
 		model = Types
 		fields = '__all__'
+
+
+
+
+# _____________________________________________________________________________________#
+
+
+
+
+class InitialStockSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = InitialStock
+		fields = ['item', 'quantity', "repository", "by"]  # Only allow updating the quantity field
+

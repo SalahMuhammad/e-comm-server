@@ -1,46 +1,34 @@
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, serializers, status
+# from rest_framework.generics import UpdateAPIView
 from rest_framework.views import APIView
-from .models import Items, Images, ItemPriceLog, Types
-from .serializers import ItemsSerializer, TypesSerializer
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.permissions import AllowAny
+# 
+from .models import Items, Images, ItemPriceLog, Types, Barcode
+from .serializers import ItemsSerializer, TypesSerializer, InitialStockSerializer
+# 
+from .services.item_fluctuation import get_item_fluctuation
+from .services.handle_images_insertion import http_request_images_handler
+from .services.handle_barcodes import http_request_barcodes_handler
+# 
+from common.utilities import ValidateItemsStock
 # 
 from operator import and_
 from functools import reduce
 # 
-from django.db.models import Q
-# 
-from rest_framework.response import Response
-# 
-from rest_framework import status
-# 
-from django.db import IntegrityError
-# 
 from django.db.models.deletion import ProtectedError
-from django.db import transaction
+from django.db.models import Q, Exists, OuterRef
+from django.db.utils import IntegrityError
+from django.db import IntegrityError, transaction
+# 
+from decimal import Decimal, ROUND_HALF_UP
 # 
 import os
-from django.db.utils import IntegrityError
-from decimal import Decimal, ROUND_HALF_UP
 
-from common.utilities import comprehensive_image_validation 
 
-from rest_framework import serializers
-from .models import InitialStock
-class InitialStockSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = InitialStock
-        fields = ['item', 'quantity', "repository", "by"]  # Only allow updating the quantity field
 
-from .services.item_fluctuation import get_item_fluctuation
-
-from rest_framework.generics import UpdateAPIView
-from common.utilities import ValidateItemsStock
-from rest_framework.decorators import api_view
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import authentication_classes, permission_classes
-
-from rest_framework.permissions import AllowAny
 @api_view(['POST'])
-
 @authentication_classes([])  # Disable authentication (CSRF check is tied to authentication)
 @permission_classes([AllowAny])  # Allow any user
 def aaaa(request, *args, **kwargs):
@@ -121,6 +109,14 @@ def quantity_errors_list_view(request, *args, **kwargs):
 
 	return Response(errors_list, status=status.HTTP_200_OK)
 
+
+
+
+# _____________________________________________________________________________________#
+
+
+
+
 # from rest_framework.parsers import MultiPartParser, FormParser
 class ItemsList(mixins.ListModelMixin, 
 	mixins.CreateModelMixin,
@@ -143,19 +139,19 @@ class ItemsList(mixins.ListModelMixin,
 	# 	# 'barcodes', 
 	# 	# 'barcodes__barcode', 
 	# 	# 'stock__repository__name',
-    #         "created_at",
-    #         "updated_at",
-    #         "name",
-    #         "price1",
-    #         "price2",
-    #         "price3",
-    #         "price4",
-    #         "is_refillable",
-    #         "origin",
-    #         "place",
-    #         "by",
-    #         "type",
-    # )
+	#         "created_at",
+	#         "updated_at",
+	#         "name",
+	#         "price1",
+	#         "price2",
+	#         "price3",
+	#         "price4",
+	#         "is_refillable",
+	#         "origin",
+	#         "place",
+	#         "by",
+	#         "type",
+	# )
 	serializer_class = ItemsSerializer
 	# parser_classes = (MultiPartParser, FormParser)
 	
@@ -169,40 +165,53 @@ class ItemsList(mixins.ListModelMixin,
 
 	def get_queryset(self):
 		queryset = self.queryset
-		
-		type_param = Q()
+		 
+		# Permission filtering
 		if not self.request.user.is_superuser:
 			permissions = self.request.user.groups.values_list('permissions__codename', flat=True)
-			type_param = Q(type__name__in=permissions)
-
-			queryset = queryset.filter(type_param)
+			queryset = queryset.filter(type__name__in=permissions)
 
 		name_param = self.request.query_params.get('s')
-		aa = Q(name__icontains=name_param) | Q(barcodes__barcode__icontains=name_param) | Q(id__icontains=name_param) | Q(origin__icontains=name_param) | Q(place__icontains=name_param) if name_param else Q()
 		if name_param:
-			q = queryset.filter(aa)
-			if q:
+			# Create a subquery to check if any barcode matches
+			barcode_match = Barcode.objects.filter(
+				item=OuterRef('pk'),
+				barcode__icontains=name_param
+			)
+			
+			# Filter using subquery - NO JOIN, NO DUPLICATES
+			q = queryset.annotate(
+				has_matching_barcode=Exists(barcode_match)
+			).filter(
+				Q(name__icontains=name_param) | 
+				Q(has_matching_barcode=True) | 
+				Q(id__icontains=name_param) | 
+				Q(origin__icontains=name_param) | 
+				Q(place__icontains=name_param)
+			)
+			
+			if q.exists():
 				return q
 
-			manipulated_params = name_param.split(' ')
-			manipulated_params.pop() if manipulated_params[-1] == '' else None
+			# Fallback to combined search
+			manipulated_params = [p for p in name_param.split(' ') if p]
+			if manipulated_params:
+				q_objects = [Q(name__icontains=value) for value in manipulated_params]
+				combined_q_object = reduce(and_, q_objects)
+				return queryset.filter(combined_q_object)
 
-			q_objects = [Q(name__icontains=value) for value in manipulated_params]
-
-			# Combine all Q objects using the logical AND operator '&'
-			combined_q_object = reduce(and_, q_objects)
-
-			return queryset.filter(combined_q_object)
-		
 		return queryset
 
 	def post(self, request, *args, **kwargs):
 		with transaction.atomic():
 			try:
 				images = request.FILES.getlist('images')
+				barcodes_data = request.POST.get('barcodes', None)
+				request.data.pop('barcodes')
 
 				res = self.create(request, *args, **kwargs)
 
+				http_request_barcodes_handler(res.data['id'], barcodes_data)
 				http_request_images_handler(res.data['id'], images)
 
 				if not float(res.data['price1']) <= 0:
@@ -217,6 +226,8 @@ class ItemsList(mixins.ListModelMixin,
 				return Response({'name': 'هذا الصنف موجود بالفعل...'}, status=status.HTTP_400_BAD_REQUEST)
 	# def perform_create(self, serializer):
 	# 	serializer.save(by=self.request.user)
+
+
 
 class ItemDetail(
 	mixins.RetrieveModelMixin, 
@@ -246,30 +257,14 @@ class ItemDetail(
 	def put(self, request,*args, **kwargs):
 		instance = self.get_object()
 		with transaction.atomic():
-			barcodes_data = request.data.get('barcodes', None)
+			barcodes_data = request.POST.get('barcodes', None)
 			request.data.pop('barcodes', None)
 			images = request.FILES.getlist('images')
 			price1 = request.data.get('price1', instance.price1)
-			print(request.data)
+			# print(request.data)
 			res = super().partial_update(request, *args, **kwargs)
 
-			barcodes = instance.barcodes.all()
-			if barcodes_data:
-				for b in barcodes_data:
-					if b.get('id', None):
-						i = barcodes.get(pk=b['id'])
-						i.barcode = b['barcode']
-						i.save()
-						barcodes = barcodes.exclude(id=b['id'])
-					else:
-						try:
-							i = instance.barcodes.create(barcode=b['barcode'])
-							barcodes = barcodes.exclude(id=i.id)
-						except IntegrityError as e:
-							return Response({'detail': f'باركود مكرر \"{b.get("barcode")}\"'}, status=status.HTTP_400_BAD_REQUEST)
-				for barcode in barcodes:
-					barcode.delete()
-			print(images)
+			http_request_barcodes_handler(instance.id, barcodes_data)
 			for img in instance.images.all():
 					img.img.delete()
 					img.delete()
@@ -279,9 +274,9 @@ class ItemDetail(
 #     images_data = []
 #     for img in images:
 #         images_data.append({'img': img})
-    
+	
 #     request.data['images'] = images_data
-    
+	
 #     serializer = self.get_serializer(instance, data=request.data, partial=True)
 #     serializer.is_valid(raise_exception=True)
 #     self.perform_update(serializer)
@@ -310,6 +305,13 @@ class ItemDetail(
 		return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+
+
+# _____________________________________________________________________________________#
+
+
+
+
 class TypesList(mixins.ListModelMixin,
 	mixins.CreateModelMixin,
 	generics.GenericAPIView
@@ -324,30 +326,24 @@ class TypesList(mixins.ListModelMixin,
 		return self.create(request, *args, **kwargs)
 
 
+
+
+# _____________________________________________________________________________________#
+
+
+
+
 class ItemFluctuation(APIView):
-    def get(self, request, pk):
-        data = get_item_fluctuation(pk)
-        return Response(data, status=status.HTTP_200_OK)
+	def get(self, request, pk):
+		data = get_item_fluctuation(pk)
+		return Response(data, status=status.HTTP_200_OK)
 
 
-def http_request_images_handler(item_id, images):
-    for image_file in images:
-        if isinstance(image_file, str):
-            continue
 
-        # Skip empty files
-        if hasattr(image_file, 'size') and image_file.size == 0:
-            continue
 
-        # Skip if not a proper file object
-        if not hasattr(image_file, 'read'):
-            continue
+# _____________________________________________________________________________________#
 
-        comprehensive_image_validation(image_file)
-        Images.objects.create(
-            item_id=item_id, 
-            img=image_file
-        )
+
 
 
 # from invoices.models import Invoice, InvoiceItem
@@ -408,10 +404,11 @@ def validate_stock(items=Items.objects.all()):
 from django.db.models import Count
 
 def delete_orphan_items_from_invoice_items():
-    # Find InvoiceItem objects with no associated Invoice
-    orphan_items = InvoiceItem.objects.annotate(invoice_count=Count('invoices')).filter(invoice_count=0)
+	# Find InvoiceItem objects with no associated Invoice
+	orphan_items = InvoiceItem.objects.annotate(invoice_count=Count('invoices')).filter(invoice_count=0)
 
-    # Delete these orphan items
-    deleted_count = orphan_items.delete()[0]
+	# Delete these orphan items
+	deleted_count = orphan_items.delete()[0]
 
-    print(f"Deleted {deleted_count} orphan InvoiceItem objects.")
+	print(f"Deleted {deleted_count} orphan InvoiceItem objects.")
+
