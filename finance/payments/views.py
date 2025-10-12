@@ -6,6 +6,7 @@ from invoices.sales.models import SalesInvoice, ReturnInvoice
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.generics import GenericAPIView
 from .models import Payment, ExpensePayment
+from finance.debt_settlement.models import DebtSettlement
 from .serializers import PaymentSerializer, ExpensePaymentSerializer
 from invoices.buyer_supplier_party.models import InitialCreditBalance
 from django.db.models import Sum
@@ -24,8 +25,15 @@ def calculate_client_credit_balance(client_id, date):
         s_invs = SalesInvoice.objects.filter(issue_date, owner_id=client_id, repository_permit=True)
         payments = Payment.objects.filter(datee, owner_id=client_id, paid=True)
         return_sales_invs = ReturnInvoice.objects.filter(issue_date, owner_id=client_id, repository_permit=True)
-        expences = ExpensePayment.objects.filter(datee, owner_id=client_id, paid=True)
+        reverse_payment = ExpensePayment.objects.filter(datee, owner_id=client_id, paid=True)
         initial_credit_balance = InitialCreditBalance.objects.filter(datee, party_id=client_id)
+        total_debt_settlement = DebtSettlement.objects.filter(
+            datee, 
+            owner_id=client_id, 
+            status="approved"
+        ).aggregate(
+            total=Sum('amount'),
+        )['total'] or 0
     
     
         initial_credit_balance = initial_credit_balance.aggregate(
@@ -60,7 +68,7 @@ def calculate_client_credit_balance(client_id, date):
             total=Sum('total_amount'),
         )['total'] or 0
 
-        expences = expences.aggregate(
+        reverse_payment = reverse_payment.aggregate(
             total=Sum('amount'),
         )['total'] or 0
 
@@ -69,7 +77,8 @@ def calculate_client_credit_balance(client_id, date):
         total += initial_credit_balance 
         total -= payments 
         total -= sales_refund 
-        total += expences
+        total += reverse_payment
+        total -= total_debt_settlement
     except Exception as e:
         return e
 
