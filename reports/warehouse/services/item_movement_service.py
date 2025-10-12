@@ -3,6 +3,7 @@ from decimal import Decimal
 from typing import Dict, List, Optional
 from datetime import date
 from django.db.models import Q
+from common.encoder import MixedRadixEncoder
 
 
 class ItemMovementService:
@@ -161,7 +162,7 @@ class ItemMovementService:
             movements.append({
                 'date': sale.issue_date,
                 'type': 'SALE',
-                'reference_id': sale.id,
+                'reference_id': MixedRadixEncoder().encode(sale.id),
                 # 'reference_number': getattr(sale, 'sale_number', f"SALE-{sale.id}"),
                 # 'quantity': - sale['total_quantity'],  # Negative for outgoing
                 # 'unit_price': sale.unit_price,
@@ -203,7 +204,7 @@ class ItemMovementService:
             movements.append({
                 'date': purchase.issue_date,
                 'type': 'PURCHASE',
-                'reference_id': purchase.id,
+                'reference_id': MixedRadixEncoder().encode(purchase.id),
                 # 'reference_number': getattr(purchase, 'purchase_number', f"PUR-{purchase.id}"),
                 # 'quantity': purchase.quantity,  # Positive for incoming
                 # 'unit_price': purchase.unit_price,
@@ -235,7 +236,7 @@ class ItemMovementService:
             movements.append({
                 'date': sales_refund.issue_date,
                 'type': 'SALES_REFUND',
-                'reference_id': sales_refund.id,
+                'reference_id': MixedRadixEncoder().encode(sales_refund.id),
                 # 'reference_number': getattr(refund, 'refund_number', f"SR-{refund.id}"),
                 # 'quantity': refund.quantity,  # Positive for incoming
                 # 'unit_price': refund.unit_price,
