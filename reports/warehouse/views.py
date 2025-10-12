@@ -163,13 +163,13 @@ class ItemRepositoryMovementReport(ListAPIView):
                     else 
                     Q(id__isnull=True)
                 ).first()
-            repository = Repositories \
-                .objects \
-                .filter(
-                    Q(pk=request.GET.get('repository_id')) if 
-                        request.GET.get('repository_id') else 
-                    Q(id__isnull=True)
-                ).first()
+            # repository = Repositories \
+            #     .objects \
+            #     .filter(
+            #         Q(pk=request.GET.get('repository_id'))
+            #             if request.GET.get('repository_id') 
+            #             else Q(id__isnull=True)
+            #     ).first()
 
             # Get query parameters
             start_date = request.GET.get('start_date')
@@ -187,7 +187,7 @@ class ItemRepositoryMovementReport(ListAPIView):
             report_data = service.get_movement_report(
                 start_date=start_date,
                 end_date=end_date,
-                repository=repository
+                # repository=repository
             )
             
             # Convert Decimal objects to strings for JSON serialization
