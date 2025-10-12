@@ -53,6 +53,16 @@ class MixedRadixEncoder:
             string.ascii_lowercase[10:20],    # Position 6: k-t (10 chars)
             string.digits + string.ascii_uppercase[:6]   # Position 7: 0-9A-F (16 chars) - checksum
         ]
+#         self.charsets = [
+#     string.digits + string.ascii_uppercase,          # Position 0: 0-9A-Z (36 chars)
+#     string.digits + string.ascii_lowercase,          # Position 1: 0-9a-z (36 chars)
+#     string.ascii_uppercase + string.ascii_lowercase, # Position 2: A-Za-z (52 chars)
+#     string.digits + string.ascii_letters,           # Position 3: 0-9A-Za-z (62 chars)
+#     string.digits + string.ascii_letters,           # Position 4: 0-9A-Za-z (62 chars)
+#     string.digits + string.ascii_letters,           # Position 5: 0-9A-Za-z (62 chars)
+#     string.digits + string.ascii_letters,           # Position 6: 0-9A-Za-z (62 chars)
+#     string.digits + string.ascii_uppercase[:6]      # Position 7: 0-9A-F (checksum)
+# ]
         self.radixes = [len(charset) for charset in self.charsets[:-1]]  # Exclude checksum position
     
     def encode(self, number):
@@ -127,6 +137,102 @@ class MixedRadixEncoder:
         return number
 
 
+class EnhancedMixedRadixEncoder(MixedRadixEncoder):
+    def __init__(self):
+        super().__init__()
+        self.avalanche_helper = AvalancheHelper()
+        # Add additional charset for salt
+        self.salt_charset = string.ascii_letters + string.digits
+    
+    def encode(self, number):
+        """Encode a number using mixed radix system with avalanche effect"""
+        if number < 0:
+            raise ValueError("Only non-negative numbers are supported")
+            
+        # Create avalanche effect
+        avalanche_num, salt = self.avalanche_helper.create_avalanche(number)
+        
+        # XOR the original number with avalanche number
+        enhanced_number = number ^ (avalanche_num & 0xFFFFFFFF)
+        
+        # Encode using mixed radix
+        encoded = super().encode(enhanced_number)
+        
+        # Return encoded string with salt
+        return encoded + salt
+    
+    def decode(self, encoded):
+        """Decode with avalanche validation"""
+        if len(encoded) != 12:  # 8 chars for encoding + 4 chars salt
+            raise ValueError("Encoded string must be 12 characters")
+            
+        # Split encoded string and salt
+        main_encoded = encoded[:8]
+        salt = encoded[8:]
+        
+        # Decode the enhanced number
+        enhanced_number = super().decode(main_encoded)
+        
+        # Recreate avalanche effect
+        avalanche_num, _ = self.avalanche_helper.create_avalanche(enhanced_number, salt_length=4)
+        
+        # Reverse the XOR operation
+        original_number = enhanced_number ^ (avalanche_num & 0xFFFFFFFF)
+        
+        # Verify the result
+        verify_avalanche, _ = self.avalanche_helper.create_avalanche(original_number, salt_length=4)
+        if (verify_avalanche & 0xFFFFFFFF) ^ original_number != enhanced_number:
+            raise ValueError("Avalanche validation failed - data may be corrupted")
+            
+        return original_number
+
+
+class EnhancedBase62Encoder(Base62Encoder):
+    def __init__(self):
+        super().__init__()
+        self.avalanche_helper = AvalancheHelper()
+    
+    def encode(self, number):
+        """Encode a number with avalanche effect"""
+        if number < 0:
+            raise ValueError("Only non-negative numbers are supported")
+        
+        # Create avalanche effect
+        avalanche_num, salt = self.avalanche_helper.create_avalanche(number)
+        
+        # Combine original number with avalanche effect
+        combined = (number << 32) | avalanche_num
+        
+        # Encode using base62
+        encoded = super().encode(combined)
+        
+        # Return encoded string with salt
+        return encoded + salt
+    
+    def decode(self, encoded):
+        """Decode a string with avalanche validation"""
+        if len(encoded) != 12:  # 8 chars for encoding + 4 chars salt
+            raise ValueError("Encoded string must be 12 characters")
+            
+        # Split encoded string and salt
+        main_encoded = encoded[:8]
+        salt = encoded[8:]
+        
+        # Decode the combined number
+        combined = super().decode(main_encoded)
+        
+        # Extract original number and avalanche number
+        original_number = combined >> 32
+        avalanche_num = combined & 0xFFFFFFFF
+        
+        # Verify avalanche effect
+        new_avalanche, _ = self.avalanche_helper.create_avalanche(original_number, salt_length=4)
+        if (new_avalanche & 0xFFFFFFFF) != avalanche_num:
+            raise ValueError("Avalanche validation failed - data may be corrupted")
+            
+        return original_number
+
+
 # Demo and testing
 if __name__ == "__main__":
     # Test Algorithm 1: Base62
@@ -176,3 +282,31 @@ if __name__ == "__main__":
         print("Error detection failed!")
     except ValueError as e:
         print(f"Error detected: {e}")
+
+
+import random
+import hashlib
+
+class AvalancheHelper:
+    @staticmethod
+    def create_avalanche(number, salt_length=4):
+        """Creates an avalanche effect by combining the number with a random salt"""
+        # Convert number to bytes
+        number_bytes = str(number).encode('utf-8')
+        # Create random salt
+        salt = ''.join(random.choices(string.ascii_letters + string.digits, k=salt_length))
+        salt_bytes = salt.encode('utf-8')
+        
+        # Combine number and salt, then hash
+        combined = number_bytes + salt_bytes
+        hashed = hashlib.sha256(combined).digest()
+        
+        # Use first 4 bytes of hash as integer
+        avalanche_num = int.from_bytes(hashed[:4], byteorder='big')
+        return avalanche_num, salt
+
+    @staticmethod
+    def reverse_avalanche(encoded_num, salt):
+        """Validates the avalanche effect using the salt"""
+        # Will be implemented based on specific encoder needs
+        pass
