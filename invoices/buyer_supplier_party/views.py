@@ -19,7 +19,7 @@ def ownerView(request, *args, **kwargs):
     client_id = kwargs['pk']
     credit = calculate_client_credit_balance(client_id, datee)
     refillable_items = calculateRefillableItemsClientHas(client_id)
-    paid = Payment.objects.filter(date__range=[datee, datee], paid=True).aggregate(total=Sum('amount'),)['total'] or 0
+    paid = Payment.objects.filter(date__range=[datee, datee], paid=True, owner_id=client_id).aggregate(total=Sum('amount'),)['total'] or 0
     owner = Party.objects.filter(id=client_id).first()
     
     owner_detail_json = None
