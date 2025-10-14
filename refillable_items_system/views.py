@@ -1,81 +1,32 @@
-from decimal import Decimal
-import os
-import subprocess
-from django.http import FileResponse
 from rest_framework import generics
 from rest_framework.response import Response
-
-from invoices.sales.models import SalesInvoice, ReturnInvoice
-from refillable_items_system.models import ItemTransformer, OreItem, RefillableItemsInitialStockClientHas, RefundedRefillableItem, RefilledItem
-from items.models import Items, Stock
-from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin, DestroyModelMixin
-from .serializers import RefundedRefillableItemSerializer, RefilledItemSerializer, ItemTransformerSerializer, OreItemSerializer, CustomDataSerializer
-from django.db import transaction
-from common.utilities import get_pagination_class
-from invoices.buyer_supplier_party.models import Party
 from rest_framework.decorators import api_view
-
+from rest_framework.mixins import (
+    ListModelMixin, 
+    CreateModelMixin, 
+    RetrieveModelMixin, 
+    DestroyModelMixin
+)
+# 
+from refillable_items_system.models import ItemTransformer, OreItem, RefundedRefillableItem, RefilledItem
+from invoices.buyer_supplier_party.models import Party
+from items.models import Stock
+# 
+from .serializers import RefundedRefillableItemSerializer, RefilledItemSerializer, ItemTransformerSerializer, OreItemSerializer, CustomDataSerializer
+# 
 from .management.commands.generateCansClientHasReport import get_cans_data_list
-
+# 
+from .services.calculate_refillable_items_client_has import calculateRefillableItemsClientHas
+# 
+from common.utilities import get_pagination_class
+# 
+from django.db import transaction
+from decimal import Decimal
+# 
 import logging
 
 logger = logging.getLogger(__name__)
 
-
-from django.db.models import Sum
-def calculateRefillableItemsClientHas(client_id):
-    invoices = SalesInvoice.objects.filter(owner_id=client_id)
-    refillable_items = Items.objects.filter(is_refillable=True)
-
-    refillable_items_quantities = {}
-    for item in refillable_items:
-        transformer = ItemTransformer.objects.filter(
-            transform=item
-        ).first()
-        empty = transformer.item
-        filled = transformer.transform
-
-        initial_stock_client_has = RefillableItemsInitialStockClientHas.objects.filter(
-            owner_id=client_id, 
-            item=empty
-        ).aggregate(Sum('quantity'))
-        key_name = empty.name
-
-        refunded = RefundedRefillableItem.objects.filter(
-            owner_id=client_id, 
-            item=empty
-        ).aggregate(Sum('quantity'))
-
-        for invoice in invoices:
-            q = 0
-            ri = None
-
-            if invoice.notes.__contains__('#بدون حساب الفارغ'):
-                continue
-
-            if invoice.repository_permit:
-                filled_item_qty = invoice.s_invoice_items.filter(item=filled).aggregate(Sum('quantity'))
-                ri = ReturnInvoice.objects.filter(
-                    original_invoice_id=invoice.id
-                ).first()
-
-                if ri:
-                    q = ri.s_invoice_items.filter(item=filled).aggregate(Sum('quantity'))
-
-                # idle_item_qty_taken = invoice.s_invoice_items.filter(item=empty).aggregate(Sum('quantity'))
-                refillable_items_quantities[key_name] = refillable_items_quantities.get(key_name, 0)
-                refillable_items_quantities[key_name] += (filled_item_qty['quantity__sum'] or 0)
-                if q:
-                    refillable_items_quantities[key_name] -= (q['quantity__sum'] or 0)
-
-                # refillable_items_quantities[key_name] += (idle_item_qty_taken['quantity__sum'] or 0)
-
-        refillable_items_quantities[key_name] = refillable_items_quantities.get(key_name, 0) + (initial_stock_client_has['quantity__sum'] or 0) - (refunded['quantity__sum'] or 0)
-
-        if refillable_items_quantities[key_name] == 0:
-            del refillable_items_quantities[key_name]
-    
-    return refillable_items_quantities
 
 
 @api_view(['GET'])

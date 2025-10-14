@@ -7,7 +7,7 @@ from django.db.models import ProtectedError
 from finance.payments.models import Payment
 
 from rest_framework.decorators import api_view
-from finance.payments.views import calculate_client_credit_balance
+from finance.payments.services.calculate_owner_credit_balance import calculate_owner_credit_balance
 from refillable_items_system.views import calculateRefillableItemsClientHas
 
 from django.db.models import Sum
@@ -17,7 +17,7 @@ from django.db.models import Sum
 def ownerView(request, *args, **kwargs):
     datee = request.GET.get('date', None)
     client_id = kwargs['pk']
-    credit = calculate_client_credit_balance(client_id, datee)
+    credit = calculate_owner_credit_balance(client_id, datee)
     refillable_items = calculateRefillableItemsClientHas(client_id)
     paid = Payment.objects.filter(date__range=[datee, datee], paid=True, owner_id=client_id).aggregate(total=Sum('amount'),)['total'] or 0
     owner = Party.objects.filter(id=client_id).first()
@@ -48,7 +48,7 @@ def ownerView(request, *args, **kwargs):
 def listClientCredits(request, *args, **kwargs):
     l = []
     for client in Party.objects.all():
-        credit = calculate_client_credit_balance(client.id, None)
+        credit = calculate_owner_credit_balance(client.id, None)
         
         if credit != 0:
             l.append({

@@ -1,88 +1,16 @@
 from django.http import Http404
+# 
 from common.encoder import MixedRadixEncoder
 from common.utilities import get_pagination_class
-from invoices.purchase.models import PurchaseInvoices
-from invoices.sales.models import SalesInvoice, ReturnInvoice
+# 
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.generics import GenericAPIView
-from .models import Payment, ExpensePayment
-from finance.debt_settlement.models import DebtSettlement
-from .serializers import PaymentSerializer, ExpensePaymentSerializer
-from invoices.buyer_supplier_party.models import InitialCreditBalance
-from django.db.models import Sum
-from django.db.models import Q
 from rest_framework.response import Response
+# 
+from .models import Payment, ExpensePayment
+from .serializers import PaymentSerializer, ExpensePaymentSerializer
+from .services.calculate_owner_credit_balance import calculate_owner_credit_balance
 
-
-
-def calculate_client_credit_balance(client_id, date):
-    datee = Q(date__lte=date) if date else Q(id__isnull=False)
-    issue_date = Q(issue_date__lte=date) if date else Q(id__isnull=False)
-
-    total = 0
-    try:
-        p_invs = PurchaseInvoices.objects.filter(issue_date, owner_id=client_id, repository_permit=True)
-        s_invs = SalesInvoice.objects.filter(issue_date, owner_id=client_id, repository_permit=True)
-        payments = Payment.objects.filter(datee, owner_id=client_id, paid=True)
-        return_sales_invs = ReturnInvoice.objects.filter(issue_date, owner_id=client_id, repository_permit=True)
-        reverse_payment = ExpensePayment.objects.filter(datee, owner_id=client_id, paid=True)
-        initial_credit_balance = InitialCreditBalance.objects.filter(datee, party_id=client_id)
-        total_debt_settlement = DebtSettlement.objects.filter(
-            datee, 
-            owner_id=client_id, 
-            status="approved"
-        ).aggregate(
-            total=Sum('amount'),
-        )['total'] or 0
-    
-    
-        initial_credit_balance = initial_credit_balance.aggregate(
-            total=Sum('amount'),
-        )['total'] or 0
-        
-        p_inv_credit = 0
-        for inv in p_invs:
-            amount = 0
-            for item in inv.p_invoice_items.all():
-                amount   = item.quantity
-                amount   *= item.unit_price
-                amount   += item.tax_rate
-                amount   -= item.discount
-                p_inv_credit += amount
-        
-        s_inv_credit = 0
-        for inv in s_invs:
-            amount = 0
-            for item in inv.s_invoice_items.all():
-                amount   = item.quantity
-                amount   *= item.unit_price
-                amount   += item.tax_rate
-                amount   -= item.discount
-                s_inv_credit += amount
-        
-        payments = payments.aggregate(
-            total=Sum('amount'),
-        )['total'] or 0
-
-        sales_refund = return_sales_invs.aggregate(
-            total=Sum('total_amount'),
-        )['total'] or 0
-
-        reverse_payment = reverse_payment.aggregate(
-            total=Sum('amount'),
-        )['total'] or 0
-
-        total -= p_inv_credit 
-        total += s_inv_credit 
-        total += initial_credit_balance 
-        total -= payments 
-        total -= sales_refund 
-        total += reverse_payment
-        total -= total_debt_settlement
-    except Exception as e:
-        return e
-
-    return total
 
 
 class ListCreateView(
@@ -136,7 +64,7 @@ class ListCreateView(
         date = request.GET.get('date')
         owner_id = request.GET.get('owner-id')
         if credit_balance and date and owner_id:
-            credit = calculate_client_credit_balance(owner_id, date)
+            credit = calculate_owner_credit_balance(owner_id, date)
             return Response({
                 'credit': credit
             })
