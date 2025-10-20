@@ -7,12 +7,12 @@ ENV PYTHONUNBUFFERED=1 \
 
 
 # Install the timezone data package
-RUN apt-get install -y tzdata && \
-    rm -rf /var/lib/apt/lists/*
+# RUN apt-get install -y tzdata && \
+#     rm -rf /var/lib/apt/lists/*
 
 # Set the timezone environment variable to Cairo, Egypt
 # The 'TZ' variable is used by many programs and libraries to determine the local time.
-ENV TZ="Africa/Cairo"
+# ENV TZ="Africa/Cairo"
 
 WORKDIR /app
 
