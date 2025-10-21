@@ -14,6 +14,8 @@ ENV PYTHONUNBUFFERED=1 \
 # The 'TZ' variable is used by many programs and libraries to determine the local time.
 # ENV TZ="Africa/Cairo"
 
+pip install --upgrade pip
+
 WORKDIR /app
 
 COPY requirements.txt .
