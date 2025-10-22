@@ -129,7 +129,7 @@ class DamagedItems(UpdatedCreatedBy):
 
 
 	def __str__(self):
-		return f'item: {self.item.name}, repository: {self.repository.name}, quantity: {self.quantity}'
+		return f'{f"owner: {self.owner.name}, " if self.owner else ""}item: {self.item.name}, repository: {self.repository.name}, quantity: {self.quantity}'
 
 
 class ItemPriceLog(UpdatedCreatedBy):
