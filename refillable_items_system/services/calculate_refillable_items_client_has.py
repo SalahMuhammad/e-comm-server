@@ -29,7 +29,7 @@ def calculateRefillableItemsClientHas(client_id):
     damaged_items = get_refillable_items_totals(
         DamagedItems,
         client_id,
-        empty_item_ids
+        [*empty_item_ids, *filled_item_ids]
     )
 
     empty_refillable_sales_data = get_sales_refillable_items_totals(SalesInvoiceItem, client_id, empty_item_ids=empty_item_ids)
@@ -50,7 +50,8 @@ def calculateRefillableItemsClientHas(client_id):
         total -= next((item['total'] for item in empty_refillable_sales_refund_data if item['item_id'] == empty.id), 0)
         total += next((item['total'] for item in filled_refillable_sales_data if item['item_id'] == filled.id), 0)
         total -= next((item['total'] for item in filled_refillable_sales_refund_data if item['item_id'] == filled.id), 0)
-        total -= next((item['total'] for item in damaged_items if item['item_id'] == empty.id), 0)
+        total += next((item['total'] for item in damaged_items if item['item_id'] == empty.id), 0)
+        total += next((item['total'] for item in damaged_items if item['item_id'] == filled.id), 0)
 
         if total != 0:
             obj[empty.name] = total
