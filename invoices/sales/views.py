@@ -9,6 +9,8 @@ from common.utilities import adjust_stock
 from rest_framework.decorators import api_view
 from django.db import transaction
 
+from .services.item_sales_and_refund_in_period import get_sold_and_items_totals_withen_period_as_http_response
+
 
 from common.utilities import ValidateItemsStock
 from items.models import Items
@@ -36,6 +38,17 @@ def toggle_repository_permit(request, *args, **kwargs):
 		"success": True,
 		"repository_permit": invoice.repository_permit
 	})
+
+@api_view(['GET'])
+def salesRefundTotals(request, *args, **kwargs):
+    try:
+        res = get_sold_and_items_totals_withen_period_as_http_response(
+            request.GET.get('fromdate', ''), 
+            request.GET.get('todate', '')
+        )
+        return res
+    except Exception as e:
+        raise Exception(f'salesRefundTotals() issue: {e}')
 
 class ListCreateView(AbstractInvoiceListCreateView):
 	queryset = SalesInvoice.objects.select_related(

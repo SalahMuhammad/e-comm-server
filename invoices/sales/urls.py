@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ListCreateView, DetailView, toggle_repository_permit, ReturnListCreateView, RefundDetailView
+from .views import ListCreateView, DetailView, toggle_repository_permit, ReturnListCreateView, RefundDetailView, salesRefundTotals
 
 
 urlpatterns = [
@@ -8,4 +8,6 @@ urlpatterns = [
     path('<str:pk>/change-repository-permit/', toggle_repository_permit, name='detail'),
     path('s/refund/', ReturnListCreateView.as_view(), name='return-list-create'),
     path('s/refund/<str:pk>/', RefundDetailView.as_view(), name='refund-detail'),
+    # analysis
+    path('t/sales-refund-totals/', salesRefundTotals),
 ]
