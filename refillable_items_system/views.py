@@ -1,9 +1,10 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.mixins import (
     ListModelMixin, 
     CreateModelMixin, 
+    UpdateModelMixin,
     RetrieveModelMixin, 
     DestroyModelMixin
 )
@@ -21,6 +22,7 @@ from .services.calculate_refillable_items_client_has import calculateRefillableI
 from common.utilities import get_pagination_class
 # 
 from django.db import transaction
+from django.db.models.deletion import ProtectedError
 from decimal import Decimal
 # 
 import logging
@@ -134,6 +136,12 @@ class GetCansClientHasReport(generics.ListAPIView):
 
 
 
+
+# ------------------------------------
+
+
+
+
 class ListCreateRefundedRefillableItemsView(
     ListModelMixin,
     CreateModelMixin,
@@ -202,6 +210,11 @@ class DetialRefundedRefillableItemsView(
             stock.adjust_stock(- Decimal(instance.quantity))
 
             return super().destroy(request, *args, **kwargs)
+
+
+
+
+# ------------------------------------
 
 
 
@@ -319,6 +332,12 @@ class DetialRefilledItemsView(
 
 
 
+
+# ------------------------------------
+
+
+
+
 class ListItemTransformer(
     ListModelMixin,
     generics.GenericAPIView
@@ -335,8 +354,15 @@ class ListItemTransformer(
 
 
 
-class ListOreItem(
+
+# ------------------------------------
+
+
+
+
+class ListCreateOreItem(
     ListModelMixin,
+    CreateModelMixin,
     generics.GenericAPIView
 ):
     queryset = OreItem.objects.select_related(
@@ -348,4 +374,32 @@ class ListOreItem(
 
     def get(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
+
+class OreItemDetailView(
+    RetrieveModelMixin, 
+    UpdateModelMixin,
+    DestroyModelMixin,
+    generics.GenericAPIView
+):
+    queryset = OreItem.objects.select_related(
+        'item',
+        'by',
+    ).all()
+    serializer_class = OreItemSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request,*args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            return super(OreItemDetailView, self).destroy(request, *args, **kwargs)
+        except ProtectedError as e:
+            return Response({'detail': 'لا يمكن حذف هذا العنصر قبل حذف المعاملات المرتبطه به اولا 😵...'}, status=status.HTTP_400_BAD_REQUEST)
+  

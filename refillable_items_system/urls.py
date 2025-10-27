@@ -1,5 +1,15 @@
 from django.urls import path
-from .views import ListCreateRefundedRefillableItemsView, DetialRefundedRefillableItemsView, ListCreateRefilledItemsView, DetialRefilledItemsView, ListItemTransformer, ListOreItem, ownersHasRefillableItems, GetCansClientHasReport
+from .views import (
+    ListCreateRefundedRefillableItemsView, 
+    DetialRefundedRefillableItemsView, 
+    ListCreateRefilledItemsView, 
+    DetialRefilledItemsView, 
+    ListItemTransformer, 
+    ListCreateOreItem, 
+    OreItemDetailView,
+    ownersHasRefillableItems, 
+    GetCansClientHasReport
+)
 
 
 urlpatterns = [
@@ -9,7 +19,8 @@ urlpatterns = [
     path('refilled-items/<int:pk>/', DetialRefilledItemsView.as_view(), name='refilled_items'),
     
     path('item-transformer/', ListItemTransformer.as_view()),
-    path('ore-item/', ListOreItem.as_view()),
+    path('ore-item/', ListCreateOreItem.as_view()),
+    # path('ore-item/<int:pk>/', OreItemDetailView.as_view()),
 
     path('refillable-items-owners-has/', ownersHasRefillableItems),
 
