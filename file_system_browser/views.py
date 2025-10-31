@@ -7,6 +7,7 @@ from django.conf import settings
 from django.utils.encoding import smart_str
 from .services.file_system_service import FileSystemService
 from .serializers import DirectoryListingSerializer
+import subprocess
 import os
 
 
@@ -98,13 +99,22 @@ class FileDownloadView(APIView):
         """Download a file from the file system"""
         file_path = request.query_params.get('path', '')
         items_export = request.query_params.get('itmes_export', None)
+        db_backup = request.query_params.get('dbbackup', None)
         
         if items_export:
-            import subprocess
-
             # Example: Run a simple 'ls' command
             result = subprocess.run(['python3', 'manage.py', 'items_as_xlsx'], capture_output=True, text=True)
             file_path = result.stdout.split('\n')[1] or None
+
+        if db_backup:
+            command = [
+                'python3', 
+                'manage.py', 
+                'db_backup'
+            ]
+            command.append('--data_only') if request.query_params.get('data-only', None) else None
+            result = subprocess.run(command, capture_output=True, text=True)
+            file_path = result.stdout.split("Backup saved to: ")[1].strip() if "Backup saved to: " in result.stdout else None
 
         if not file_path:
             return Response({

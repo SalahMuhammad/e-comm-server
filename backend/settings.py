@@ -84,7 +84,8 @@ INSTALLED_APPS = [
     "requests_logs",
     "django_extensions",
 
-    'debug_toolbar'
+    'debug_toolbar',
+    'services',
 ]
 
 #################################
@@ -314,7 +315,7 @@ FILE_SYSTEM_ROOTS = {
 ALLOWED_FILE_EXTENSIONS = [
     # '.sqlite3', '.pdf', '.doc', '.docx', '.txt', '.jpg', '.jpeg', '.png', '.gif', 
     # '.zip', '.rar', '.mp4', '.mp3', '.xlsx', '.csv'
-    '.xlsx',
+    '.xlsx', '.sql',
 ]
 
 # Maximum file size for preview (in bytes)
