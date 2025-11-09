@@ -16,6 +16,21 @@ class UpdatedCreatedBy(models.Model):
         abstract = True
 
 
+class UpdatedCreatedByV2(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    last_updated_at = models.DateTimeField(auto_now=True)
+    last_updated_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name='%(class)s_last_updated_by')
+
+
+    # @property
+    # def alive(self):
+    #     return (now() - updated_at).days < 7
+
+    class Meta:
+        abstract = True
+
+
 
 class InvoiceStatus(models.IntegerChoices):
     DRAFT = 1, "Draft"
@@ -23,10 +38,11 @@ class InvoiceStatus(models.IntegerChoices):
     UNPAID = 3, "Unpaid"
     PARTIALLY_PAID = 4, "Partially Paid"
     PAID = 5, "Paid"
-    OVERDUE = 6, "Overdue"
-    CANCELLED = 7, "Cancelled"
-    DISPUTED = 8, "Disputed"
-    REFUNDED = 9, "Refunded"
+    OVERPAID = 6, 'Overpaid'
+    OVERDUE = 7, "Overdue"
+    CANCELLED = 8, "Cancelled"
+    DISPUTED = 9, "Disputed"
+    REFUNDED = 10, "Refunded"
 
 
 class AbstractInvoice(UpdatedCreatedBy):
@@ -46,10 +62,21 @@ class AbstractInvoice(UpdatedCreatedBy):
     # content_object = GenericForeignKey("content_type", "object_id")    
     def clean(self):
         super().clean()
-        
+
         if self.due_date and self.issue_date and self.due_date < self.issue_date:
             raise ValidationError({"detail": "Due date must be after issue date."})
-    
+
+        if self.id and hasattr(self, 'payments'):
+            can_change_owner(
+                self.payments,
+                self.owner,
+            )
+        elif self.id and hasattr(self, 'r_payments'):
+            can_change_owner(
+                self.r_payments,
+                self.owner,
+            )
+
     def __str__(self):
         return f'{self.id} - {self.owner.name} - {self.issue_date} - {self.total_amount} - {self.status} - {self.repository_permit}'
 
@@ -92,3 +119,42 @@ class AbstractInvoiceItems(models.Model):
     class Meta:
         abstract = True
         # ordering = ['-created_at']
+
+
+
+
+# utils ------------------------------------------------------------------
+
+
+
+
+def can_change_owner(payments, owner):
+    """
+    Validate whether the owner of an order may be changed.
+
+    Parameters
+    ----------
+    payments : QuerySet
+        A Django QuerySet (or similar iterable) of payment/transaction objects related to the order.
+        The function checks for the presence of any payments and compares the owner attribute of
+        the first payment with the provided owner.
+    owner : object
+        The proposed new owner to validate against the existing payment owner.
+
+    Raises
+    ------
+    django.core.exceptions.ValidationError
+        Raised with a dictionary {'owner': <message>} when there is at least one related payment
+        and the owner of the first payment differs from the provided owner, indicating the
+        order's owner cannot be changed because it has related payment transactions.
+
+    Notes
+    -----
+    - Uses payments.count() to determine existence and payments.first() to obtain an example payment.
+      For large QuerySets, consider using payments.exists() for an existence check to avoid extra work.
+    - Assumes payment objects expose an 'owner' attribute that is comparable with the provided owner.
+    """
+    if payments.exists() and payments.first().owner != owner:
+        raise ValidationError({
+                'owner': 'owner cannot be changed, because order has related pay transaction...'
+            })
