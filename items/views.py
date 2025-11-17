@@ -202,28 +202,28 @@ class ItemsList(mixins.ListModelMixin,
 
 		return queryset
 
-	def post(self, request, *args, **kwargs):
-		with transaction.atomic():
-			try:
-				images = request.FILES.getlist('images')
-				barcodes_data = request.POST.get('barcodes', None)
-				request.data.pop('barcodes')
+	# def post(self, request, *args, **kwargs):
+	# 	with transaction.atomic():
+	# 		try:
+	# 			images = request.FILES.getlist('images')
+	# 			barcodes_data = request.POST.get('barcodes', None)
+	# 			request.data.pop('barcodes')
 
-				res = self.create(request, *args, **kwargs)
+	# 			res = self.create(request, *args, **kwargs)
 
-				http_request_barcodes_handler(res.data['id'], barcodes_data)
-				http_request_images_handler(res.data['id'], images)
+	# 			http_request_barcodes_handler(res.data['id'], barcodes_data)
+	# 			http_request_images_handler(res.data['id'], images)
 
-				if not float(res.data['price1']) <= 0:
-					ItemPriceLog.objects.create(
-						item_id=res.data['id'], 
-						price=res.data['price1'], 
-						by_id=request.data['by']
-					)
+	# 			if not float(res.data['price1']) <= 0:
+	# 				ItemPriceLog.objects.create(
+	# 					item_id=res.data['id'], 
+	# 					price=res.data['price1'], 
+	# 					by_id=request.data['by']
+	# 				)
 
-				return res
-			except IntegrityError as e:
-				return Response({'name': 'هذا الصنف موجود بالفعل...'}, status=status.HTTP_400_BAD_REQUEST)
+	# 			return res
+	# 		except IntegrityError as e:
+	# 			return Response({'name': 'هذا الصنف موجود بالفعل...'}, status=status.HTTP_400_BAD_REQUEST)
 	# def perform_create(self, serializer):
 	# 	serializer.save(by=self.request.user)
 
