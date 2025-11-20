@@ -1,5 +1,5 @@
 from invoices.buyer_supplier_party.models import Party
-from finance.payments.services.calculate_owner_credit_balance import calculate_owner_credit_balance
+from finance.vault_and_methods.services.calculate_owner_credit_balance import calculate_owner_credit_balance
 from rest_framework.response import Response
 
 def getOwnersCreditBalance():

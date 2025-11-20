@@ -9,7 +9,7 @@ from invoices.sales.models import invoice_status_handler
 
 class PurchaseInvoices(AbstractInvoice):
     def save(self, *args, **kwargs):
-        r_payments = self.r_payments
+        r_payments = self.r_payments if self.id else None
         
         res = invoice_status_handler(r_payments, self.remaining_balance, self.total_amount)
         self.status = res[0]
