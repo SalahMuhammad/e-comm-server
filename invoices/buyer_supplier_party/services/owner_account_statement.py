@@ -1,5 +1,5 @@
 from finance.payment.models import Payment2
-from finance.reverse_payment.models import ReversePayment
+from finance.reverse_payment.models import ReversePayment2
 from finance.debt_settlement.models import DebtSettlement
 from invoices.buyer_supplier_party.models import InitialCreditBalance
 from invoices.sales.models import SalesInvoice, ReturnInvoice as ReturnSalesInvoice
@@ -70,7 +70,7 @@ def getOwnerAccountStatement(owner_id):
         'by',
         'payment_method'
     ).filter(owner_id=owner_id)
-    revers_payments = ReversePayment.objects.select_related(
+    revers_payments = ReversePayment2.objects.select_related(
         'owner',
         'by',
         'payment_method'
@@ -136,7 +136,7 @@ def getOwnerAccountStatement(owner_id):
             data_dict = dict(serializer.data)
             data_dict['type'] = 'due from last year'
             list.append(data_dict)
-        elif isinstance(instance, ReversePayment):
+        elif isinstance(instance, ReversePayment2):
             serializer = ExpensePaymentSerializer(instance)
             data_dict = dict(serializer.data)
             data_dict['type'] = 'reverse payment'

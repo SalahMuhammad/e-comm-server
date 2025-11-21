@@ -32,11 +32,15 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api/pp/', include('pp.urls')),
     ###################################################
-    ################ payment #########################
+    ################ finance #########################
     ###################################################
-    path('api/payment/methods/', include('finance.payment_method.urls')),
-    path('api/payment/', include('finance.payments.urls')),
+    # path('api/payment/methods/', include('finance.payment_method.urls')),
+    path('api/finance/payment/', include('finance.payment.urls')),
+    path('api/finance/reverse-payment/', include('finance.reverse_payment.urls')),
     path('api/finance/debt-settlement/', include('finance.debt_settlement.urls')),
+    path('api/finance/expenses/', include('finance.expenses.urls')),
+    path('api/finance/account-vault/', include('finance.vault_and_methods.urls')),
+    # path('admin/finance/payment/', include('finance.payment.urls')),
     ###################################################
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
