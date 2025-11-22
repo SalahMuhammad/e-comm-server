@@ -74,8 +74,6 @@ INSTALLED_APPS = [
     'invoices.sales.apps.SalesConfig',
     'rest_framework',
     "corsheaders",
-    "finance.payment_method.apps.PaymentMethodConfig",
-    "finance.payments.apps.PaymentsConfig",
     'finance.debt_settlement.apps.DebtSettlementConfig',
     'finance.expenses.apps.ExpensesConfig',
     'finance.vault_and_methods.apps.VaultAndMethodsConfig',
