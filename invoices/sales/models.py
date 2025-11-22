@@ -62,7 +62,7 @@ def invoice_status_handler(payments, remaining_balance, total_amount):
     if payments:
         confirmed_payments = payments \
         .filter(
-            status='confirmed'
+            status=2
         ).aggregate(
             total=models.Sum('amount')
         )['total'] or Decimal('0')
