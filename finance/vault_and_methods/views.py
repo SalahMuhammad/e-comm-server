@@ -7,11 +7,15 @@ from rest_framework.response import Response
 
 from .models import BusinessAccount
 from .services.account_balance_total import get_total_money_in_vaults
-
+# 
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+class SuperUserRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_superuser
 
 
 # class VaultBalanceAPIView(LoginRequiredMixin, APIView):
-class VaultBalanceAPIView(APIView):
+class VaultBalanceAPIView(APIView, SuperUserRequiredMixin):
     """
     API endpoint to retrieve vault balance(s).
     
@@ -314,7 +318,7 @@ from .serializers import (
 
 
 
-class AccountMovementListView(APIView):
+class AccountMovementListView(APIView, SuperUserRequiredMixin):
     """
     Get account movements with optional filtering.
     
@@ -332,7 +336,7 @@ class AccountMovementListView(APIView):
         GET /api/account-movements/?account_id=5&start_date=2025-01-01
         GET /api/account-movements/?account_ids=5,7,9&include_pending=true
     """
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     
     def get(self, request):
         try:
