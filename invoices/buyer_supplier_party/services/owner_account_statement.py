@@ -9,7 +9,8 @@ from invoices.buyer_supplier_party.serializers import InitialCreditBalanceSerial
 from invoices.sales.serializers import InvoiceSerializer, ReturnInvoiceSerializer as ReturnSalesInvoiceSerializer
 from finance.debt_settlement.serializers import DebtSettlementSerializer
 from invoices.purchase.serializers import InvoiceSerializer as PurchaseInvoiceSerializer
-from finance.payments.serializers import PaymentSerializer, ExpensePaymentSerializer
+from finance.payment.serializers import PaymentSerializer
+from finance.reverse_payment.serializers import ReversePaymentSerializer
 # 
 from itertools import chain
 from decimal import Decimal
@@ -67,13 +68,19 @@ def getOwnerAccountStatement(owner_id):
     )
     payments = Payment2.objects.select_related(
         'owner',
-        'by',
-        'payment_method'
+        'created_by',
+        'last_updated_by',
+        'business_account',
+        'business_account__account_type',
+        'sale'
     ).filter(owner_id=owner_id)
     revers_payments = ReversePayment2.objects.select_related(
         'owner',
-        'by',
-        'payment_method'
+        'created_by',
+        'last_updated_by',
+        'business_account',
+        'business_account__account_type',
+        'purchase'
     ).filter(owner_id=owner_id)
     debt_settlement = DebtSettlement.objects.select_related(
         'owner',
@@ -137,7 +144,7 @@ def getOwnerAccountStatement(owner_id):
             data_dict['type'] = 'due from last year'
             list.append(data_dict)
         elif isinstance(instance, ReversePayment2):
-            serializer = ExpensePaymentSerializer(instance)
+            serializer = ReversePaymentSerializer(instance)
             data_dict = dict(serializer.data)
             data_dict['type'] = 'reverse payment'
             list.append(data_dict)
