@@ -156,7 +156,7 @@ def create_items_excel_from_django_data(data = Items.objects.all(), filename="it
     # Auto-adjust column widths
     adjust_column_widths(ws)
     
-    path = f'media/shared/{datetime.now()}-{filename}'
+    path = f'media/items_as_xlsx/{datetime.now()}-{filename}'
     # Save workbook
     wb.save(path)
     # print(f"Excel file created successfully: {path}")
