@@ -41,7 +41,8 @@ urlpatterns = [
     path('api/finance/expenses/', include('finance.expenses.urls')),
     path('api/finance/account-vault/', include('finance.vault_and_methods.urls')),
     # path('admin/finance/payment/', include('finance.payment.urls')),
-    ###################################################
+    ###################### services #############################
+    path('api/services/', include('services.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += [
