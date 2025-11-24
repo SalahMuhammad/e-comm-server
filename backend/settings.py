@@ -304,22 +304,3 @@ APPEND_SLASH = False
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
-
-
-# fileSystem browse config
-# Configure the file system paths you want to expose
-FILE_SYSTEM_ROOTS = {
-    # 'documents': '/path/to/your/documents',  # Change this to your actual path
-    'shared': os.path.join(BASE_DIR, 'media/shared'),
-    # 'shared': '/shared/files',  # Another example path
-}
-
-# Security: Define allowed file extensions
-ALLOWED_FILE_EXTENSIONS = [
-    # '.sqlite3', '.pdf', '.doc', '.docx', '.txt', '.jpg', '.jpeg', '.png', '.gif', 
-    # '.zip', '.rar', '.mp4', '.mp3', '.xlsx', '.csv'
-    '.xlsx', '.sql',
-]
-
-# Maximum file size for preview (in bytes)
-MAX_PREVIEW_SIZE = 10 * 1024 * 1024  # 10 MB

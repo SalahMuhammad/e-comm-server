@@ -75,8 +75,6 @@ urlpatterns += [
 
 
     path('__debug__/', include('debug_toolbar.urls')),
-
-    path('api/fs/', include('file_system_browser.urls')),
 ] + debug_toolbar_urls()
 
 
