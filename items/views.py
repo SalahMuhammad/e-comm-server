@@ -165,40 +165,36 @@ class ItemsList(mixins.ListModelMixin,
 
 	def get_queryset(self):
 		queryset = self.queryset
-		 
+		
+		
+		type = self.request.query_params.get('type')
+		if type:
+			queryset = queryset.filter(type__name__icontains=type)
+
+		id = self.request.query_params.get('id')
+		if id:
+			queryset = queryset.filter(id__icontains=id)
+
+		name = self.request.query_params.get('name')
+		if name:
+			queryset = queryset.filter(name__icontains=name)		
+
+		barcode = self.request.query_params.get('barcode')
+		if barcode:
+			queryset = queryset.filter(barcodes__barcode__icontains=barcode)
+			
+		place = self.request.query_params.get('place')
+		if place:
+			queryset = queryset.filter(place__icontains=place)
+			
+		origin = self.request.query_params.get('origin')
+		if origin:
+			queryset = queryset.filter(origin__icontains=origin)
+
 		# Permission filtering
 		if not self.request.user.is_superuser:
 			permissions = self.request.user.groups.values_list('permissions__codename', flat=True)
 			queryset = queryset.filter(type__name__in=permissions)
-
-		name_param = self.request.query_params.get('s')
-		if name_param:
-			# Create a subquery to check if any barcode matches
-			barcode_match = Barcode.objects.filter(
-				item=OuterRef('pk'),
-				barcode__icontains=name_param
-			)
-			
-			# Filter using subquery - NO JOIN, NO DUPLICATES
-			q = queryset.annotate(
-				has_matching_barcode=Exists(barcode_match)
-			).filter(
-				Q(name__icontains=name_param) | 
-				Q(has_matching_barcode=True) | 
-				Q(id__icontains=name_param) | 
-				Q(origin__icontains=name_param) | 
-				Q(place__icontains=name_param)
-			)
-			
-			if q.exists():
-				return q
-
-			# Fallback to combined search
-			manipulated_params = [p for p in name_param.split(' ') if p]
-			if manipulated_params:
-				q_objects = [Q(name__icontains=value) for value in manipulated_params]
-				combined_q_object = reduce(and_, q_objects)
-				return queryset.filter(combined_q_object)
 
 		return queryset
 
