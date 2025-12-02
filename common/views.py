@@ -90,11 +90,17 @@ class AbstractInvoiceListCreateView(
 		
 		item_desc = self.request.query_params.get('itemdesc')
 		if item_desc:
-			queryset = queryset.filter(Q(s_invoice_items__description__icontains=item_desc))
+			try: 
+				queryset = queryset.filter(Q(s_invoice_items__description__icontains=item_desc))
+			except:
+				queryset = queryset.filter(Q(p_invoice_items__description__icontains=item_desc))
 
 		item_name = self.request.query_params.get('itemname')
 		if item_name:
-			queryset = queryset.filter(Q(s_invoice_items__item__name__icontains=item_name))
+			try:
+				queryset = queryset.filter(Q(s_invoice_items__item__name__icontains=item_name))
+			except:
+				queryset = queryset.filter(Q(p_invoice_items__item__name__icontains=item_name))
 		
 		return queryset
 
