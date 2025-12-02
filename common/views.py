@@ -49,6 +49,7 @@ from rest_framework import status
 from invoices.purchase.utilities import update_items_prices
 from common.utilities import set_request_items_totals, insert_invoice_items, adjust_stock
 from django.db import transaction
+from django.db.models import Q
 from common.encoder import MixedRadixEncoder
 
 
@@ -82,6 +83,18 @@ class AbstractInvoiceListCreateView(
 				print(f"Invalid encoded ID: {name_param}")
 				
 			queryset = queryset.filter(pk=id)
+			
+		note = self.request.query_params.get('note')
+		if note:
+			queryset = queryset.filter(notes__icontains=note)
+		
+		item_desc = self.request.query_params.get('itemdesc')
+		if item_desc:
+			queryset = queryset.filter(Q(s_invoice_items__description__icontains=item_desc))
+
+		item_name = self.request.query_params.get('itemname')
+		if item_name:
+			queryset = queryset.filter(Q(s_invoice_items__item__name__icontains=item_name))
 		
 		return queryset
 
@@ -115,9 +128,9 @@ class AbstractInvoiceDetailView(
 	def get_object(self):
 		encoded_pk = self.kwargs.get('pk')
 		try:
-            # Decode the encoded ID from URL parameter
+			# Decode the encoded ID from URL parameter
 			decoded_id = MixedRadixEncoder().decode(str(encoded_pk))
-            # Use the decoded ID to get the object
+			# Use the decoded ID to get the object
 			return self.get_queryset().get(id=decoded_id)
 		except Exception as e:
 			print(f"Invalid encoded ID: {self.kwargs['pk']}")
