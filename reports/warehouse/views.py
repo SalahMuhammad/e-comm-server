@@ -7,6 +7,7 @@ from django.utils.decorators import method_decorator
 from django.db.models import Q
 from datetime import datetime, date
 from rest_framework.generics import ListAPIView
+from rest_framework.response import Response
 import csv
 from io import StringIO
 import json
@@ -153,7 +154,6 @@ class ItemMovementReportView(View):
 class ItemRepositoryMovementReport(ListAPIView):
     def get(self, request, *args, **kwargs):
         """API endpoint for getting item movement data."""    
-        Items.objects.all()
         try:
             item = Items \
                 .objects \
@@ -199,9 +199,10 @@ class ItemRepositoryMovementReport(ListAPIView):
                 raise TypeError(f"Object of type {type(obj)} is not JSON serializable")
             
             return JsonResponse(report_data, json_dumps_params={'default': decimal_handler})
+            # return Response(report_data)
             
         except Exception as e:
-            print(e)
+            print(f'class ItemRepositoryMovementReport(): {e}')
             return JsonResponse({'error': str(e)}, status=500)
 
 

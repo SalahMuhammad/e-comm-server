@@ -159,12 +159,13 @@ class ItemMovementService:
         
         movements = []
         for sale in queryset: #.select_related('repository'):
+            qty = sale.s_invoice_items.filter(item=self.item).aggregate(total=Sum('quantity'))['total'] or 0
             movements.append({
                 'date': sale.issue_date,
                 'type': 'SALE',
                 'reference_id': MixedRadixEncoder().encode(sale.id),
                 # 'reference_number': getattr(sale, 'sale_number', f"SALE-{sale.id}"),
-                # 'quantity': - sale['total_quantity'],  # Negative for outgoing
+                'quantity': qty * -1,  # Negative for outgoing
                 # 'unit_price': sale.unit_price,
                 # 'total_value': -sale.total_value,
                 # 'repository': sale.repository.name if sale.repository else None,
@@ -201,12 +202,13 @@ class ItemMovementService:
         
         movements = []
         for purchase in queryset: #.select_related('repository', 'supplier'):
+            qty = purchase.p_invoice_items.filter(item=self.item).aggregate(total=Sum('quantity'))['total'] or 0
             movements.append({
                 'date': purchase.issue_date,
                 'type': 'PURCHASE',
                 'reference_id': MixedRadixEncoder().encode(purchase.id),
                 # 'reference_number': getattr(purchase, 'purchase_number', f"PUR-{purchase.id}"),
-                # 'quantity': purchase.quantity,  # Positive for incoming
+                'quantity': qty,  # Positive for incoming
                 # 'unit_price': purchase.unit_price,
                 # 'total_value': purchase.total_value,
                 # 'repository': purchase.repository.name if purchase.repository else None,
@@ -233,12 +235,13 @@ class ItemMovementService:
         
         movements = []
         for sales_refund in queryset: #.select_related('repository'):
+            qty = sales_refund.s_invoice_items.filter(item=self.item).aggregate(total=Sum('quantity'))['total'] or 0
             movements.append({
                 'date': sales_refund.issue_date,
                 'type': 'SALES_REFUND',
                 'reference_id': MixedRadixEncoder().encode(sales_refund.id),
                 # 'reference_number': getattr(refund, 'refund_number', f"SR-{refund.id}"),
-                # 'quantity': refund.quantity,  # Positive for incoming
+                'quantity': qty,  # Positive for incoming
                 # 'unit_price': refund.unit_price,
                 # 'total_value': refund.total_value,
                 # 'repository': refund.repository.name if refund.repository else None,
