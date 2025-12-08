@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework import generics, mixins
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.views import APIView
 # models
 from .models import Party
 # services 
@@ -15,17 +16,19 @@ from django.db.models import ProtectedError
 
 
 
-@api_view(['GET'])
-def ownerView(request, *args, **kwargs):
-    return ownerViewAsHttpResponse(
-        request.GET.get('date', None),
-        kwargs['pk'],
-    )
+class OwnerView(APIView):
+    level = 'c'
+    def get(self, request, *args, **kwargs):
+        return ownerViewAsHttpResponse(
+            request.GET.get('date', None),
+            kwargs['pk'],
+        )
 
 
-@api_view(['GET'])
-def listClientCredits(request, *args, **kwargs):
-    return getOwnersCreditBalanceAsHttpResponse()
+class ListClientCredits(APIView):
+    level = 'c'
+    def get(self, request, *args, **kwargs):
+        return getOwnersCreditBalanceAsHttpResponse()
 
 
 

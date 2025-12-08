@@ -22,7 +22,8 @@ class DynamicPermission(PermissionRequiredMixin):
         """
         if request.user.is_superuser:
             return True
-        
+
+        view_level = view.level if hasattr(view, 'level') else None
         try:
             model = view.queryset.model
             app_label = model._meta.app_label
@@ -38,8 +39,9 @@ class DynamicPermission(PermissionRequiredMixin):
                     return True
             except:
                 pass
-            
-            return False
+        
+        if view_level and request.user.user_permissions.filter(codename=view_level).exists():
+            return True
 
         if request.method == 'GET':
             action = 'view'
@@ -54,9 +56,12 @@ class DynamicPermission(PermissionRequiredMixin):
 
         # Construct the permission string: app_label.action_modelname
         # permission = f"{app_label}.{action}_{model_name}"
-        permission = f"{action}_{model_name}"
-        user_groups = request.user.groups.values_list('permissions__codename', flat=True)
-        return permission in user_groups
+        try:
+            permission = f"{action}_{model_name}"
+            user_groups = request.user.groups.values_list('permissions__codename', flat=True)
+            return permission in user_groups
+        except Exception as e:
+            return False
     
     def has_object_permission(self, request, view, obj):
         return self.has_permission(request=request, view=view)
