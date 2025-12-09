@@ -235,14 +235,28 @@ class ListCreateRefilledItemsView(
 
 
     def get_queryset(self):
+        queryset = self.queryset
+
         self.pagination_class = get_pagination_class(self)
         from_date = self.request.query_params.get('from')
         to_date = self.request.query_params.get('to')
 
         if from_date and to_date:
-            return self.queryset.filter(date__range=(from_date, to_date))
+            return queryset.filter(date__range=(from_date, to_date))
+
+        refilled_item = self.request.query_params.get('ritem')
+        if refilled_item:
+            queryset = queryset.filter(refilled_item__name__icontains=refilled_item)
+
+        used_item = self.request.query_params.get('uitem')
+        if used_item:
+            queryset = queryset.filter(used_item__item__name__icontains=used_item)
+
+        note = self.request.query_params.get('note')
+        if note:
+            queryset = queryset.filter(notes__icontains=note)
         
-        return self.queryset
+        return queryset
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
