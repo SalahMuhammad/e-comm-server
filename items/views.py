@@ -12,7 +12,7 @@ from .services.item_fluctuation import get_item_fluctuation
 from .services.handle_images_insertion import http_request_images_handler
 from .services.handle_barcodes import http_request_barcodes_handler
 # 
-from common.utilities import ValidateItemsStock
+from .services.validate_items_stock import ValidateItemsStock
 # 
 from operator import and_
 from functools import reduce
@@ -82,7 +82,6 @@ def aaaa(request, *args, **kwargs):
 # 	except Items.DoesNotExist:
 # 		return Response({'detail': f"لم يتم العثور على العنصر المطابق للباركود {barcode}... 😰"}, status=status.HTTP_404_NOT_FOUND)
 
-from common.utilities import ValidateItemsStock
 @api_view(['get'])
 def quantity_errors_corrector_view(request, *args, **kwargs):
 	a = ValidateItemsStock()

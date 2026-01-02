@@ -12,7 +12,7 @@ from django.db import transaction
 from .services.item_sales_and_refund_in_period import get_sold_and_items_totals_withen_period_as_http_response
 
 
-from common.utilities import ValidateItemsStock
+from items.services.validate_items_stock import ValidateItemsStock
 from items.models import Items
 
 from rest_framework import mixins, generics

@@ -5,7 +5,8 @@ from items.models import Items
 from .models import PurchaseInvoices
 from .serializers import InvoiceSerializer
 from common.views import AbstractInvoiceDetailView, AbstractInvoiceListCreateView
-from common.utilities import ValidateItemsStock, adjust_stock
+from common.utilities import adjust_stock
+from items.services.validate_items_stock import ValidateItemsStock
 from rest_framework.decorators import api_view
 from django.db import transaction
 
