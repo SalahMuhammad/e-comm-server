@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from repositories.models import Repositories
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -51,12 +51,12 @@ class Images(models.Model):
 
 	
 	def delete(self, *args, **kwargs):
-        # Delete the file from the file system
+		# Delete the file from the file system
 		if self.img:
 			if os.path.isfile(self.img.path):
 				os.remove(self.img.path)
-        
-        # Call the "real" delete() method
+		
+		# Call the "real" delete() method
 		super(Images, self).delete(*args, **kwargs)
 	
 
@@ -128,8 +128,42 @@ class DamagedItems(UpdatedCreatedBy):
 	notes = models.TextField(blank=True)
 
 
+	# for updating stock if item has been changed until reform items's stocks sys 
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self._initial_data = self.__dict__.copy()
+
 	def __str__(self):
 		return f'{f"owner: {self.owner.name}, " if self.owner else ""}item: {self.item.name}, repository: {self.repository.name}, quantity: {self.quantity}'
+
+	def clean(self):
+		super().clean()
+
+		if self.quantity <= 0:
+			raise ValidationError({"detail": "Quantity must be greater than 0."})	
+
+	def save(self, *args, **kwargs):
+		ids = []
+		ids.append(self.item.id)
+		ids.append(self._initial_data['item_id']) if not self._initial_data['item_id'] == self.item.id else None
+		repository_ids = []
+		repository_ids.append(self.repository.id)
+		repository_ids.append(self._initial_data['repository_id']) if not self._initial_data['repository_id'] == self.repository.id else None
+
+		with transaction.atomic():
+			super().full_clean()
+			super().save(*args, **kwargs)
+			from .services.validate_items_stock import ValidateItemsStock
+			ValidateItemsStock().validate_stock(Items.objects.filter(pk__in=ids), repository_ids=repository_ids ,create_error_file=False)
+
+	def delete(self, *args, **kwargs):
+		super().delete(*args, **kwargs)
+		from .services.validate_items_stock import ValidateItemsStock
+		ValidateItemsStock().validate_stock(Items.objects.filter(pk=self.item.pk), repository_ids=[self.repository.id], create_error_file=False)
+
+
+	class Meta:
+		ordering = ['-date']
 
 
 class ItemPriceLog(UpdatedCreatedBy):

@@ -1,5 +1,13 @@
 from django.urls import path
-from .views import ItemsList, ItemDetail, quantity_errors_corrector_view, quantity_errors_list_view, TypesList, ItemFluctuation
+from .views import (
+    ItemsList, 
+    ItemDetail, 
+    quantity_errors_corrector_view, 
+    quantity_errors_list_view, 
+    TypesList, 
+    ItemFluctuation,
+    DamagedItemsViewSet
+)
 
 
 urlpatterns = [
@@ -12,3 +20,11 @@ urlpatterns = [
 	# path('getbarcode/', handle_barcode_image),
 	# path('initial-stock/<int:pk>/', aaaa, name='update-initial-stock'),
 ]
+
+
+
+from rest_framework.routers import DefaultRouter
+router = DefaultRouter()
+router.register(r'damaged-items', DamagedItemsViewSet, basename='damaged-items')
+
+urlpatterns += router.urls

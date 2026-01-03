@@ -250,3 +250,17 @@ class InitialStockSerializer(serializers.ModelSerializer):
 		model = InitialStock
 		fields = ['item', 'quantity', "repository", "by"]  # Only allow updating the quantity field
 
+
+
+
+# _____________________________________________________________________________________#
+
+
+
+
+from .models import DamagedItems
+class DamagedItemsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DamagedItems
+        fields = '__all__'
+        read_only_fields = ('by', )

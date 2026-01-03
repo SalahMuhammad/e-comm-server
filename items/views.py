@@ -1,4 +1,4 @@
-from rest_framework import generics, mixins, serializers, status
+from rest_framework import generics, mixins, serializers, status, viewsets
 # from rest_framework.generics import UpdateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import AllowAny
 # 
 from .models import Items, Images, ItemPriceLog, Types, Barcode
-from .serializers import ItemsSerializer, TypesSerializer, InitialStockSerializer
+from .serializers import ItemsSerializer, TypesSerializer, InitialStockSerializer, DamagedItemsSerializer
 # 
 from .services.item_fluctuation import get_item_fluctuation
 from .services.handle_images_insertion import http_request_images_handler
@@ -23,6 +23,8 @@ from django.db.utils import IntegrityError
 from django.db import IntegrityError, transaction
 # 
 from decimal import Decimal, ROUND_HALF_UP
+# django filters
+from django_filters.rest_framework import DjangoFilterBackend
 # 
 import os
 
@@ -111,7 +113,7 @@ def quantity_errors_list_view(request, *args, **kwargs):
 
 
 
-# _____________________________________________________________________________________#
+# __________________________________ Items ___________________________________________________#
 
 
 
@@ -302,7 +304,7 @@ class ItemDetail(
 
 
 
-# _____________________________________________________________________________________#
+# ______________________________________ Types _______________________________________________#
 
 
 
@@ -323,7 +325,7 @@ class TypesList(mixins.ListModelMixin,
 
 
 
-# _____________________________________________________________________________________#
+# ______________________________ Item Fluctuation _______________________________________________________#
 
 
 
@@ -332,6 +334,40 @@ class ItemFluctuation(APIView):
 	def get(self, request, pk):
 		data = get_item_fluctuation(pk)
 		return Response(data, status=status.HTTP_200_OK)
+
+
+
+
+# __________________________________ Damaged Items ___________________________________________________#
+
+
+
+
+from django_filters import rest_framework as filters
+from .models import DamagedItems
+
+class DamagedItemsFilter(filters.FilterSet):
+	# 'icontains' allows searching for a snippet of text in notes
+	notes = filters.CharFilter(lookup_expr='icontains')
+	item__name = filters.CharFilter(lookup_expr='icontains')
+	owner__name = filters.CharFilter(lookup_expr='icontains')
+	repository__name = filters.CharFilter(lookup_expr='icontains')
+
+
+	class Meta:
+		model = DamagedItems
+		fields = ['item__name', 'owner__name', 'repository__name', 'notes']
+
+class DamagedItemsViewSet(viewsets.ModelViewSet):
+	queryset = DamagedItems.objects.all()
+	serializer_class = DamagedItemsSerializer
+	
+	# Adding filtering backends
+	filter_backends = [DjangoFilterBackend]
+	filterset_class = DamagedItemsFilter
+
+	def perform_create(self, serializer):
+		serializer.save(by=self.request.user)
 
 
 
