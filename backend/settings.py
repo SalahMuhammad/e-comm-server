@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'invoices.purchase.apps.PurchaseConfig',
     'invoices.sales.apps.SalesConfig',
     'rest_framework',
+    'django_filters',
     "corsheaders",
     'finance.debt_settlement.apps.DebtSettlementConfig',
     'finance.expenses.apps.ExpensesConfig',
