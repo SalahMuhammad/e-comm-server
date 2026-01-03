@@ -2,13 +2,13 @@ from invoices.purchase.models import PurchaseInvoices
 from invoices.sales.models import SalesInvoice, ReturnInvoiceItem
 from repositories.models import Repositories
 from transfer_items.models import Transfer
-from items.models import Stock
-from items.models import Items, InitialStock, DamagedItems
 from django.db.models import Sum
 from django.db.models import Q
+from django.apps import apps
 import os, json, datetime
 import re
 from refillable_items_system.models import ItemTransformer, RefundedRefillableItem, RefilledItem, OreItem
+from rest_framework.exceptions import ValidationError
 
 
 class ValidateItemsStock():
@@ -17,8 +17,13 @@ class ValidateItemsStock():
 		# self.items_relations_name = items_relations_name
 		# self.items = items
 
-	def validate_stock(self, items=Items.objects.all()):
-		repositories = Repositories.objects.all()
+	def validate_stock(self, items=None, repository_ids=None, create_error_file=True):
+		Items = apps.get_model('items', 'Items')
+		Stock = apps.get_model('items', 'Stock')
+		if items is None:
+			items = Items.objects.all()
+
+		repositories = Repositories.objects.all() if not repository_ids else Repositories.objects.filter(pk__in=repository_ids)
 		item_transformer = ItemTransformer.objects.all()
 
 		for item_data in items:
@@ -95,11 +100,14 @@ class ValidateItemsStock():
 				exact_qty -= used_items_qty
 				exact_qty += sales_invoice_refund
 				exact_qty -= damaged
-				
+
 				stock, created = Stock.objects.get_or_create(repository=repo, item=item_data)
-				
-				if stock.quantity != exact_qty:
-					directory = 'quantity-errors'
+				stock_quantity = stock.quantity
+				stock.quantity = exact_qty
+				stock.save()
+
+				if create_error_file and stock_quantity != exact_qty:
+					directory = 'media/quantity-errors'
 					os.makedirs(directory, exist_ok=True)
 
 					raw_filename = f"{item_data.name}_{repo.name}_{datetime.datetime.now(datetime.timezone.utc)}.json"
@@ -113,23 +121,26 @@ class ValidateItemsStock():
 						'item_name': item_data.name,
 						'repo_id': repo.id,
 						'repo_name': repo.name,
-						'stock': str(stock.quantity),
+						'stock': str(stock_quantity),
 						'accurate_stock': str(exact_qty)
 					}
 
 					with open(file_path, 'w', encoding='utf-8') as f:
 						json.dump(data, f, indent=4)
-
-					stock.quantity = exact_qty
-					stock.save()
+				
+				if stock.quantity < 0 and not create_error_file:
+					raise ValidationError({'detail': 'no enough items...'})
 
 	def get_invoices_quantities(
 		self,
 		invoice_instance=PurchaseInvoices, 
 		items_relations_name='p', 
-		item_ids=Items.objects.all(), 
+		item_ids=None, 
 		repository_id=1
 	):
+		Items = apps.get_model('items', 'Items')
+		if item_ids is None:
+			item_ids = Items.objects.all()
 		relation_name = f"{items_relations_name}_invoice_items"
 		items_path = f"{relation_name}__item_id"
 		repo_path = f"{relation_name}__repository_id"
@@ -198,6 +209,7 @@ class ValidateItemsStock():
 		item,
 		repository
 	):
+		DamagedItems = apps.get_model('items', 'DamagedItems')
 		return DamagedItems.objects.filter(
 			item=item,
 			repository=repository,
@@ -217,6 +229,7 @@ class ValidateItemsStock():
 		).values_list('items__item_id', 'total_quantity')
 	
 	def get_initial_stock_quantities(self, item, repo):
+		InitialStock = apps.get_model('items', 'InitialStock')
 		return InitialStock.objects.filter(
 			repository=repo,
 			item=item,
