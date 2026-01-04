@@ -359,7 +359,11 @@ class DamagedItemsFilter(filters.FilterSet):
 		fields = ['item__name', 'owner__name', 'repository__name', 'notes']
 
 class DamagedItemsViewSet(viewsets.ModelViewSet):
-	queryset = DamagedItems.objects.all()
+	queryset = DamagedItems.objects.select_related(
+		'repository',
+		'by',
+		'owner'
+	).all()
 	serializer_class = DamagedItemsSerializer
 	
 	# Adding filtering backends

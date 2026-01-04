@@ -103,11 +103,11 @@ class BarcodeSerializer(serializers.ModelSerializer):
 
 
 class ImageURLField(serializers.RelatedField):
-    def to_representation(self, value):
-        request = self.context.get('request', None)
-        if request:
-            return request.build_absolute_uri(value.img.url)
-        # return f'{settings.MEDIA_URL}{value.img}'
+	def to_representation(self, value):
+		request = self.context.get('request', None)
+		if request:
+			return request.build_absolute_uri(value.img.url)
+		# return f'{settings.MEDIA_URL}{value.img}'
 
 
 
@@ -181,37 +181,37 @@ class ItemsSerializer(serializers.ModelSerializer):
 
 	# 		return item
 
-    # def update(self, instance, validated_data):
-    #     images_data = validated_data.pop('images', [])
-        
-    #     with transaction.atomic():
-    #         # Update the item instance
-    #         instance = super().update(instance, validated_data)
+	# def update(self, instance, validated_data):
+	#     images_data = validated_data.pop('images', [])
+		
+	#     with transaction.atomic():
+	#         # Update the item instance
+	#         instance = super().update(instance, validated_data)
 
-    #         # Handle images
-    #         existing_images = {img.id: img for img in instance.images.all()}
-            
-    #         # Process each image in the request
-    #         for image_data in images_data:
-    #             image_id = image_data.get('id')
-                
-    #             if image_id and image_id in existing_images:
-    #                 # Update existing image if new file provided
-    #                 if 'img' in image_data:
-    #                     existing_image = existing_images[image_id]
-    #                     existing_image.img = image_data['img']
-    #                     existing_image.save()
-    #                 existing_images.pop(image_id)
-    #             else:
-    #                 # Create new image
-    #                 if 'img' in image_data:
-    #                     Images.objects.create(item=instance, **image_data)
+	#         # Handle images
+	#         existing_images = {img.id: img for img in instance.images.all()}
+			
+	#         # Process each image in the request
+	#         for image_data in images_data:
+	#             image_id = image_data.get('id')
+				
+	#             if image_id and image_id in existing_images:
+	#                 # Update existing image if new file provided
+	#                 if 'img' in image_data:
+	#                     existing_image = existing_images[image_id]
+	#                     existing_image.img = image_data['img']
+	#                     existing_image.save()
+	#                 existing_images.pop(image_id)
+	#             else:
+	#                 # Create new image
+	#                 if 'img' in image_data:
+	#                     Images.objects.create(item=instance, **image_data)
 
-    #         # Delete any remaining old images
-    #         for image in existing_images.values():
-    #             image.delete()
+	#         # Delete any remaining old images
+	#         for image in existing_images.values():
+	#             image.delete()
 
-    #         return instance
+	#         return instance
 
 	# def get_stock(self, obj):
 	# 	return [f'{i.repository}: {i.quantity}, ' for i in obj.stock.all()]
@@ -260,7 +260,12 @@ class InitialStockSerializer(serializers.ModelSerializer):
 
 from .models import DamagedItems
 class DamagedItemsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DamagedItems
-        fields = '__all__'
-        read_only_fields = ('by', )
+	by_username = serializers.ReadOnlyField(source='by.username')
+	owner_name = serializers.ReadOnlyField(source='owner.name')
+	repository_name = serializers.ReadOnlyField(source='repository.name')
+	
+
+	class Meta:
+		model = DamagedItems
+		fields = '__all__'
+		read_only_fields = ('by', )
