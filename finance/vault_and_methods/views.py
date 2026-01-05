@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .models import BusinessAccount
-from .services.account_balance_total import get_total_money_in_vaults
+from .services.account_balance_total import AccountBalance
 # 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 class SuperUserRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -27,6 +27,51 @@ class VaultBalanceAPIView(APIView, SuperUserRequiredMixin):
     """
     
     def get(self, request, *args, **kwargs):
+        """
+        Retrieve account balance information for a business account or all accounts.
+        This GET endpoint returns balance data with optional computation from all transactions.
+        Query Parameters:
+            account_id (str, optional): The ID of a specific business account. If provided,
+                returns balance for that account only. If omitted, returns total balance
+                across all active accounts and individual account details.
+            compute_all (str, optional): Boolean flag ('true'/'false'). When 'true', forces
+                balance computation by summing all transactions from scratch rather than
+                using cached/current balance. Defaults to 'false'.
+        Returns:
+            Response: JSON response with the following structure:
+                - Single account (account_id provided):
+                    {
+                        'success': bool,
+                        'account_id': int,
+                        'account_name': str,
+                        'balance': str,
+                        'computed_from_transactions': bool
+                    }
+                - All accounts (account_id not provided):
+                    {
+                        'success': bool,
+                        'total_balance': str,
+                        'accounts': [
+                            {
+                                'id': int,
+                                'name': str,
+                                'balance': str  # or 'error' if computation failed
+                            }
+                        ],
+                        'computed_from_transactions': bool
+                    }
+        Raises:
+            PermissionDenied (403): User lacks permission to view the requested account.
+            BusinessAccount.DoesNotExist (404): Specified account_id does not exist.
+            ValueError (400): Invalid parameter values.
+            Exception (500): Unexpected server error.
+        Note:
+            'computed_from_transactions': Indicates whether the balance was calculated by
+            summing all individual transactions (True) or retrieved from a cached/current
+            balance field (False). When True, the balance reflects the most accurate state
+            by recalculating from transaction history. When False, it uses a pre-calculated
+            stored value for performance.
+        """
         try:
             account_id = request.GET.get('account_id')
             compute_all = request.GET.get('compute_all', '').lower() == 'true'
@@ -38,25 +83,20 @@ class VaultBalanceAPIView(APIView, SuperUserRequiredMixin):
                 # Check permissions (customize based on your permission system)
                 if not self.has_permission(request.user, account):
                     raise PermissionDenied("You don't have permission to view this account")
-                
-                balance = get_total_money_in_vaults(
-                    account=account,
-                    is_explicit_compute_all_transactions=compute_all
-                )
-                
+
+                acc_instance = AccountBalance(account_id, compute_all)
+                balance = acc_instance.get_account_or_accounts_balance()
+
                 return Response({
                     'success': True,
                     'account_id': account.id,
-                    'account_name': str(account),
+                    'account_name': str(account.account_name),
                     'balance': str(balance),
                     'computed_from_transactions': compute_all or account.current_balance is None
                 })
             else:
-                # Get total across all accounts
-                balance = get_total_money_in_vaults(
-                    account=None,
-                    is_explicit_compute_all_transactions=compute_all
-                )
+                acc_instance = AccountBalance(is_computed_from_transactions=compute_all)
+                balance = acc_instance.get_account_or_accounts_balance()
                 
                 # Get individual account balances
                 accounts = BusinessAccount.objects.filter(is_active=True)
@@ -65,19 +105,18 @@ class VaultBalanceAPIView(APIView, SuperUserRequiredMixin):
                 for acc in accounts:
                     if self.has_permission(request.user, acc):
                         try:
-                            acc_balance = get_total_money_in_vaults(
-                                account=acc,
-                                is_explicit_compute_all_transactions=compute_all
-                            )
+                            acc_instance.acc = acc
+                            acc_balance = acc_instance.get_account_or_accounts_balance()
+
                             account_details.append({
                                 'id': acc.id,
-                                'name': str(acc),
+                                'name': str(acc.account_name),
                                 'balance': str(acc_balance)
                             })
                         except Exception as e:
                             account_details.append({
                                 'id': acc.id,
-                                'name': str(acc),
+                                'name': str(acc.account_name),
                                 'error': str(e)
                             })
                 
@@ -304,15 +343,15 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.utils.dateparse import parse_date
 from datetime import date, datetime
-from decimal import Decimal
+# from decimal import Decimal
 from typing import List, Optional
 from .services.AccountMovementService import AccountMovementService
 from .serializers import (
     AccountMovementResponseSerializer,
     BalanceHistoryItemSerializer,
-    MovementFiltersSerializer,
-    MovementSerializer,
-    MovementSummarySerializer,
+    # MovementFiltersSerializer,
+    # MovementSerializer,
+    # MovementSummarySerializer,
     AccountSummarySerializer
 )
 
@@ -350,7 +389,7 @@ class AccountMovementListView(APIView, SuperUserRequiredMixin):
             # Validate that account_id and account_ids are not both provided
             if account_id and account_ids:
                 return Response(
-                    {'error': 'Cannot specify both account_id and account_ids'},
+                    {'detail': 'Cannot specify both account_id and account_ids'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
             
