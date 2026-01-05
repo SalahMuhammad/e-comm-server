@@ -33,5 +33,6 @@ class BusinessAccount(UpdatedCreatedBy):
             models.Index(fields=['account_type', 'is_active']),
         ]
 
-    def __str__(self):
-        return f"{self.account_name} ({self.account_type})"
+    # causes extra queryes
+    # def __str__(self):
+    #     return f"{self.account_name} ({self.account_type})"

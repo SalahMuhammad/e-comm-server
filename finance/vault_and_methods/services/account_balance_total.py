@@ -113,14 +113,14 @@ class AccountBalance():
 			return Q(from_vault=self.acc) if self.acc else Q(from_vault__is_active=True)
 
 	def _set_account(self, acc):
-		is_valid_account = isinstance(acc, BusinessAccount)
-		is_valid_account_id = BusinessAccount.objects.filter(pk=acc)
+		if isinstance(acc, BusinessAccount):
+			return acc
 		
-		if not is_valid_account and not is_valid_account_id.exists():
-			# raise ValidationError({'detail': 'AccountBalance()._is_valid_account(): invalid account instance or id...'})
-			return None
-
-		return acc if is_valid_account else is_valid_account_id[0]
+		is_valid_account_id = BusinessAccount.objects.filter(pk=acc)
+		if is_valid_account_id.exists():
+			return is_valid_account_id[0]
+		
+		return None
 	
 	def _to_decimal(self, value):
 		return Decimal(value) if value is not None else Decimal('0')
