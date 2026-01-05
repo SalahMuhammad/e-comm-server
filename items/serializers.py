@@ -262,6 +262,7 @@ from .models import DamagedItems
 class DamagedItemsSerializer(serializers.ModelSerializer):
 	by_username = serializers.ReadOnlyField(source='by.username')
 	owner_name = serializers.ReadOnlyField(source='owner.name')
+	item_name = serializers.ReadOnlyField(source='item.name')
 	repository_name = serializers.ReadOnlyField(source='repository.name')
 	
 

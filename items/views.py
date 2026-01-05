@@ -362,7 +362,8 @@ class DamagedItemsViewSet(viewsets.ModelViewSet):
 	queryset = DamagedItems.objects.select_related(
 		'repository',
 		'by',
-		'owner'
+		'owner',
+		'item'
 	).all()
 	serializer_class = DamagedItemsSerializer
 	
