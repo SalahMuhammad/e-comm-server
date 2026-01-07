@@ -48,7 +48,7 @@ class AccountBalance():
 		self.is_computed_from_transactions = is_computed_from_transactions
 
 	def get_account_or_accounts_balance(self):
-		if self.acc and self.acc.current_balance is not None and not self.is_computed_from_transactions:
+		if isinstance(self.acc, BusinessAccount) and self.acc.current_balance is not None and not self.is_computed_from_transactions:
 			return Decimal(self.acc.current_balance)
 		return self._compute_from_transactions()
 

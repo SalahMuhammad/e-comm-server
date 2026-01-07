@@ -75,6 +75,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     "corsheaders",
+    'django_cleanup.apps.CleanupConfig',
+    
     'finance.debt_settlement.apps.DebtSettlementConfig',
     'finance.expenses.apps.ExpensesConfig',
     'finance.vault_and_methods.apps.VaultAndMethodsConfig',
@@ -114,7 +116,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     # my input
-    'backend.middleware.JSONOnlyMiddleware',
+    # 'backend.middleware.JSONOnlyMiddleware',
     'backend.middleware.RequestLogMiddleware',
 ]
 

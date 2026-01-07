@@ -77,8 +77,8 @@ class AbstractInvoice(UpdatedCreatedBy):
                 self.owner,
             )
 
-    def __str__(self):
-        return f'{self.id} - {self.owner.name} - {self.issue_date} - {self.total_amount} - {self.status} - {self.repository_permit}'
+    # def __str__(self):
+    #     return f'{self.id} - {self.owner.name} - {self.issue_date} - {self.total_amount} - {self.status} - {self.repository_permit}'
 
 
     class Meta:

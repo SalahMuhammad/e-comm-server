@@ -1,10 +1,9 @@
 import json
 from django.contrib import admin
-from django.urls import path, re_path, include
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 # 
-from django.shortcuts import render
 from django.http import JsonResponse
 # 
 from debug_toolbar.toolbar import debug_toolbar_urls
@@ -39,6 +38,7 @@ urlpatterns = [
     path('api/finance/reverse-payment/', include('finance.reverse_payment.urls')),
     path('api/finance/debt-settlement/', include('finance.debt_settlement.urls')),
     path('api/finance/expenses/', include('finance.expenses.urls')),
+    path('api/finance/internal-money-transfer/', include('finance.transfer.urls')),
     path('api/finance/account-vault/', include('finance.vault_and_methods.urls')),
     # path('admin/finance/payment/', include('finance.payment.urls')),
     ###################### services #############################
