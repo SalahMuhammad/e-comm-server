@@ -11,19 +11,22 @@ class ReversePaymentSerializer(serializers.ModelSerializer):
     ref_order_total_amount = serializers.ReadOnlyField(source='purchase.total_amount')
     # payment_method_name = serializers.ReadOnlyField(source='business_account.account_name')
     payment_method_name = serializers.SerializerMethodField()
-    ref = serializers.SerializerMethodField()
+    related_order_ref = serializers.SerializerMethodField()
     hashed_id = serializers.SerializerMethodField()
 
 
     class Meta:
         model = ReversePayment2
         fields = '__all__'
+        extra_kwargs = {
+            'payment_ref': {'required': False, 'allow_blank': True},
+        }
 
 
     def get_hashed_id(self, obj):
         return MixedRadixEncoder().encode(obj.id)
     
-    def get_ref(self, obj):
+    def get_related_order_ref(self, obj):
         if obj.purchase:
             return MixedRadixEncoder().encode(obj.purchase.id)
         else: 
