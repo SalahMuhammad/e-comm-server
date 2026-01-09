@@ -1,8 +1,49 @@
 from rest_framework import serializers
-
+from finance.vault_and_methods.models import AccountType, BusinessAccount
 
 
 # Serializers
+class AccountTypeSerializer(serializers.ModelSerializer):
+    """Serializer for account types"""
+    class Meta:
+        model = AccountType
+        fields = '__all__'
+
+
+class BusinessAccountSerializer(serializers.ModelSerializer):
+    """Serializer for creating/updating business accounts"""
+    account_type_name = serializers.CharField(source='account_type.name', read_only=True)
+
+
+    class Meta:
+        model = BusinessAccount
+        fields = '__all__'
+        read_only_fields = ['id', 'created_at', 'updated_at', 'account_type_name']
+
+
+class BusinessAccountDetailSerializer(serializers.ModelSerializer):
+    """Serializer for retrieving business account details"""
+    account_type = AccountTypeSerializer(read_only=True)
+    account_type_id = serializers.IntegerField(write_only=True, source='account_type.id')
+    
+    class Meta:
+        model = BusinessAccount
+        fields = [
+            'id',
+            'account_type',
+            'account_type_id',
+            'account_name',
+            'account_number',
+            'phone_number',
+            'bank_name',
+            'current_balance',
+            'is_active',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+
 class MovementSerializer(serializers.Serializer):
     """Serializer for individual movement records"""
     id = serializers.CharField()
@@ -66,3 +107,6 @@ class AccountSummarySerializer(serializers.Serializer):
     total_out = serializers.DecimalField(max_digits=20, decimal_places=2)
     net_movement = serializers.DecimalField(max_digits=20, decimal_places=2)
     transaction_count = serializers.IntegerField()
+
+
+

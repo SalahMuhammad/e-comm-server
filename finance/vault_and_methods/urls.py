@@ -2,6 +2,8 @@
 from django.urls import path
 from .views import (
     VaultBalanceAPIView,
+    ListCreateAccountsView,
+    ListCreateAccountTypeView
     # VaultBalanceDashboardView,
     # RecalculateVaultBalanceView
 )
@@ -9,6 +11,9 @@ from .views import (
 # app_name = 'vault_balance'
 
 urlpatterns = [
+    path('', ListCreateAccountsView.as_view()),
+    path('type/list/', ListCreateAccountTypeView.as_view()),
+    
     # API endpoint for getting balance
     path('balance/', VaultBalanceAPIView.as_view(), name='api_balance'),
     
