@@ -1,6 +1,7 @@
 # urls.py
 from django.urls import path
 from .views import (
+    AccountMovementListView,
     VaultBalanceAPIView,
     ListCreateAccountsView,
     DetailAccountView,
@@ -8,55 +9,31 @@ from .views import (
     DetailAccountTypeView
     # VaultBalanceDashboardView,
     # RecalculateVaultBalanceView
+    # AccountBalanceHistoryView,
+    # MultiAccountSummaryView,
+    # AccountMovementExportView
 )
 
 # app_name = 'vault_balance'
 
 urlpatterns = [
-    path('', ListCreateAccountsView.as_view()),
-    path('<str:pk>/', DetailAccountView.as_view()),
-    path('type/list/', ListCreateAccountTypeView.as_view()),
-    path('type/<str:pk>/', DetailAccountTypeView.as_view()),
-
     # API endpoint for getting balance
     path('balance/', VaultBalanceAPIView.as_view(), name='api_balance'),
+    path('account-movements/', AccountMovementListView.as_view(), name='account-movements-list'),
+
+
+    path('', ListCreateAccountsView.as_view()),
+    path('type/', ListCreateAccountTypeView.as_view()),
+    path('<str:pk>/', DetailAccountView.as_view()),
+    path('type/<str:pk>/', DetailAccountTypeView.as_view()),
+
     
     # # Dashboard view
     # path('dashboard/', VaultBalanceDashboardView.as_view(), name='dashboard'),
     
     # # Recalculate balance (admin only)
     # path('recalculate/', RecalculateVaultBalanceView.as_view(), name='recalculate'),
-]
 
-"""
-URL Configuration for Account Movement Views
-
-Add to your main urls.py:
-    from django.urls import path, include
-    
-    urlpatterns = [
-        ...
-        path('api/', include('your_app.urls')),
-    ]
-"""
-
-from .views import (
-    AccountMovementListView,
-    AccountBalanceHistoryView,
-    MultiAccountSummaryView,
-    AccountMovementExportView
-)
-
-# app_name = 'account_movements'
-
-urlpatterns += [
-    # Main movements endpoint
-    path(
-        'account-movements/',
-        AccountMovementListView.as_view(),
-        name='account-movements-list'
-    ),
-    
     # # Balance history for specific account
     # path(
     #     'account-movements/<int:account_id>/balance-history/',
@@ -78,6 +55,7 @@ urlpatterns += [
     #     name='account-movements-export'
     # ),
 ]
+
 
 
 """
