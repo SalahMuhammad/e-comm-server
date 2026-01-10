@@ -95,6 +95,28 @@ class DetailView(
 		return super().retrieve(request, *args, **kwargs)
 
 	def patch(self, request,*args, **kwargs):
+		instance = self.get_object()
+		
+		# Handle payment_proof deletion
+		# Use request.data instead of request.POST to handle both JSON and form-data
+		delete_payment_proof = request.data.get('delete_payment_proof', 'false')
+		payment_proof_file = request.FILES.get('payment_proof')
+		
+		# Debug logging
+		# print(f"[PAYMENT PATCH] delete_payment_proof: {delete_payment_proof}")
+		# print(f"[PAYMENT PATCH] payment_proof_file: {payment_proof_file}")
+		# print(f"[PAYMENT PATCH] current payment_proof: {instance.payment_proof}")
+		# print(f"[PAYMENT PATCH] request.data type: {type(request.data)}")
+		
+		# If user wants to delete the image and hasn't uploaded a new one
+		if delete_payment_proof == 'true' and not payment_proof_file:
+			if instance.payment_proof:
+				# print(f"[PAYMENT PATCH] Deleting payment_proof...")
+				instance.payment_proof.delete()  # Delete file from filesystem
+				instance.payment_proof = None
+				instance.save()
+				# print(f"[PAYMENT PATCH] Deletion complete")
+		
 		return super().partial_update(request, *args, **kwargs)
 
 	def delete(self, request, *args, **kwargs):
@@ -102,3 +124,4 @@ class DetailView(
 	
 	def perform_update(self, serializer):
 		serializer.save(last_updated_by=self.request.user)
+
