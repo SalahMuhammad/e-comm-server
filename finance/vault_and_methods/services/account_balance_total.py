@@ -66,33 +66,33 @@ class AccountBalance():
 		total = self._to_decimal(
 			Payment2.objects.select_related('business_account')\
 			.filter(payment_types_filter)\
-			.aggregate(total=Sum('amount'))['total']
+			.aggregate(total=Sum('amount'))['total'] or '0'
 		)
 
 		# reverse payments
 		total -= self._to_decimal(
 			ReversePayment2.objects.select_related('business_account')\
 			.filter(payment_types_filter)\
-			.aggregate(total=Sum('amount'))['total']
+			.aggregate(total=Sum('amount'))['total'] or '0'
 		)
 
 		# expensees
 		total -= self._to_decimal(
 			Expense.objects.select_related('business_account')\
 			.filter(payment_types_filter)\
-			.aggregate(total=Sum('amount'))['total']
+			.aggregate(total=Sum('amount'))['total'] or '0'
 		)
 
 		total += self._to_decimal(
 			MoneyTransfer.objects\
 			.filter(self._get_filters(is_for_transfer_in=True))\
-			.aggregate(total=Sum('amount'))['total'] or self._to_decimal('0')
+			.aggregate(total=Sum('amount'))['total'] or '0'
 		)
 
 		total -= self._to_decimal(
 			MoneyTransfer.objects\
 			.filter(self._get_filters(is_for_transfer_out=True))\
-			.aggregate(total=Sum('amount'))['total'] or self._to_decimal('0')
+			.aggregate(total=Sum('amount'))['total'] or '0'
 		)
 		
 		return total
