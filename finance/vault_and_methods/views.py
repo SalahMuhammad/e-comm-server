@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
@@ -6,6 +7,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import mixins
 from rest_framework.generics import GenericAPIView
+
+from common.encoder import MixedRadixEncoder
 # 
 from .models import BusinessAccount, AccountType
 from .services.account_balance_total import AccountBalance
@@ -14,11 +17,7 @@ from .services.filters import AccountsFilter
 from .serializers import BusinessAccountSerializer, AccountTypeSerializer
 # django filters
 from django_filters.rest_framework import DjangoFilterBackend
-# 
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-class SuperUserRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
-	def test_func(self):
-		return self.request.user.is_superuser
+
 
 
 
@@ -44,6 +43,49 @@ class ListCreateAccountsView(
 		return self.create(request, *args, **kwargs)
 
 
+
+class DetailAccountView(
+	mixins.RetrieveModelMixin, 
+	mixins.UpdateModelMixin,
+	mixins.DestroyModelMixin,
+	GenericAPIView
+):
+	queryset = BusinessAccount.objects.select_related(
+		'by',
+		"account_type"
+	).all()
+	serializer_class = BusinessAccountSerializer
+
+
+	def get_object(self):
+		encoded_pk = self.kwargs.get('pk')
+		try:
+			decoded_id = MixedRadixEncoder().decode(str(encoded_pk))
+			return self.get_queryset().get(id=decoded_id)
+		except Exception as e:
+			print(f"Invalid encoded ID: {self.kwargs['pk']}")
+			raise Http404("Object not found")
+
+	def get(self, request, *args, **kwargs):
+		return super().retrieve(request, *args, **kwargs)
+
+	def patch(self, request,*args, **kwargs):
+		return super().partial_update(request, *args, **kwargs)
+
+	def delete(self, request, *args, **kwargs):
+		return super().destroy(request, *args, **kwargs)
+	
+	def perform_update(self, serializer):
+		serializer.save(by=self.request.user)
+
+
+
+
+# ------------------------ account type ----------------------------------------
+
+
+
+
 class ListCreateAccountTypeView(
 	mixins.ListModelMixin,
 	mixins.CreateModelMixin,
@@ -60,6 +102,47 @@ class ListCreateAccountTypeView(
 	
 	def post(self, request, *args, **kwargs):
 		return self.create(request, *args, **kwargs)
+
+
+class DetailAccountTypeView(
+	mixins.RetrieveModelMixin, 
+	mixins.UpdateModelMixin,
+	mixins.DestroyModelMixin,
+	GenericAPIView
+):
+	queryset = AccountType.objects.select_related(
+		'by',
+	).all()
+	serializer_class = AccountTypeSerializer
+
+
+	def get_object(self):
+		encoded_pk = self.kwargs.get('pk')
+		try:
+			decoded_id = MixedRadixEncoder().decode(str(encoded_pk))
+			return self.get_queryset().get(id=decoded_id)
+		except Exception as e:
+			print(f"Invalid encoded ID: {self.kwargs['pk']}")
+			raise Http404("Object not found")
+
+	def get(self, request, *args, **kwargs):
+		return super().retrieve(request, *args, **kwargs)
+
+	def patch(self, request,*args, **kwargs):
+		return super().partial_update(request, *args, **kwargs)
+
+	def delete(self, request, *args, **kwargs):
+		return super().destroy(request, *args, **kwargs)
+	
+	def perform_update(self, serializer):
+		serializer.save(by=self.request.user)
+
+
+
+
+# ------------------- analysis --------------------------------------
+
+
 
 
 # class VaultBalanceAPIView(LoginRequiredMixin, APIView):
@@ -403,6 +486,12 @@ from .serializers import (
 	AccountSummarySerializer
 )
 
+
+
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+class SuperUserRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+	def test_func(self):
+		return self.request.user.is_superuser
 
 
 class AccountMovementListView(APIView, SuperUserRequiredMixin):

@@ -1,24 +1,35 @@
 from rest_framework import serializers
+from common.encoder import MixedRadixEncoder
 from finance.vault_and_methods.models import AccountType, BusinessAccount
 
 
 # Serializers
 class AccountTypeSerializer(serializers.ModelSerializer):
     """Serializer for account types"""
+    hashed_id = serializers.SerializerMethodField()
+
+
     class Meta:
         model = AccountType
         fields = '__all__'
+
+    def get_hashed_id(self, obj):
+        return MixedRadixEncoder().encode(obj.id)
 
 
 class BusinessAccountSerializer(serializers.ModelSerializer):
     """Serializer for creating/updating business accounts"""
     account_type_name = serializers.CharField(source='account_type.name', read_only=True)
+    hashed_id = serializers.SerializerMethodField()
 
 
     class Meta:
         model = BusinessAccount
         fields = '__all__'
         read_only_fields = ['id', 'created_at', 'updated_at', 'account_type_name']
+
+    def get_hashed_id(self, obj):
+        return MixedRadixEncoder().encode(obj.id)
 
 
 class BusinessAccountDetailSerializer(serializers.ModelSerializer):
@@ -42,6 +53,13 @@ class BusinessAccountDetailSerializer(serializers.ModelSerializer):
             'updated_at',
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
+
+
+
+
+# ---------------------------------------------------------------------------
+
+
 
 
 class MovementSerializer(serializers.Serializer):
