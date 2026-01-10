@@ -145,6 +145,12 @@ class DetailAccountTypeView(
 
 
 
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+class SuperUserRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+	def test_func(self):
+		return self.request.user.is_superuser
+
+
 # class VaultBalanceAPIView(LoginRequiredMixin, APIView):
 class VaultBalanceAPIView(APIView, SuperUserRequiredMixin):
 	"""
@@ -486,12 +492,6 @@ from .serializers import (
 	AccountSummarySerializer
 )
 
-
-
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-class SuperUserRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
-	def test_func(self):
-		return self.request.user.is_superuser
 
 
 class AccountMovementListView(APIView, SuperUserRequiredMixin):
