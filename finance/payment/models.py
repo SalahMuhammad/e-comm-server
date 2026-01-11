@@ -208,9 +208,9 @@ class Payment2(AbstractTransaction):
 			super().save(*args, **kwargs)
 
 			# validate account balance
-			# AccountBalance(self.business_account, True).validate_balance()
-			# if not self._initial_data['business_account_id'] == self.business_account.id:
-				# AccountBalance(self._initial_data['business_account_id'], True).validate_balance()
+			AccountBalance(self.business_account, True).validate_balance()
+			if not self._initial_data['business_account_id'] == self.business_account.id:
+				AccountBalance(self._initial_data['business_account_id'], True).validate_balance()
 
 			if self.sale:
 				self.sale.save()
@@ -223,7 +223,7 @@ class Payment2(AbstractTransaction):
 			res = super().delete(*args, **kwargs)
 
 			# validate account balance
-			# AccountBalance(self.business_account, True).validate_balance()
+			AccountBalance(self.business_account, True).validate_balance()
 
 			if sale:
 				sale.save()

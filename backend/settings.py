@@ -79,10 +79,10 @@ INSTALLED_APPS = [
     
     'finance.debt_settlement.apps.DebtSettlementConfig',
     'finance.expenses.apps.ExpensesConfig',
+    'finance.vault_and_methods.apps.VaultAndMethodsConfig',
     'finance.payment.apps.PaymentConfig',
     'finance.reverse_payment.apps.ReversePaymentConfig',
     'finance.transfer.apps.TransferConfig',
-    'finance.vault_and_methods.apps.VaultAndMethodsConfig',
     "common",
     "employees.apps.EmployeesConfig",
     "refillable_items_system",
@@ -154,8 +154,8 @@ DATABASES = {
         'NAME': 'e-commerce',
         'USER': 'postgres',
         'PASSWORD': 'BeWithAllah',
-        # 'HOST': 'db',
-        'HOST': 'localhost',
+        'HOST': 'db',
+        # 'HOST': 'localhost',
         'PORT': '5432'
     }
 }

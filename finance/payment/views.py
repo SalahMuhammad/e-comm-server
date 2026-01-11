@@ -112,7 +112,6 @@ class DetailView(
 		if delete_payment_proof == 'true' and not payment_proof_file:
 			if instance.payment_proof:
 				# print(f"[PAYMENT PATCH] Deleting payment_proof...")
-				instance.payment_proof.delete()  # Delete file from filesystem
 				instance.payment_proof = None
 				instance.save()
 				# print(f"[PAYMENT PATCH] Deletion complete")
