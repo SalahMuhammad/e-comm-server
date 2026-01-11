@@ -271,8 +271,7 @@ class ItemDetail(
 			# Delete images that are NOT in the keep list
 			for img in instance.images.all():
 				if img.id not in keep_image_ids:
-					img.img.delete()  # Delete file from filesystem
-					img.delete()      # Delete database record
+					img.delete()
 			
 			# Add newly uploaded images
 			http_request_images_handler(instance.id, images)

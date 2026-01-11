@@ -94,9 +94,8 @@ class DetailView(
 		# If user wants to delete the image and hasn't uploaded a new one
 		if delete_payment_proof == 'true' and not payment_proof_file:
 			if instance.payment_proof:
-				instance.payment_proof.delete()  # Delete file from filesystem
 				instance.payment_proof = None
-				instance.save()
+				instance.save() 
 		
 		return super().partial_update(request, *args, **kwargs)
 
