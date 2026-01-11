@@ -9,6 +9,7 @@ from django.utils import timezone
 import uuid
 from rest_framework.exceptions import ValidationError
 from datetime import date
+from decimal import Decimal
 
 
 
@@ -76,7 +77,7 @@ class AbstractTransaction(UpdatedCreatedByV2):
 	# sale = models.ForeignKey(SalesInvoice, on_delete=models.PROTECT, related_name='payments', blank=True, null=True, help_text="not required, if selected it's effects invoice status.")
 	owner = models.ForeignKey(Party, on_delete=models.PROTECT)
 	
-	amount = models.DecimalField(max_digits=20, decimal_places=2, validators=[MinValueValidator(0.01)])
+	amount = models.DecimalField(max_digits=20, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
 	
 	# PAYMENT_METHOD_CHOICES = [
 	#     ('cash', 'Cash'),
@@ -207,9 +208,9 @@ class Payment2(AbstractTransaction):
 			super().save(*args, **kwargs)
 
 			# validate account balance
-			AccountBalance(self.business_account, True).validate_balance()
-			if not self._initial_data['business_account_id'] == self.business_account.id:
-				AccountBalance(self._initial_data['business_account_id'], True).validate_balance()
+			# AccountBalance(self.business_account, True).validate_balance()
+			# if not self._initial_data['business_account_id'] == self.business_account.id:
+				# AccountBalance(self._initial_data['business_account_id'], True).validate_balance()
 
 			if self.sale:
 				self.sale.save()
@@ -222,7 +223,7 @@ class Payment2(AbstractTransaction):
 			res = super().delete(*args, **kwargs)
 
 			# validate account balance
-			AccountBalance(self.business_account, True).validate_balance()
+			# AccountBalance(self.business_account, True).validate_balance()
 
 			if sale:
 				sale.save()

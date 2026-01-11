@@ -118,7 +118,7 @@ class ImagesSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Images
-		fields = ['img']
+		fields = ['id', 'img']
 
 
 	# def validate_img(self, value):
