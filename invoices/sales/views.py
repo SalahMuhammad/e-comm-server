@@ -68,37 +68,6 @@ class ListCreateView(AbstractInvoiceListCreateView):
 	filter_backends = [DjangoFilterBackend]
 	filterset_class = SalesInvoiceFilter
 
-	def get_queryset(self):
-		"""
-		Override to prevent parent's get_queryset from interfering with django-filter.
-		Django-filter will handle owner, status, and no parameters.
-		Parent's get_queryset will still handle note, itemdesc, and itemname parameters.
-		"""
-		queryset = super().get_queryset()
-		
-		# Remove the parent's owner and 'no' filtering since django-filter handles them
-		# Only keep note, itemdesc, and itemname filters from parent
-		# We need to call parent but skip its owner/no logic
-		
-		# Actually, let's just return self.queryset and let django-filter do everything
-		# except for the note/itemdesc/itemname filters which we'll keep from parent
-		queryset = self.queryset
-		
-		# Keep these filters from the parent class
-		note = self.request.query_params.get('note')
-		if note:
-			queryset = queryset.filter(notes__icontains=note)
-		
-		item_desc = self.request.query_params.get('itemdesc')
-		if item_desc:
-			queryset = queryset.filter(Q(s_invoice_items__description__icontains=item_desc))
-		
-		item_name = self.request.query_params.get('itemname')
-		if item_name:
-			queryset = queryset.filter(Q(s_invoice_items__item__name__icontains=item_name))
-		
-		return queryset
-
 
 class DetailView(AbstractInvoiceDetailView):
 	queryset = SalesInvoice.objects.select_related(

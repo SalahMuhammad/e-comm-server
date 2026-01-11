@@ -7,6 +7,7 @@ from finance.vault_and_methods.models import AccountType, BusinessAccount
 class AccountTypeSerializer(serializers.ModelSerializer):
     """Serializer for account types"""
     hashed_id = serializers.SerializerMethodField()
+    created_by = serializers.ReadOnlyField(source='by.username')
 
 
     class Meta:
@@ -21,6 +22,7 @@ class BusinessAccountSerializer(serializers.ModelSerializer):
     """Serializer for creating/updating business accounts"""
     account_type_name = serializers.CharField(source='account_type.name', read_only=True)
     hashed_id = serializers.SerializerMethodField()
+    created_by = serializers.ReadOnlyField(source='by.username')
 
 
     class Meta:
