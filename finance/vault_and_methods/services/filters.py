@@ -11,5 +11,6 @@ class AccountsFilter(filters.FilterSet):
 	class Meta:
 		model = BusinessAccount
 		fields = [
-			'account_name', 
+			'account_name',
+			'is_active',
 		]

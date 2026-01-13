@@ -9,6 +9,7 @@ from django.utils import timezone
 import uuid
 from rest_framework.exceptions import ValidationError
 from datetime import date
+from decimal import Decimal
 
 
 
@@ -76,7 +77,7 @@ class AbstractTransaction(UpdatedCreatedByV2):
 	# sale = models.ForeignKey(SalesInvoice, on_delete=models.PROTECT, related_name='payments', blank=True, null=True, help_text="not required, if selected it's effects invoice status.")
 	owner = models.ForeignKey(Party, on_delete=models.PROTECT)
 	
-	amount = models.DecimalField(max_digits=20, decimal_places=2, validators=[MinValueValidator(0.01)])
+	amount = models.DecimalField(max_digits=20, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
 	
 	# PAYMENT_METHOD_CHOICES = [
 	#     ('cash', 'Cash'),

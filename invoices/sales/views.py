@@ -1,9 +1,12 @@
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 from common.encoder import MixedRadixEncoder
 from .models import SalesInvoice, ReturnInvoice
 from .serializers import InvoiceSerializer, ReturnInvoiceSerializer
+from django_filters.rest_framework import DjangoFilterBackend
+from .services.filters import SalesInvoiceFilter
 from common.views import AbstractInvoiceDetailView, AbstractInvoiceListCreateView
 from common.utilities import adjust_stock
 from rest_framework.decorators import api_view
@@ -61,6 +64,9 @@ class ListCreateView(AbstractInvoiceListCreateView):
 	serializer_class = InvoiceSerializer
 	adjust_stock_sign = -1
 	items_relation_name = 's_invoice_items'
+	# Adding filtering backends
+	filter_backends = [DjangoFilterBackend]
+	filterset_class = SalesInvoiceFilter
 
 
 class DetailView(AbstractInvoiceDetailView):

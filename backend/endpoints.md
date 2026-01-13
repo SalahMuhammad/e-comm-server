@@ -1,5 +1,7 @@
 # API Endpoints Documentation
 
+> **📝 For POST/PATCH Request Body Examples**: See [endpoints_request_bodies.md](./endpoints_request_bodies.md)
+
 ## Authentication
 - `POST /api/users/register/` - User registration
 - `POST /api/users/login/` - User login
@@ -73,6 +75,7 @@
 - `GET /api/purchases/<str:pk>/` - Get purchase invoice details
 - `PATCH /api/purchases/<str:pk>/` - Update purchase invoice
 - `DELETE /api/purchases/<str:pk>/` - Delete purchase invoice
+- `POST /api/purchases/<int:pk>/change-repository-permit/` - Toggle repository permit
 
 ## Finance - Payments
 - `GET /api/finance/payment/` - List all payments
@@ -81,7 +84,7 @@
 - `GET /api/finance/payment/<str:pk>/` - Get payment details
 - `PATCH /api/finance/payment/<str:pk>/` - Update payment
 - `DELETE /api/finance/payment/<str:pk>/` - Delete payment
-- `GET /api/finance/payment/?owner_id=<int>&date=<YYYY-MM-DD>&credit_balance=1` - Get owner credit balance
+- `GET /api/finance/payment/?owner-id=<int>&date=<YYYY-MM-DD>&credit-balance=1` - Get owner credit balance
 
 ## Finance - Reverse Payments
 - `GET /api/finance/reverse-payment/` - List all reverse payments
@@ -90,7 +93,7 @@
 - `GET /api/finance/reverse-payment/<str:pk>/` - Get reverse payment details
 - `PATCH /api/finance/reverse-payment/<str:pk>/` - Update reverse payment
 - `DELETE /api/finance/reverse-payment/<str:pk>/` - Delete reverse payment
-- `GET /api/finance/reverse-payment/?owner_id=<int>&date=<YYYY-MM-DD>&credit_balance=1` - Get owner credit balance
+- `GET /api/finance/reverse-payment/?owner-id=<int>&date=<YYYY-MM-DD>&credit-balance=1` - Get owner credit balance
 
 ## Finance - Expenses
 - `GET /api/finance/expenses/` - List all expenses
@@ -153,9 +156,9 @@
 - `GET /api/refillable-sys/ore-item/` - List ore items
   - Query params: `limit`, `offset`, `name`, `type`
 - `POST /api/refillable-sys/ore-item/` - Create ore item
-- `GET /api/refillable-sys/ore-item/<int:pk>/` - Get ore item details
-- `PATCH /api/refillable-sys/ore-item/<int:pk>/` - Update ore item
-- `DELETE /api/refillable-sys/ore-item/<int:pk>/` - Delete ore item
+- ⚠️ **COMMENTED OUT**: `GET /api/refillable-sys/ore-item/<int:pk>/` - Get ore item details (view exists but URL disabled)
+- ⚠️ **COMMENTED OUT**: `PATCH /api/refillable-sys/ore-item/<int:pk>/` - Update ore item (view exists but URL disabled)
+- ⚠️ **COMMENTED OUT**: `DELETE /api/refillable-sys/ore-item/<int:pk>/` - Delete ore item (view exists but URL disabled)
 - `GET /api/refillable-sys/refillable-items-owners-has/` - Get owners with refillable items
   - Query params: `limit`, `offset`, `item_id`
 - `GET /api/refillable-sys/cans-client-has/<int:pk>/` - Get cans client report
@@ -165,6 +168,7 @@
 - `GET /api/employees/` - List all employees
   - Query params: `limit`, `offset`, `name`, `department`, `status`
 - `POST /api/employees/` - Create new employee
+- ⚠️ **MISSING**: Detail view endpoints (GET/PATCH/DELETE /api/employees/<int:pk>/) are not implemented
 
 ## Reports - Warehouse
 - `GET /api/reports/item-movement-json/` - Get item movement report (JSON)
