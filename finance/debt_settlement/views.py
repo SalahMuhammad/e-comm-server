@@ -4,6 +4,8 @@ from .models import DebtSettlement
 from .serializers import DebtSettlementSerializer
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.generics import GenericAPIView
+from django_filters.rest_framework import DjangoFilterBackend
+from .services.filters import DebtSettlementFilter
 
 
 
@@ -17,16 +19,9 @@ class ListCreateDebtSettlementView(
         'by',
     ).all()
     serializer_class = DebtSettlementSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = DebtSettlementFilter
 
-
-    def get_queryset(self):
-        queryset = self.queryset
-
-        name_param = self.request.query_params.get('owner')
-        if name_param:
-            queryset = queryset.filter(owner__name__icontains=name_param)
-
-        return queryset
     
     def get(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
