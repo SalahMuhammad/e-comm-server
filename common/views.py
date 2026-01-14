@@ -66,43 +66,6 @@ class AbstractInvoiceListCreateView(
 		""" Override this to get the created instance """
 		instance = serializer.save()  # This is the actual instance
 		return instance  # Returning the created object
-	
-	def get_queryset(self):
-		queryset = self.queryset
-
-		owner = self.request.query_params.get('owner')
-		if owner:
-			queryset = queryset.filter(owner_id__name__icontains=owner)
-		
-		name_param = self.request.query_params.get('no')
-		id = -1
-		if name_param:
-			try:
-				id = MixedRadixEncoder().decode(name_param)  # Validate the encoded ID
-			except:
-				print(f"Invalid encoded ID: {name_param}")
-				
-			queryset = queryset.filter(pk=id)
-			
-		note = self.request.query_params.get('note')
-		if note:
-			queryset = queryset.filter(notes__icontains=note)
-		
-		item_desc = self.request.query_params.get('itemdesc')
-		if item_desc:
-			try: 
-				queryset = queryset.filter(Q(s_invoice_items__description__icontains=item_desc))
-			except:
-				queryset = queryset.filter(Q(p_invoice_items__description__icontains=item_desc))
-
-		item_name = self.request.query_params.get('itemname')
-		if item_name:
-			try:
-				queryset = queryset.filter(Q(s_invoice_items__item__name__icontains=item_name))
-			except:
-				queryset = queryset.filter(Q(p_invoice_items__item__name__icontains=item_name))
-		
-		return queryset
 
 	def get(self, request, *args, **kwargs):
 		return self.list(request, *args, **kwargs)

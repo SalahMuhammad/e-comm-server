@@ -1,4 +1,6 @@
 from django.http import Http404
+from django.db.models.deletion import ProtectedError
+from rest_framework import status
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
@@ -7,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import mixins
 from rest_framework.generics import GenericAPIView
+from django.db import IntegrityError, transaction
 
 from common.encoder import MixedRadixEncoder
 # 
@@ -76,7 +79,10 @@ class DetailAccountView(
 		return super().partial_update(request, *args, **kwargs)
 
 	def delete(self, request, *args, **kwargs):
-		return super().destroy(request, *args, **kwargs)
+		try:
+			return super().destroy(request, *args, **kwargs)
+		except ProtectedError:
+			return Response({'detail': 'لا يمكن حذف هذا العنصر قبل حذف المعاملات المرتبطه به اولا 😵...'}, status=status.HTTP_400_BAD_REQUEST)
 	
 	def perform_update(self, serializer):
 		serializer.save(by=self.request.user)
@@ -138,7 +144,10 @@ class DetailAccountTypeView(
 		return super().partial_update(request, *args, **kwargs)
 
 	def delete(self, request, *args, **kwargs):
-		return super().destroy(request, *args, **kwargs)
+		try:
+			return super().destroy(request, *args, **kwargs)
+		except ProtectedError:
+			return Response({'detail': 'لا يمكن حذف هذا العنصر قبل حذف المعاملات المرتبطه به اولا 😵...'}, status=status.HTTP_400_BAD_REQUEST)
 	
 	def perform_update(self, serializer):
 		serializer.save(by=self.request.user)

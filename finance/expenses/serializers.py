@@ -12,6 +12,7 @@ class ExpensesSerializers(serializers.ModelSerializer):
 	category_name = serializers.ReadOnlyField(source='category.name')
 	payment_method_name = serializers.SerializerMethodField()
 	hashed_id = serializers.SerializerMethodField()
+	business_account_hashed_id = serializers.SerializerMethodField()
 	
 
 	class Meta:
@@ -23,6 +24,9 @@ class ExpensesSerializers(serializers.ModelSerializer):
 	
 	def get_payment_method_name(self, obj):
 		return f'{obj.business_account.account_type} - {obj.business_account.account_name}'
+	
+	def get_business_account_hashed_id(self, obj):
+		return MixedRadixEncoder().encode(obj.business_account.id)
 
 
 

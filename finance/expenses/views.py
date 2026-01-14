@@ -71,6 +71,18 @@ class ExpenseDetailView(
 		return super().retrieve(request, *args, **kwargs)
 
 	def patch(self, request, *args, **kwargs):
+		instance = self.get_object()
+		
+		# Handle image deletion
+		# Use request.data instead of request.POST to handle both JSON and form-data
+		keep_image = request.data.get('keep_image', 'true')
+		image_file = request.FILES.get('image')
+		
+		# If keep_image is 'false' and no new file uploaded, delete the existing image
+		if keep_image == 'false' and not image_file and instance.image:
+			instance.image = None
+			instance.save()
+		
 		return super().partial_update(request, *args, **kwargs)
 
 	def delete(self, request, *args, **kwargs):
@@ -132,7 +144,15 @@ class CategoryDetailView(
 		return super().partial_update(request, *args, **kwargs)
 
 	def delete(self, request, *args, **kwargs):
-		return super().destroy(request, *args, **kwargs)
+		from django.db.models.deletion import ProtectedError
+		from rest_framework.response import Response
+		from rest_framework import status
+		
+		try:
+			return super().destroy(request, *args, **kwargs)
+		except ProtectedError:
+			return Response({'detail': 'لا يمكن حذف هذا العنصر قبل حذف المعاملات المرتبطه به اولا ...'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 	def perform_update(self, serializer):
 		serializer.save(last_updated_by=self.request.user)

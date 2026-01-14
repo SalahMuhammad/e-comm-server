@@ -9,6 +9,8 @@ class TransferSerializer(serializers.ModelSerializer):
     last_updated_by = serializers.ReadOnlyField(source='last_updated_by.username')
     from_vault_name = serializers.SerializerMethodField()
     to_vault_name = serializers.SerializerMethodField()
+    from_vault_hashed_id = serializers.SerializerMethodField()
+    to_vault_hashed_id = serializers.SerializerMethodField()
     hashed_id = serializers.SerializerMethodField()
 
 
@@ -24,3 +26,9 @@ class TransferSerializer(serializers.ModelSerializer):
     
     def get_to_vault_name(self, obj):
         return f'{obj.to_vault.account_type} - {obj.to_vault.account_name}'
+    
+    def get_from_vault_hashed_id(self, obj):
+        return MixedRadixEncoder().encode(obj.from_vault.id) if obj.from_vault else None
+    
+    def get_to_vault_hashed_id(self, obj):
+        return MixedRadixEncoder().encode(obj.to_vault.id) if obj.to_vault else None

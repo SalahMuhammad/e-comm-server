@@ -18,7 +18,8 @@ class TransferFilter(filters.FilterSet):
 		fields = [
 			'from_vault__account_name',
 			'to_vault__account_name', 
-			'date_range', 
+			'date_range',
+			'transfer_type',
 			'notes',
 			'date',
 		]
