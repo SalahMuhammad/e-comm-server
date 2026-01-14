@@ -73,6 +73,18 @@ class DetailView(
 		return super().retrieve(request, *args, **kwargs)
 
 	def patch(self, request,*args, **kwargs):
+		instance = self.get_object()
+		
+		# Handle proof deletion
+		# Use request.data instead of request.POST to handle both JSON and form-data
+		keep_proof = request.data.get('keep_proof', 'true')
+		proof_file = request.FILES.get('proof')
+		
+		# If keep_proof is 'false' and no new file uploaded, delete the existing image
+		if keep_proof == 'false' and not proof_file and instance.proof:
+			instance.proof = None
+			instance.save()
+		
 		return super().partial_update(request, *args, **kwargs)
 
 	def delete(self, request, *args, **kwargs):

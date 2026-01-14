@@ -88,14 +88,13 @@ class DetailView(
 		
 		# Handle payment_proof deletion
 		# Use request.data instead of request.POST to handle both JSON and form-data
-		delete_payment_proof = request.data.get('delete_payment_proof', 'false')
+		keep_payment_proof = request.data.get('keep_payment_proof', 'true')
 		payment_proof_file = request.FILES.get('payment_proof')
 		
-		# If user wants to delete the image and hasn't uploaded a new one
-		if delete_payment_proof == 'true' and not payment_proof_file:
-			if instance.payment_proof:
-				instance.payment_proof = None
-				instance.save() 
+		# If keep_payment_proof is 'false' and no new file uploaded, delete the existing image
+		if keep_payment_proof == 'false' and not payment_proof_file and instance.payment_proof:
+			instance.payment_proof = None
+			instance.save() 
 		
 		return super().partial_update(request, *args, **kwargs)
 

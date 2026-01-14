@@ -27,9 +27,8 @@ class ExpensesFilter(filters.FilterSet):
 
 class CategoryFilter(filters.FilterSet):
 	name = filters.CharFilter(lookup_expr='icontains')
-
-
+	description = filters.CharFilter(lookup_expr='icontains')
 
 	class Meta:
 		model = Category
-		fields = ['name']
+		fields = ['name', 'description']
