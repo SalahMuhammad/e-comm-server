@@ -6,7 +6,7 @@ from common.encoder import MixedRadixEncoder
 from .models import SalesInvoice, ReturnInvoice
 from .serializers import InvoiceSerializer, ReturnInvoiceSerializer
 from django_filters.rest_framework import DjangoFilterBackend
-from .services.filters import SalesInvoiceFilter
+from .services.filters import SalesInvoiceFilter, ReturnInvoiceFilter
 from common.views import AbstractInvoiceDetailView, AbstractInvoiceListCreateView
 from common.utilities import adjust_stock
 from rest_framework.decorators import api_view
@@ -94,6 +94,10 @@ class ReturnListCreateView(AbstractInvoiceListCreateView):
 	serializer_class = ReturnInvoiceSerializer
 	adjust_stock_sign = 1
 	items_relation_name = 's_invoice_items'
+	# Adding filtering backends
+	filter_backends = [DjangoFilterBackend]
+	filterset_class = ReturnInvoiceFilter
+
 
 
 class RefundDetailView(
