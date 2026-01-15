@@ -1,6 +1,10 @@
 from decimal import ROUND_HALF_UP, Decimal
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+# models
+from finance.reverse_payment.models import ReversePayment2
 from .models import PurchaseInvoices, PurchaseInvoiceItems
+# 
 from common.utilities import set_request_items_totals
 from common.encoder import MixedRadixEncoder
 
@@ -33,6 +37,10 @@ class InvoiceSerializer(serializers.ModelSerializer):
     by_username = serializers.ReadOnlyField(source='by.username')
     owner_name = serializers.ReadOnlyField(source='owner.name')
     hashed_id = serializers.SerializerMethodField()
+    # payment info
+    payment_amount = serializers.DecimalField(max_digits=20, decimal_places=2, write_only=True, allow_null=True, required=False)
+    payment_account = serializers.CharField(write_only=True, allow_null=True, allow_blank=True, required=False)
+    payment_notes = serializers.CharField(write_only=True, allow_null=True, allow_blank=True, required=False)
 
 
     class Meta:
@@ -56,6 +64,10 @@ class InvoiceSerializer(serializers.ModelSerializer):
         items_data = validated_data.pop('p_invoice_items')
         edited_items, sum_items_total = set_request_items_totals(items_data)
         validated_data['total_amount'] = Decimal(str(sum_items_total)).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        # related to payment info
+        p_amount = validated_data.pop('payment_amount', None)
+        p_account = validated_data.pop('payment_account', None)
+        p_notes = validated_data.pop('payment_notes', None)
         
         invoice = super().create(validated_data)
 
@@ -64,6 +76,21 @@ class InvoiceSerializer(serializers.ModelSerializer):
                 invoice=invoice,
                 **item_data
             )
+
+        if p_amount or p_account:
+            try:
+                ReversePayment2.objects.create(
+                    business_account_id=MixedRadixEncoder().decode(p_account),
+                    owner=invoice.owner,
+                    purchase_id=invoice.id,
+                    amount=p_amount,
+                    status=2,
+                    notes=p_notes,
+                    created_by=invoice.by,
+                    last_updated_by=invoice.by
+                )
+            except Exception as e:
+                raise ValidationError(e)
 
         return invoice
 
