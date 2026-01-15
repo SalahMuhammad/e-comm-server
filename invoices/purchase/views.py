@@ -1,14 +1,20 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-
+# models
 from items.models import Items
 from .models import PurchaseInvoices
+from django.db import transaction
+# 
 from .serializers import InvoiceSerializer
+from items.services.validate_items_stock import ValidateItemsStock
 from common.views import AbstractInvoiceDetailView, AbstractInvoiceListCreateView
 from common.utilities import adjust_stock
-from items.services.validate_items_stock import ValidateItemsStock
+# 
 from rest_framework.decorators import api_view
-from django.db import transaction
+# django filters
+from django_filters.rest_framework import DjangoFilterBackend
+from .services.filters import PurchaseInvoiceFilter
+
 
 
 @api_view(['POST'])
@@ -43,6 +49,9 @@ class ListCreateView(AbstractInvoiceListCreateView):
 	serializer_class = InvoiceSerializer
 	adjust_stock_sign = 1
 	items_relation_name = 'p_invoice_items'
+	# Adding filtering backends
+	filter_backends = [DjangoFilterBackend]
+	filterset_class = PurchaseInvoiceFilter
 
 
 class DetailView(AbstractInvoiceDetailView):
