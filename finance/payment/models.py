@@ -75,7 +75,7 @@ class AbstractTransaction(UpdatedCreatedByV2):
 	"""Customer payments - can be cash, mobile wallet, or bank transfer"""
 	payment_ref = models.CharField(max_length=100, unique=True)
 	# sale = models.ForeignKey(SalesInvoice, on_delete=models.PROTECT, related_name='payments', blank=True, null=True, help_text="not required, if selected it's effects invoice status.")
-	owner = models.ForeignKey(Party, on_delete=models.PROTECT)
+	owner = models.ForeignKey(Party, on_delete=models.PROTECT, null=True, blank=True)
 	
 	amount = models.DecimalField(max_digits=20, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
 	

@@ -46,7 +46,7 @@ class InvoiceStatus(models.IntegerChoices):
 
 
 class AbstractInvoice(UpdatedCreatedBy):
-    owner = models.ForeignKey("buyer_supplier_party.Party", on_delete=models.PROTECT)
+    owner = models.ForeignKey("buyer_supplier_party.Party", on_delete=models.PROTECT, null=True, blank=True)
     issue_date = models.DateField()
     due_date = models.DateField()
     total_amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)

@@ -52,7 +52,8 @@ class InvoiceSerializer(serializers.ModelSerializer):
         edited_items, sum_items_total = set_request_items_totals(items_data)
         validated_data['total_amount'] = Decimal(str(sum_items_total)).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
         # related to payment info
-        p_amount = validated_data.pop('payment_amount', None)
+        p_amount = validated_data.pop('payment_amount', 0) if validated_data['owner'] else validated_data['total_amount']
+        validated_data.pop('payment_amount', 0)
         p_account = validated_data.pop('payment_account', None)
         p_notes = validated_data.pop('payment_notes', None)
 
@@ -64,7 +65,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
                 **item_data
             )
 
-        if p_amount or p_account:
+        if p_account:
             try:
                 Payment2.objects.create(
                     business_account_id=MixedRadixEncoder().decode(p_account),
