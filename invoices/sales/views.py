@@ -1,24 +1,27 @@
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404
-from django.db.models import Q
-
-from common.encoder import MixedRadixEncoder
+# models
 from .models import SalesInvoice, ReturnInvoice
-from .serializers import InvoiceSerializer, ReturnInvoiceSerializer
-from django_filters.rest_framework import DjangoFilterBackend
+from items.models import Items
+from django.db import transaction
+# rest framework
+from rest_framework import mixins, generics
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+# services
+from .services.item_sales_and_refund_in_period import get_sold_and_items_totals_withen_period_as_http_response
 from .services.filters import SalesInvoiceFilter, ReturnInvoiceFilter
+from .services.get_cash_and_deferred_percentages import get_cash_deferred_percentages
+from items.services.validate_items_stock import ValidateItemsStock
+# 
+from common.encoder import MixedRadixEncoder
 from common.views import AbstractInvoiceDetailView, AbstractInvoiceListCreateView
 from common.utilities import adjust_stock
-from rest_framework.decorators import api_view
-from django.db import transaction
+from .serializers import InvoiceSerializer, ReturnInvoiceSerializer
+# django filters
+from django_filters.rest_framework import DjangoFilterBackend
 
-from .services.item_sales_and_refund_in_period import get_sold_and_items_totals_withen_period_as_http_response
 
-
-from items.services.validate_items_stock import ValidateItemsStock
-from items.models import Items
-
-from rest_framework import mixins, generics
 
 
 @api_view(['POST'])
@@ -43,7 +46,7 @@ def toggle_repository_permit(request, *args, **kwargs):
 	})
 
 @api_view(['GET'])
-def salesRefundTotals(request, *args, **kwargs):
+def salesAndRefundTotals(request, *args, **kwargs):
     try:
         res = get_sold_and_items_totals_withen_period_as_http_response(
             request.GET.get('fromdate', ''), 
@@ -124,4 +127,15 @@ class RefundDetailView(
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
-	
+
+
+
+
+# --------------------------------- analysis ------------------------------
+
+
+
+
+class CashAndDeferredPercentages(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        return Response(get_cash_deferred_percentages())
