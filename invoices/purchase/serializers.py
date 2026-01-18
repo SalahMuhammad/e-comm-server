@@ -77,7 +77,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
                 **item_data
             )
 
-        if p_amount or p_account:
+        if p_account:
             try:
                 ReversePayment2.objects.create(
                     business_account_id=MixedRadixEncoder().decode(p_account),
@@ -95,7 +95,10 @@ class InvoiceSerializer(serializers.ModelSerializer):
         return invoice
 
     def update(self, instance, validated_data):
-        items_data = validated_data.pop('p_invoice_items')
+        validated_data.pop('p_invoice_items')
+        validated_data.pop('payment_amount', None)
+        validated_data.pop('payment_account', None)
+        validated_data.pop('payment_notes', None)
 
 
         # for item_data in edited_items:
