@@ -25,6 +25,11 @@ class SalesInvoiceFilter(filters.FilterSet):
 	note = filters.CharFilter(field_name='notes', lookup_expr='icontains')
 	itemdesc = filters.CharFilter(method='filter_by_item_description')
 	itemname = filters.CharFilter(method='filter_by_item_name')
+	repository_permit = filters.BooleanFilter(field_name='repository_permit')
+	issue_date_after = filters.DateFilter(field_name='issue_date', lookup_expr='gte')
+	issue_date_before = filters.DateFilter(field_name='issue_date', lookup_expr='lte')
+	due_date_after = filters.DateFilter(field_name='due_date', lookup_expr='gte')
+	due_date_before = filters.DateFilter(field_name='due_date', lookup_expr='lte')
 
 	class Meta:
 		model = SalesInvoice
@@ -117,6 +122,10 @@ class ReturnInvoiceFilter(filters.FilterSet):
 	note = filters.CharFilter(field_name='notes', lookup_expr='icontains')
 	itemdesc = filters.CharFilter(method='filter_by_item_description')
 	itemname = filters.CharFilter(method='filter_by_item_name')
+	issue_date_after = filters.DateFilter(field_name='issue_date', lookup_expr='gte')
+	issue_date_before = filters.DateFilter(field_name='issue_date', lookup_expr='lte')
+	due_date_after = filters.DateFilter(field_name='due_date', lookup_expr='gte')
+	due_date_before = filters.DateFilter(field_name='due_date', lookup_expr='lte')
 
 	class Meta:
 		model = ReturnInvoice
