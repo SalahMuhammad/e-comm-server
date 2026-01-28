@@ -9,8 +9,7 @@ def http_request_barcodes_handler(item_id, barcodes_data):
 			barcodes_obj = json.loads(barcodes_data)
 			# delete
 			barcode_ids = [b['id'] for b in barcodes_obj if b.get('id', None)]
-			if barcode_ids:
-				Barcode.objects.filter(item_id=item_id).exclude(pk__in=barcode_ids).delete()
+			Barcode.objects.filter(item_id=item_id).exclude(pk__in=barcode_ids).delete()
 
 			for barcode in barcodes_obj:
 				# update exsisting barcode
