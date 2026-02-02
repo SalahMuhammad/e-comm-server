@@ -10,8 +10,22 @@ class CustomAuthentication(BaseAuthentication):
     def authenticate(self, request):
         # return (None, None)
 
+        # Skip authentication for login endpoint
         if request.build_absolute_uri().__contains__('8000/api/users/login/') or request.build_absolute_uri().__contains__('89/api/users/login/'):
             return (None, None)
+            
+        # Allow restore endpoint to bypass auth if DB is broken (emergency hatch) or generally?
+        # If we bypass auth, we must ensure permissions handle it or we relying on something else?
+        # But RestoreDbBackup view requires IsSuperuser. IsSuperuser CHECKS user.
+        # If I return (None, None), request.user is AnonymousUser.
+        # IsSuperuser checks request.user.is_superuser. AnonymousUser.is_superuser is False.
+        # So bypassing auth here will satisfy Authentication middleware, but fail Permission check.
+        
+        # If I want to allow restore when DB is broken, I need to open the permissions too.
+        # But let's start by not crashing in `authenticate` when user table is missing.
+        
+        if request.build_absolute_uri().__contains__('/api/services/restore-db-backup/'):
+             return (None, None)
         
         token = request.headers.get('auth', '')
         token = request.COOKIES.get('auth_0', '') + request.COOKIES.get('auth_1', '') if not token else token
@@ -34,13 +48,21 @@ class CustomAuthentication(BaseAuthentication):
             raise AuthenticationFailed(f'not superuser. {payload}')
 
         if request.method.lower() in ('post', 'put', 'patch'):
-            # Get existing data or use empty dict as fallback
-            existing_data = request.data if request.data is not None else {}
-            mutable_data = existing_data.copy() if hasattr(existing_data, 'copy') else dict(existing_data)
-            mutable_data['by'] = payload['id']
-            request._full_data = mutable_data
+            try:
+                # Get existing data or use empty dict as fallback
+                existing_data = request.data if request.data is not None else {}
+                
+                mutable_data = existing_data.copy() if hasattr(existing_data, 'copy') else dict(existing_data)
+                mutable_data['by'] = payload['id']
+                request._full_data = mutable_data
+            except Exception as e:
+                # If copying fails (e.g. file uploads in multipart requests),
+                pass
             
         user = User.objects.get(pk=payload['id'])
+
+        if not user.is_active:
+            raise AuthenticationFailed('User account is disabled.')
         
         return (user, payload)
 
