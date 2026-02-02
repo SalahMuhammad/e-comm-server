@@ -20,6 +20,26 @@ class DynamicPermission(PermissionRequiredMixin):
         Override this method to dynamically determine the permissions required.
         Returns a list of permission strings.
         """
+        # First check if password change is required
+        if hasattr(request.user, 'password_change_required') and request.user.password_change_required:
+            # Allow these specific endpoints
+            allowed_paths = [
+                '/api/users/change-password/',
+                '/api/users/logout/',
+            ]
+            
+            # Also allow GET requests to /api/users/ to fetch user info
+            if request.path == '/api/users/' and request.method == 'GET':
+                return True
+            
+            # Check if current path is in allowed list - return True to allow
+            if request.path in allowed_paths:
+                return True
+            
+            # Block all other endpoints when password change is required
+            return False
+        
+        # Continue with normal permission checks
         if request.user.is_superuser:
             return True
 
@@ -58,6 +78,12 @@ class DynamicPermission(PermissionRequiredMixin):
         # permission = f"{app_label}.{action}_{model_name}"
         try:
             permission = f"{action}_{model_name}"
+            
+            # Check direct user permissions
+            if request.user.user_permissions.filter(codename=permission).exists():
+                return True
+                
+            # Check group permissions
             user_groups = request.user.groups.values_list('permissions__codename', flat=True)
             return permission in user_groups
         except Exception as e:
@@ -69,8 +95,7 @@ class DynamicPermission(PermissionRequiredMixin):
 
 class IsSuperuser(BasePermission):
     def has_permission(self, request, view):
-        permissions = request.auth
-        return permissions['is_superuser']
+        return bool(request.user and request.user.is_authenticated and request.user.is_superuser)
     
 
 class IsSuperuserOrReadOnly(BasePermission):
