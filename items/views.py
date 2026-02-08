@@ -194,8 +194,10 @@ class ItemsList(mixins.ListModelMixin,
 
 		# Permission filtering
 		if not self.request.user.is_superuser:
-			permissions = self.request.user.groups.values_list('permissions__codename', flat=True)
-			queryset = queryset.filter(type__name__in=permissions)
+			group_permissions = set(self.request.user.groups.values_list('permissions__codename', flat=True))
+			user_permissions = set(self.request.user.user_permissions.values_list('codename', flat=True))
+			all_permissions = group_permissions | user_permissions
+			queryset = queryset.filter(type__name__in=all_permissions)
 
 		return queryset
 
@@ -243,8 +245,10 @@ class ItemDetail(
 		queryset = self.queryset
 
 		if not self.request.user.is_superuser:
-			a = self.request.user.groups.values_list('permissions__codename', flat=True)
-			return queryset.filter(type__name__in=a)
+			group_permissions = set(self.request.user.groups.values_list('permissions__codename', flat=True))
+			user_permissions = set(self.request.user.user_permissions.values_list('codename', flat=True))
+			all_permissions = group_permissions | user_permissions
+			return queryset.filter(type__name__in=all_permissions)
 		
 		return queryset
 
