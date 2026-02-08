@@ -68,6 +68,8 @@ INSTALLED_APPS = [
     'items.apps.ItemsConfig',
     'repositories.apps.RepositoriesConfig',
     'users.apps.UsersConfig',
+    'permissions.apps.PermissionsConfig',
+    'user_management.apps.UserManagementConfig',
     'invoices.buyer_supplier_party.apps.BuyerSupplierPartyConfig',
     'transfer_items',
     'invoices.purchase.apps.PurchaseConfig',
@@ -108,7 +110,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
 
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    # "debug_toolbar.middleware.DebugToolbarMiddleware",
 
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -220,6 +222,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         # 'auth.permissions.IsLoggedIn',
         'auth.permissions.DynamicPermission',
+        # Note: RequirePasswordChangePermission removed from here
+        # It was blocking ALL requests. Better to check in middleware or login.
     ),
 }
 

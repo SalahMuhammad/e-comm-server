@@ -25,6 +25,8 @@ urlpatterns = [
 
     path('api/items/', include('items.urls')),
     path('api/users/', include('users.urls')),
+    path('api/permissions/', include('permissions.urls')),
+    path('api/user-management/', include('user_management.urls')),
     path('api/repositories/', include('repositories.urls')),
     # path('api/transfer-items/', include('transfer_items.urls')),
     ###################################################
@@ -72,10 +74,11 @@ urlpatterns += [
 
 
     path('api/reports/', include('reports.urls')),
-
-
-    path('__debug__/', include('debug_toolbar.urls')),
-] + debug_toolbar_urls()
+    
+    
+    # path('__debug__/', include('debug_toolbar.urls')),
+# ] + debug_toolbar_urls()
+]
 
 
 from django.middleware.csrf import get_token
