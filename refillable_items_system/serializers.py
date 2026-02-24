@@ -22,15 +22,27 @@ class RefilledItemSerializer(serializers.ModelSerializer):
     repository_name = serializers.ReadOnlyField(source='repository.name')
     by_username = serializers.ReadOnlyField(source='by.username')
     used_item_id = serializers.ReadOnlyField(source='used_item.item.id')
+    # refilled_item_calculated_price = serializers.SerializerMethodField()
+    # ore_item_price_at_date = serializers.SerializerMethodField()
 
 
     class Meta:
         model = RefilledItem
         fields = '__all__'
-
     
     def get_employee_name(self, obj):
         return f"{obj.employee.first_name} {obj.employee.last_name}"
+
+    def get_refilled_item_calculated_price(self, obj):
+        """
+        Calculate the cost price of the refilled item based on the ore used.
+        Formula: (used_quantity / refilled_quantity) * ore_item_price_at_date
+        """
+        return str(obj.get_refilled_item_price())
+
+    def get_ore_item_price_at_date(self, obj):
+        """Get the OreItem's price at the transaction date"""
+        return str(obj.get_ore_item_price_at_date())
 
 
 class ItemTransformerSerializer(serializers.ModelSerializer):

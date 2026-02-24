@@ -1,6 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from rest_framework.mixins import (
     ListModelMixin, 
     CreateModelMixin, 
@@ -134,6 +135,41 @@ class GetCansClientHasReport(generics.ListAPIView):
         #             "error": str(e)
         #         }, status=500)
 
+
+
+from .services.analysis_item_unit_cost import RefillableItemPriceCalculator
+
+class AnalysisItemUnitCostView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        refilled_id = request.query_params.get('refilled')
+        used_id = request.query_params.get('used')
+        date_from = request.query_params.get('from')
+        date_to = request.query_params.get('to')
+
+        filters = {}
+
+        if refilled_id:
+            filters['refilled_item__id__in'] = refilled_id.split(',')
+
+        if used_id:
+            filters['used_item__item__id__in'] = used_id.split(',')
+
+        if date_from:
+            filters['date__gte'] = date_from
+
+        if date_to:
+            filters['date__lte'] = date_to
+
+        date = RefilledItem.objects.select_related(
+            'used_item__item',
+            'refilled_item',
+        ).prefetch_related(
+            'refilled_item__item_price_log',
+        ).filter(**filters).order_by('date')
+
+        queryset = RefillableItemPriceCalculator.calculate_batch_refilled_prices(date)
+        return Response(queryset, status=status.HTTP_200_OK)
 
 
 

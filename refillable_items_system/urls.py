@@ -8,7 +8,8 @@ from .views import (
     ListCreateOreItem, 
     OreItemDetailView,
     ownersHasRefillableItems, 
-    GetCansClientHasReport
+    GetCansClientHasReport,
+    AnalysisItemUnitCostView
 )
 
 
@@ -27,4 +28,6 @@ urlpatterns = [
 
 
     path('cans-client-has/<int:pk>/', GetCansClientHasReport.as_view()),
+
+    path('analysis/item-unit-cost/', AnalysisItemUnitCostView.as_view())
 ]
