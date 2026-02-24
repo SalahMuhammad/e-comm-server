@@ -5,9 +5,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 # 
 from django.http import JsonResponse
-# 
-from debug_toolbar.toolbar import debug_toolbar_urls
-
 
 
 # def abc(request):
@@ -76,8 +73,7 @@ urlpatterns += [
     path('api/reports/', include('reports.urls')),
     
     
-    # path('__debug__/', include('debug_toolbar.urls')),
-# ] + debug_toolbar_urls()
+    path('__debug__/', include('debug_toolbar.urls')),
 ]
 
 
