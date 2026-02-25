@@ -5,6 +5,7 @@ from rest_framework import generics, mixins
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 # models
 from .models import Party
 # services 
@@ -17,7 +18,9 @@ from django.db.models import ProtectedError
 
 
 class OwnerView(APIView):
-    level = 'c'
+    permission_classes = (AllowAny, )
+
+
     def get(self, request, *args, **kwargs):
         return ownerViewAsHttpResponse(
             request.GET.get('date', None),
@@ -26,7 +29,9 @@ class OwnerView(APIView):
 
 
 class ListClientCredits(APIView):
-    level = 'c'
+    permission_classes = (AllowAny, )
+
+    
     def get(self, request, *args, **kwargs):
         return getOwnersCreditBalanceAsHttpResponse()
 

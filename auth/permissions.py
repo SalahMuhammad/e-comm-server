@@ -43,7 +43,6 @@ class DynamicPermission(PermissionRequiredMixin):
         if request.user.is_superuser:
             return True
 
-        view_level = view.level if hasattr(view, 'level') else None
         try:
             model = view.queryset.model
             app_label = model._meta.app_label
@@ -59,9 +58,7 @@ class DynamicPermission(PermissionRequiredMixin):
                     return True
             except:
                 pass
-        
-        if view_level and request.user.user_permissions.filter(codename=view_level).exists():
-            return True
+
 
         if request.method == 'GET':
             action = 'view'
