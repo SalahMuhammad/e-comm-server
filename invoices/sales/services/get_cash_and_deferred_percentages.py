@@ -1,11 +1,12 @@
 from django.db.models import Sum, Count, Q
 from decimal import Decimal
-from finance.payment.models import Payment2
-from finance.reverse_payment.models import ReversePayment2
+# from finance.payment.models import Payment2
+# from finance.reverse_payment.models import ReversePayment2
 from invoices.sales.models import SalesInvoice
-from invoices.purchase.models import PurchaseInvoices
+# from invoices.purchase.models import PurchaseInvoices
 from invoices.buyer_supplier_party.models import Party
-
+# from finance.vault_and_methods.services.calculate_owner_credit_balance import calculate_owner_credit_balance
+from invoices.buyer_supplier_party.services.owners_credit_balance import getOwnersCreditBalance
 
 def get_cash_deferred_percentages():
     """
@@ -23,24 +24,31 @@ def get_cash_deferred_percentages():
     # Get confirmed (cash) transactions
     sales_orders_total = SalesInvoice.objects.aggregate(total=Sum('total_amount'))['total'] or Decimal('0')
 
-    dual_owners = [a[0] for a in get_customers_with_both_invoices()]
-    purchas_orders_total = PurchaseInvoices.objects.filter(
-        owner_id__in=dual_owners
-    ).aggregate(total=Sum('total_amount'))['total'] or Decimal('0')
+    total_credit = 0
+    for owner in getOwnersCreditBalance()['list']:
+        if owner['amount'] > 0:
+            total_credit += owner['amount']
 
-    # Get confirmed (cash) transactions
-    confirmed_payments = Payment2.objects.filter(
-        status='2'  # Confirmed
-    ).aggregate(total=Sum('amount'))['total'] or Decimal('0')
+    # dual_owners = [a[0] for a in get_customers_with_both_invoices()]
+    # purchas_orders_total = PurchaseInvoices.objects.filter(
+    #     owner_id__in=dual_owners
+    # ).aggregate(total=Sum('total_amount'))['total'] or Decimal('0')
+
+    # # Get confirmed (cash) transactions
+    # confirmed_payments = Payment2.objects.filter(
+    #     status='2'  # Confirmed
+    # ).aggregate(total=Sum('amount'))['total'] or Decimal('0')
     
-    confirmed_reverse_payments = ReversePayment2.objects.filter(
-        status='2',  # Confirmed
-        owner_id__in=dual_owners
-    ).aggregate(total=Sum('amount'))['total'] or Decimal('0')
+    # confirmed_reverse_payments = ReversePayment2.objects.filter(
+    #     status='2',  # Confirmed
+    #     owner_id__in=dual_owners
+    # ).aggregate(total=Sum('amount'))['total'] or Decimal('0')
 
     return {
-        'total_orders': sales_orders_total - (purchas_orders_total - confirmed_reverse_payments),
-        'total_payed': confirmed_payments,
+        # 'total_orders': sales_orders_total - (purchas_orders_total - confirmed_reverse_payments),
+        # 'total_payed': confirmed_payments,
+        'total_orders': sales_orders_total,
+        'total_remaining': total_credit,
     }
 
 
