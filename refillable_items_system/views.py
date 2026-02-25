@@ -9,6 +9,7 @@ from rest_framework.mixins import (
     RetrieveModelMixin, 
     DestroyModelMixin
 )
+from rest_framework.permissions import AllowAny
 # 
 from refillable_items_system.models import ItemTransformer, OreItem, RefundedRefillableItem, RefilledItem
 from invoices.buyer_supplier_party.models import Party
@@ -140,6 +141,8 @@ class GetCansClientHasReport(generics.ListAPIView):
 from .services.analysis_item_unit_cost import RefillableItemPriceCalculator
 
 class AnalysisItemUnitCostView(APIView):
+    permission_classes = (AllowAny, )
+
 
     def get(self, request, *args, **kwargs):
         refilled_id = request.query_params.get('refilled')
