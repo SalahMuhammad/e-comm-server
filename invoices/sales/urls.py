@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ListCreateView, DetailView, toggle_repository_permit, ReturnListCreateView, RefundDetailView, salesAndRefundTotals, CashAndDeferredPercentages
+from .views import ListCreateView, DetailView, toggle_repository_permit, ReturnListCreateView, RefundDetailView, SalesAndRefundTotals, CashAndDeferredPercentages
 
 
 urlpatterns = [
@@ -10,6 +10,6 @@ urlpatterns = [
     path('s/refund/', ReturnListCreateView.as_view(), name='return-list-create'),
     path('s/refund/<str:pk>/', RefundDetailView.as_view(), name='refund-detail'),
     # analysis
-    path('t/sales-refund-totals/', salesAndRefundTotals),
+    path('t/sales-refund-totals/', SalesAndRefundTotals.as_view()),
     path('analysis/cash-deferred-percentages/', CashAndDeferredPercentages.as_view())
 ]
