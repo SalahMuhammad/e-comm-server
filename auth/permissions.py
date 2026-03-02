@@ -60,8 +60,14 @@ class DynamicPermission(PermissionRequiredMixin):
             except:
                 pass
         
-        if view_level and request.user.user_permissions.filter(codename=view_level).exists():
-            return True
+        if view_level:
+            # Check direct permissions
+            if request.user.user_permissions.filter(codename=view_level).exists():
+                return True
+            # Check group permissions
+            user_groups = request.user.groups.values_list('permissions__codename', flat=True)
+            if view_level in user_groups:
+                return True
 
         if request.method == 'GET':
             action = 'view'
