@@ -210,8 +210,8 @@ class ItemsList(mixins.ListModelMixin,
 
 				res = self.create(request, *args, **kwargs)
 
-				http_request_barcodes_handler(res.data['id'], barcodes_data)
-				http_request_images_handler(res.data['id'], images)
+				http_request_barcodes_handler(res.data['id'], barcodes_data, request)
+				http_request_images_handler(res.data['id'], images, request)
 
 				if not float(res.data['price1']) <= 0:
 					ItemPriceLog.objects.create(
@@ -242,15 +242,10 @@ class ItemDetail(
 	# 	return super().get_serializer(*args, **kwargs)
 
 	def get_queryset(self):
-		queryset = self.queryset
-
-		if not self.request.user.is_superuser:
-			group_permissions = set(self.request.user.groups.values_list('permissions__codename', flat=True))
-			user_permissions = set(self.request.user.user_permissions.values_list('codename', flat=True))
-			all_permissions = group_permissions | user_permissions
-			return queryset.filter(type__name__in=all_permissions)
-		
-		return queryset
+		# Return all items for any authenticated user.
+		# List view (ItemsList) handles type-based filtering for the listing.
+		# Detail view should be accessible to anyone with view_items permission.
+		return self.queryset
 
 	def get(self, request, *args, **kwargs):
 		return self.retrieve(request, *args, **kwargs)
@@ -270,15 +265,18 @@ class ItemDetail(
 			# print(request.data)
 			res = super().partial_update(request, *args, **kwargs)
 
-			http_request_barcodes_handler(instance.id, barcodes_data)
+			http_request_barcodes_handler(instance.id, barcodes_data, request)
 			
-			# Delete images that are NOT in the keep list
-			for img in instance.images.all():
-				if img.id not in keep_image_ids:
-					img.delete()
-			
-			# Add newly uploaded images
-			http_request_images_handler(instance.id, images)
+			# Only touch images if user has view_images permission
+			can_view_images = request.user.is_superuser or request.user.has_perm('items.view_images')
+			if can_view_images:
+				# Delete images that are NOT in the keep list
+				for img in instance.images.all():
+					if img.id not in keep_image_ids:
+						img.delete()
+				
+				# Add newly uploaded images
+				http_request_images_handler(instance.id, images, request)
 
 # # Prepare images data for serializer
 #     images_data = []
@@ -344,6 +342,7 @@ class TypesList(mixins.ListModelMixin,
 
 
 class ItemFluctuation(APIView):
+	level = 'view_items'
 	def get(self, request, pk):
 		data = get_item_fluctuation(pk)
 		return Response(data, status=status.HTTP_200_OK)

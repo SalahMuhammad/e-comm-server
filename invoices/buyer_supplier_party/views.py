@@ -17,7 +17,9 @@ from django.db.models import ProtectedError
 
 
 class OwnerView(APIView):
-    level = 'c'
+    # queryset is used by DynamicPermission to resolve the model → view_party (GET), etc.
+    queryset = Party.objects.all()
+
     def get(self, request, *args, **kwargs):
         return ownerViewAsHttpResponse(
             request.GET.get('date', None),
@@ -26,7 +28,9 @@ class OwnerView(APIView):
 
 
 class ListClientCredits(APIView):
-    level = 'c'
+    # queryset is used by DynamicPermission to resolve the model → view_party (GET)
+    queryset = Party.objects.all()
+
     def get(self, request, *args, **kwargs):
         return getOwnersCreditBalanceAsHttpResponse()
 
