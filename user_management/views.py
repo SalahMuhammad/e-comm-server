@@ -15,20 +15,14 @@ from .filters import UserFilter
 class UserManagementViewSet(viewsets.ModelViewSet):
     """
     CRUD viewset for user management.
-    Only accessible to superusers.
+    Requires appropriate model permissions (add_user, change_user, delete_user, view_user).
     Sets password_change_required=True on user creation.
     Supports filtering by username, is_active, is_superuser, is_staff.
     """
     queryset = User.objects.all().prefetch_related('groups', 'user_permissions')
-    permission_classes = [drf_permissions.IsAuthenticated]
+    permission_classes = [drf_permissions.DjangoModelPermissions]
     filter_backends = [DjangoFilterBackend]
     filterset_class = UserFilter
-    
-    def get_queryset(self):
-        """Only allow superusers to access"""
-        if not self.request.user.is_superuser:
-            return User.objects.none()
-        return super().get_queryset()
     
     def get_serializer_class(self):
         """Use appropriate serializer based on action"""
