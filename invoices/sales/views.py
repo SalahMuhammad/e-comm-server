@@ -8,6 +8,7 @@ from django.db import transaction
 from rest_framework import mixins, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 # services
 from .services.item_sales_and_refund_in_period import get_sold_and_items_totals_withen_period_as_http_response
 from .services.filters import SalesInvoiceFilter, ReturnInvoiceFilter
@@ -139,7 +140,6 @@ class RefundDetailView(
 
 
 class CashAndDeferredPercentages(generics.ListAPIView):
-    queryset = SalesInvoice.objects.none()
-
+    permission_classes = (AllowAny, )
     def get(self, request, *args, **kwargs):
         return Response(get_cash_deferred_percentages())

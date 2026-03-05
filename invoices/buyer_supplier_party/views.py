@@ -5,6 +5,7 @@ from rest_framework import generics, mixins
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 # models
 from .models import Party
 # services 
@@ -17,8 +18,8 @@ from django.db.models import ProtectedError
 
 
 class OwnerView(APIView):
-    # queryset is used by DynamicPermission to resolve the model → view_party (GET), etc.
-    queryset = Party.objects.all()
+    permission_classes = (AllowAny, )
+
 
     def get(self, request, *args, **kwargs):
         return ownerViewAsHttpResponse(
@@ -28,9 +29,9 @@ class OwnerView(APIView):
 
 
 class ListClientCredits(APIView):
-    # queryset is used by DynamicPermission to resolve the model → view_party (GET)
-    queryset = Party.objects.all()
+    permission_classes = (AllowAny, )
 
+    
     def get(self, request, *args, **kwargs):
         return getOwnersCreditBalanceAsHttpResponse()
 

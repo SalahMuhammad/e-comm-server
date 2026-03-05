@@ -119,6 +119,36 @@ class RefilledItem(UpdatedCreatedBy):
         self.full_clean()
         super().save(*args, **kwargs)
 
+    def get_refilled_item_price(self):
+        """
+        Calculate the cost price of the refilled item based on the ore used.
+        
+        Formula: (used_quantity / refilled_quantity) * ore_item_price_at_date
+        
+        Returns:
+            Decimal: The calculated price per unit of refilled item
+        """
+        from refillable_items_system.services.analysis_item_unit_cost import RefillableItemPriceCalculator
+        from decimal import Decimal
+        
+        try:
+            return RefillableItemPriceCalculator.calculate_refilled_item_price(self)
+        except Exception as e:
+            return Decimal('0.00')
+
+    def get_ore_item_price_at_date(self):
+        """
+        Get the OreItem's price at the transaction date.
+        
+        Returns:
+            Decimal: The price of the ore item at transaction date
+        """
+        from refillable_items_system.services.analysis_item_unit_cost import RefillableItemPriceCalculator
+        
+        return RefillableItemPriceCalculator.get_item_price_at_date(
+            self.used_item.item,
+            self.date
+        )
 
     class Meta:
         ordering = ['-date', '-created_at']
