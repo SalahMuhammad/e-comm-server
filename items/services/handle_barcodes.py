@@ -3,16 +3,7 @@ from rest_framework import serializers
 from items.models import Barcode
 
 
-def http_request_barcodes_handler(item_id, barcodes_data, request=None):
-	# If the requesting user doesn't have view_barcode permission,
-	# skip barcode handling entirely — don't touch existing barcodes.
-	if request is not None and not request.user.is_superuser:
-		has_view_perm = (
-			request.user.has_perm('items.view_barcode')
-		)
-		if not has_view_perm:
-			return
-
+def http_request_barcodes_handler(item_id, barcodes_data):
 	if barcodes_data:
 		try:
 			barcodes_obj = json.loads(barcodes_data)
