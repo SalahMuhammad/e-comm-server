@@ -9,6 +9,8 @@ from rest_framework.mixins import (
     RetrieveModelMixin, 
     DestroyModelMixin
 )
+from django_filters.rest_framework import DjangoFilterBackend
+from .filters import RefundedRefillableItemFilter, RefilledItemFilter
 from rest_framework.permissions import AllowAny
 # 
 from refillable_items_system.models import ItemTransformer, OreItem, RefundedRefillableItem, RefilledItem
@@ -193,19 +195,17 @@ class ListCreateRefundedRefillableItemsView(
         'owner',
         'by'
     ).all()
-    
-    def get_queryset(self):
-        queryset = self.queryset
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = RefundedRefillableItemFilter
 
-        name_param = self.request.query_params.get('ownerid')
-        if name_param:
-            return queryset.filter(owner_id=name_param)
-        
-        return self.queryset
+    @property
+    def paginator(self):
+        self.pagination_class = get_pagination_class(self)
+        return super().paginator
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
-    
+
     def post(self, request, *args, **kwargs):
         with transaction.atomic():
             serializer = self.serializer_class(data=request.data)
@@ -219,6 +219,7 @@ class ListCreateRefundedRefillableItemsView(
             stock.adjust_stock(Decimal(serializer.data['quantity']))
 
             return Response(serializer.data, status=201)
+
 
 
 class DetialRefundedRefillableItemsView(
@@ -271,12 +272,11 @@ class ListCreateRefilledItemsView(
         'employee'
     ).all()
     serializer_class = RefilledItemSerializer
-
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = RefilledItemFilter
 
     def get_queryset(self):
         queryset = self.queryset
-
-        self.pagination_class = get_pagination_class(self)
         from_date = self.request.query_params.get('from')
         to_date = self.request.query_params.get('to')
 
@@ -296,10 +296,15 @@ class ListCreateRefilledItemsView(
             queryset = queryset.filter(notes__icontains=note)
         
         return queryset
+    
+    @property
+    def paginator(self):
+        self.pagination_class = get_pagination_class(self)
+        return super().paginator
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
-    
+
     def post(self, request, *args, **kwargs):
         with transaction.atomic():
             serializer = self.serializer_class(data=request.data)

@@ -46,16 +46,16 @@ def toggle_repository_permit(request, *args, **kwargs):
 		"repository_permit": invoice.repository_permit
 	})
 
-@api_view(['GET'])
-def salesAndRefundTotals(request, *args, **kwargs):
-    try:
-        res = get_sold_and_items_totals_withen_period_as_http_response(
-            request.GET.get('fromdate', ''), 
-            request.GET.get('todate', '')
-        )
-        return res
-    except Exception as e:
-        raise Exception(f'salesRefundTotals() issue: {e}')
+class SalesAndRefundTotals(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        try:
+            res = get_sold_and_items_totals_withen_period_as_http_response(
+                request.GET.get('fromdate', ''), 
+                request.GET.get('todate', '')
+            )
+            return res
+        except Exception as e:
+            raise Exception(f'SalesAndRefundTotals() issue: {e}')
 
 class ListCreateView(AbstractInvoiceListCreateView):
 	queryset = SalesInvoice.objects.select_related(

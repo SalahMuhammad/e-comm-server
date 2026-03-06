@@ -1,22 +1,30 @@
 from rest_framework import serializers
 from django.contrib.auth.models import Permission, Group
 from django.contrib.contenttypes.models import ContentType
+from .utils import get_cached_superuser_required_permissions
 
 
 class PermissionSerializer(serializers.ModelSerializer):
     """Serializer for Django Permission model"""
     app_label = serializers.SerializerMethodField()
     model_name = serializers.SerializerMethodField()
+    requires_superuser = serializers.SerializerMethodField()
     
     class Meta:
         model = Permission
-        fields = ['id', 'name', 'codename', 'app_label', 'model_name']
+        fields = ['id', 'name', 'codename', 'app_label', 'model_name', 'requires_superuser']
         
     def get_app_label(self, obj):
         return obj.content_type.app_label if obj.content_type else None
         
     def get_model_name(self, obj):
         return obj.content_type.model if obj.content_type else None
+    
+    def get_requires_superuser(self, obj):
+        """Check if this permission requires superuser status"""
+        superuser_perms = get_cached_superuser_required_permissions()
+        return obj.codename in superuser_perms
+
 
 
 class GroupSerializer(serializers.ModelSerializer):

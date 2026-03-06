@@ -5,7 +5,6 @@ from rest_framework import status, permissions
 from .models import User
 from .serializers import UserSerializers
 from auth.utilities import JWTUtilities
-import datetime
 from rest_framework.permissions import AllowAny
 
 
@@ -56,17 +55,16 @@ class LoginView(APIView):
       'username': username,
       'password_change_required': user.password_change_required
     }
-
-    # response.set_cookie(
-    #   key='jwt',
-    #   value=token,
-    #   httponly=True,
-    #   expires=datetime.datetime.utcnow() + datetime.timedelta(days=7),
-    #   # expires= datetime.datetime.utcnow() + datetime.timedelta(seconds=30),  # 7 days in seconds
-    #   # samesite='Lax',
-    #   samesite='strict', # Use 'strict' for better security, 'Lax' if you need cross-site requests
-    #   # secure=False  # Set to True in production with HTTPS
-    # )
+    
+    # Set superuser flag for middleware bypass
+    response.set_cookie(
+      key='is_superuser',
+      value=str(user.is_superuser).lower(),  # "true" or "false"
+      max_age=86400,
+      httponly=False,  # Must be readable by Next.js middleware
+      samesite='Lax',
+      secure=False  # Set to True in production with HTTPS
+    )
 
     response.status_code = status.HTTP_200_OK
 

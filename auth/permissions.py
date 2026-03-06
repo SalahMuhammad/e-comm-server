@@ -59,7 +59,6 @@ class DynamicPermission(PermissionRequiredMixin):
             except:
                 pass
 
-
         if request.method == 'GET':
             action = 'view'
         elif request.method == 'POST':

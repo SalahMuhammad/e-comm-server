@@ -15,9 +15,19 @@ class UserSerializers(serializers.ModelSerializer):
     return instance
 
 
+
+
+  permissions = serializers.SerializerMethodField()
+  is_superuser = serializers.BooleanField(read_only=True)
+  
+  def get_permissions(self, obj):
+    """Return list of permission codenames user has"""
+    return list(obj.get_all_permissions())
+
   class Meta:
     model = User
-    fields = ['id', 'username', 'password', 'first_name', 'last_name', 'email', 'avatar', 'remove_avatar']
+    fields = ['id', 'username', 'password', 'first_name', 'last_name', 'email', 
+              'avatar', 'remove_avatar', 'permissions', 'is_superuser']
     extra_kwargs = {
       'password': {'write_only': True},
       'avatar': {'required': False, 'allow_null': True}

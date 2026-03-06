@@ -4,19 +4,10 @@ import jwt, datetime
 class JWTUtilities:
 	@staticmethod
 	def generate_jwt(user):
-		permissions_list = list(user.get_all_permissions())
-		group_names = list(user.groups.values_list('name', flat=True))
-
 		payload = {
 			'id': user.id,
 			'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=1),
     		'iat': datetime.datetime.now(datetime.timezone.utc),
-			'permissions': {
-                'is_superuser': user.is_superuser,
-                'is_staff': user.is_staff,  # Note: it's "is_staff" not "is_stuff"
-				'user_permissions': permissions_list, 
-				'roles': group_names
-            }
 		}
 		
 		return jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm='HS256')
