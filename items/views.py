@@ -210,8 +210,8 @@ class ItemsList(mixins.ListModelMixin,
 
 				res = self.create(request, *args, **kwargs)
 
-				http_request_barcodes_handler(res.data['id'], barcodes_data, request)
-				http_request_images_handler(res.data['id'], images, request)
+				http_request_barcodes_handler(res.data['id'], barcodes_data)
+				http_request_images_handler(res.data['id'], images)
 
 				if not float(res.data['price1']) <= 0:
 					ItemPriceLog.objects.create(
@@ -265,18 +265,15 @@ class ItemDetail(
 			# print(request.data)
 			res = super().partial_update(request, *args, **kwargs)
 
-			http_request_barcodes_handler(instance.id, barcodes_data, request)
+			http_request_barcodes_handler(instance.id, barcodes_data)
 			
-			# Only touch images if user has view_images permission
-			can_view_images = request.user.is_superuser or request.user.has_perm('items.view_images')
-			if can_view_images:
-				# Delete images that are NOT in the keep list
-				for img in instance.images.all():
-					if img.id not in keep_image_ids:
-						img.delete()
+			# Delete images that are NOT in the keep list
+			for img in instance.images.all():
+				if img.id not in keep_image_ids:
+					img.delete()
 				
-				# Add newly uploaded images
-				http_request_images_handler(instance.id, images, request)
+			# Add newly uploaded images
+			http_request_images_handler(instance.id, images)
 
 # # Prepare images data for serializer
 #     images_data = []
@@ -342,7 +339,6 @@ class TypesList(mixins.ListModelMixin,
 
 
 class ItemFluctuation(APIView):
-	level = 'view_items'
 	def get(self, request, pk):
 		data = get_item_fluctuation(pk)
 		return Response(data, status=status.HTTP_200_OK)
