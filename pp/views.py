@@ -5,7 +5,6 @@ import json
 
 
 class ProfitPercentage(APIView):
-    level = 'view_items'
     json_file_path = 'pp/profitPercentage.json'
 
     def get_data(self):
