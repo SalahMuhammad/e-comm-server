@@ -1,6 +1,7 @@
 from decimal import ROUND_HALF_UP, Decimal
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from django.core.exceptions import ValidationError as DjangoValidationError
 
 from .models import SalesInvoice, SalesInvoiceItem, ReturnInvoice, ReturnInvoiceItem
 from finance.payment.models import Payment2
@@ -77,8 +78,10 @@ class InvoiceSerializer(serializers.ModelSerializer):
                     created_by=invoice.by,
                     last_updated_by=invoice.by
                 )
+            except DjangoValidationError as e:
+                raise ValidationError(e.message_dict)
             except Exception as e:
-                raise ValidationError(e)
+                raise ValidationError({"detail": str(e)})
 
         return invoice
 
