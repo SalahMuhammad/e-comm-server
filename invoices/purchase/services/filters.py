@@ -38,7 +38,7 @@ class PurchaseInvoiceFilter(filters.FilterSet):
 		"""
 		if not value:
 			return queryset
-		return queryset.filter(s_invoice_items__description__icontains=value).distinct()
+		return queryset.filter(p_invoice_items__description__icontains=value).distinct()
 
 	def filter_by_item_name(self, queryset, name, value):
 		"""
@@ -47,7 +47,7 @@ class PurchaseInvoiceFilter(filters.FilterSet):
 		"""
 		if not value:
 			return queryset
-		return queryset.filter(s_invoice_items__item__name__icontains=value).distinct()
+		return queryset.filter(p_invoice_items__item__name__icontains=value).distinct()
 
 	def filter_by_invoice_number(self, queryset, name, value):
 		"""
