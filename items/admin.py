@@ -52,6 +52,11 @@ class TypesAdmin(admin.ModelAdmin):
         }),
     )
 
+    def save_model(self, request, obj, form, change):
+        obj.by = request.user
+
+        super().save_model(request, obj, form, change)
+
 
 @admin.register(Items)
 class ItemsAdmin(admin.ModelAdmin):
