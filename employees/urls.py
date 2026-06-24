@@ -3,5 +3,5 @@ from .views import ListCreate
 
 
 urlpatterns = [
-    path('', ListCreate.as_view()),
+    path('', ListCreate.as_view(), name='employee-list'),
 ]
