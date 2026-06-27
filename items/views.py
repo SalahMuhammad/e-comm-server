@@ -27,7 +27,7 @@ from decimal import Decimal, ROUND_HALF_UP
 from django_filters.rest_framework import DjangoFilterBackend
 # 
 import os
-from metadata.base import RelationshipMetadata
+from metadata.base import CompositeMetadata
 
 
 
@@ -124,7 +124,7 @@ class ItemsList(mixins.ListModelMixin,
 	mixins.CreateModelMixin,
 	generics.GenericAPIView,
 ):
-	metadata_class = RelationshipMetadata
+	metadata_class = CompositeMetadata
 	queryset = Items.objects.select_related(
 		'by', 
 		'type'
