@@ -52,6 +52,7 @@ urlpatterns += [
     ###################################################
     path('api/purchases/', include('invoices.purchase.urls')),
     path('api/sales/', include('invoices.sales.urls')),
+    path('api/maintenance/', include('invoices.maintenance.urls')),
 
 
 

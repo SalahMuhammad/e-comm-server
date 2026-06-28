@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     'transfer_items',
     'invoices.purchase.apps.PurchaseConfig',
     'invoices.sales.apps.SalesConfig',
+    'invoices.maintenance.apps.MaintenanceConfig',
     'rest_framework',
     'django_filters',
     "corsheaders",

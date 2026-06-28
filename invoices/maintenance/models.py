@@ -17,12 +17,11 @@ class Maintenance(UpdatedCreatedByV2):
             # ('unknown', 'unknown'),
         ], 
         default='pending', 
-        help_text="Maintenance date + Malfunctions => 'maintained', date out + blank(Maintenance date) + blank(Malfunctions) => 'rejected', blank(Maintenance date) + blank(Date Out) + blank(Malfunctions) => 'pending', otherwise 'unknown'"
     )
     date_in = models.DateField(default=date.today)
     maintenance_date = models.DateField(null=True, blank=True)
     date_out = models.DateField(null=True, blank=True)
-    by = models.ForeignKey("users.User", on_delete=models.PROTECT, blank=True, null=True, related_name='maintained_by')
+    by = models.ForeignKey("employees.Employee", on_delete=models.PROTECT, blank=True, null=True, related_name='maintained_by')
     malfunctions = models.TextField(blank=True)
     notes = models.TextField(blank=True)
 
