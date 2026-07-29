@@ -3,7 +3,7 @@ from common.services.customeConfigurationHandler import customeViewsUserPermissi
 
 
 
-class CustomeViewsPermission(BasePermission):
+class ConfigurationBasedCustomeViewsPermission(BasePermission):
     """DRF permission class that dynamically determines permissions based on the view."""
     
     def has_permission(self, request, view):        

@@ -96,9 +96,12 @@ class IsSuperuser(BasePermission):
 
 class IsSuperuserOrReadOnly(BasePermission):
     def has_permission(self, request, view):
-        if request.method == 'GET':
+        if request.method in ["GET", "HEAD", "OPTIONS"]:
             return True
-        return request.auth['is_superuser']
+        
+        return bool(
+            request.user and request.user.is_authenticated and request.user.is_superuser
+        )
     
 
 class RepositoryPermission(BasePermission):

@@ -94,7 +94,7 @@ INSTALLED_APPS = [
     "django_extensions",
 
     'debug_toolbar',
-    'services',
+    'services.apps.ServicesConfig',
 ]
 
 #################################

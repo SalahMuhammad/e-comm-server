@@ -4,6 +4,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 # 
 from .services.media_browser import get_media_path_files
+from rest_framework.generics import RetrieveUpdateAPIView
+from .models import AppConfiguration
+from .config_serializers import ConfigurationMainSerializer
+from auth._permissions.CustomeViewsPermission import ConfigurationBasedCustomeViewsPermission
+from auth.permissions import IsSuperuserOrReadOnly
 
 
 
@@ -11,6 +16,56 @@ from .services.media_browser import get_media_path_files
 class MediaBrowser(APIView):
     def get(self, request, *args, **kwargs):
         return Response(get_media_path_files(''))
+
+
+class ConfigurationRetrieveUpdateAPIView(RetrieveUpdateAPIView):
+    serializer_class = ConfigurationMainSerializer
+    permission_classes = (
+        ConfigurationBasedCustomeViewsPermission,
+        IsSuperuserOrReadOnly,
+    )
+
+    def get_object(self):
+        obj, created = AppConfiguration.objects.get_or_create(
+            pk=1,
+            defaults={
+                "data": {
+                    "items": {
+                        "defaultFilters": {
+                            "users": ["استففار"],
+                            "filters": {"type__name": "fd"},
+                        },
+                        "maintenance_optional_filters": {
+                            "fields": {
+                                "maintainable_items": "",
+                                "spare_parts": "",
+                            }
+                        },
+                    },
+                    "maintenance": {
+                        "defaultFilters": {
+                            "users": ["استنفار", "ahmed", "ali"],
+                            "filters": {"status__in": ["pending"]},
+                        }
+                    },
+                    "customeViewsUserPermission": {
+                        "buyerSupplier_view": ["استنفار"],
+                        "buyerSupplier_creditBalanceList": ["استنفار"],
+                        "buyerSupplier_accountStatement": ["استنفار"],
+                        "vaultMthod_balance": ["استنفار"],
+                        "vaultMthod_accountMovements": ["استنفار"],
+                        "reportsWarehouse_itemMovement": ["استنفار"],
+                        "items_itemFluctuation": [""],
+                        "sales_totalItemsSoldIn": ["استنفار"],
+                        "sales_analysisCashDeferredPercentages": ["اgستنفار"],
+                        "refillableItems_refundableItemsClientHas": ["استنفار"],
+                        "refillableItems_itemUnitCost": ["استنفار"],
+                        "services_configuration": [],
+                    },
+                }
+            },
+        )
+        return obj
 
 
 import subprocess

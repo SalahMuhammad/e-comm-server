@@ -14,7 +14,7 @@ import json
 
 from items.models import Items , Repositories
 from .services.item_movement_service import ItemMovementService
-from auth._permissions.CustomeViewsPermission import CustomeViewsPermission
+from auth._permissions.CustomeViewsPermission import ConfigurationBasedCustomeViewsPermission
 
 
 @method_decorator(login_required, name='dispatch')
@@ -153,7 +153,7 @@ class ItemMovementReportView(View):
 
 
 class ItemRepositoryMovementReport(ListAPIView):
-    permission_classes = (CustomeViewsPermission, )
+    permission_classes = (ConfigurationBasedCustomeViewsPermission, )
 
 
     def get(self, request, *args, **kwargs):

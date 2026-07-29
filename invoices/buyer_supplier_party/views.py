@@ -14,14 +14,14 @@ from .models import Party
 from .services.owner_account_statement import getOwnerAccountStatementAsHttpResponse
 from .services.owners_credit_balance import getOwnersCreditBalanceAsHttpResponse
 from .services.ownerView import ownerViewAsHttpResponse
-from auth._permissions.CustomeViewsPermission import CustomeViewsPermission
+from auth._permissions.CustomeViewsPermission import ConfigurationBasedCustomeViewsPermission
 # 
 from django.db.models import ProtectedError
 
 
 
 class OwnerView(APIView):
-    permission_classes = (CustomeViewsPermission, )
+    permission_classes = (ConfigurationBasedCustomeViewsPermission, )
 
 
     def get(self, request, *args, **kwargs):
@@ -32,7 +32,7 @@ class OwnerView(APIView):
 
 
 class ListClientCredits(APIView):
-    permission_classes = (CustomeViewsPermission, )
+    permission_classes = (ConfigurationBasedCustomeViewsPermission, )
 
     
     def get(self, request, *args, **kwargs):

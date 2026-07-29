@@ -16,7 +16,7 @@ from common.encoder import MixedRadixEncoder
 from .models import BusinessAccount, AccountType
 from .services.account_balance_total import AccountBalance
 from .services.filters import AccountsFilter
-from auth._permissions.CustomeViewsPermission import CustomeViewsPermission
+from auth._permissions.CustomeViewsPermission import ConfigurationBasedCustomeViewsPermission
 # 
 from .serializers import BusinessAccountSerializer, AccountTypeSerializer
 # django filters
@@ -171,7 +171,7 @@ class VaultBalanceAPIView(APIView):
 	
 	Returns JSON with balance information.
 	"""
-	permission_classes = (CustomeViewsPermission, )
+	permission_classes = (ConfigurationBasedCustomeViewsPermission, )
 	
 	def get(self, request, *args, **kwargs):
 		"""
@@ -522,7 +522,7 @@ class AccountMovementListView(APIView):
 		GET /api/account-movements/?account_id=5&start_date=2025-01-01
 		GET /api/account-movements/?account_ids=5,7,9&include_pending=true
 	"""
-	permission_classes = (CustomeViewsPermission, )
+	permission_classes = (ConfigurationBasedCustomeViewsPermission, )
 	
 	def get(self, request, *args, **kwargs):
 		view_id = kwargs.get('___view_id')
