@@ -36,3 +36,26 @@ def customeViewsUserPermissionHandler(user, ___view_id):
         return True
 
     return False
+
+def hideFieldsConfigBased(self, field_list):
+    request = self.context.get('request')
+    if not request:
+        return
+
+    # 1. Get the actual underlying HTTP method to catch OPTIONS requests
+    if hasattr(request, '_request'):
+        method = str(request._request.method).lower() # Safely captures 'options'
+    else:
+        method = str(request.method).lower()
+
+    key = self.Meta.model.__name__.lower()
+    config = AppConfiguration.objects.all()[0]
+    
+    try:
+        method_config = config.data['serializers']['hideFields'][key][method]
+    except KeyError:
+        return
+
+    if request.user and request.user.username in method_config['users']:
+        for field in method_config['fields']:
+            field_list.pop(field, None)

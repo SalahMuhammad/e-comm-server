@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from .services.media_browser import get_media_path_files
 from rest_framework.generics import RetrieveUpdateAPIView
 from .models import AppConfiguration
-from .config_serializers import ConfigurationMainSerializer
+from .config_serializers import ConfigSerializer
 from auth._permissions.CustomeViewsPermission import ConfigurationBasedCustomeViewsPermission
 from auth.permissions import IsSuperuserOrReadOnly
 
@@ -19,7 +19,7 @@ class MediaBrowser(APIView):
 
 
 class ConfigurationRetrieveUpdateAPIView(RetrieveUpdateAPIView):
-    serializer_class = ConfigurationMainSerializer
+    serializer_class = ConfigSerializer
     permission_classes = (
         ConfigurationBasedCustomeViewsPermission,
         IsSuperuserOrReadOnly,
@@ -62,7 +62,29 @@ class ConfigurationRetrieveUpdateAPIView(RetrieveUpdateAPIView):
                         "refillableItems_itemUnitCost": ["استنفار"],
                         "services_configuration": [],
                     },
-                }
+                    "serializers": {
+                        "hideFields": {
+                            "maintenance": {
+                                'get': {
+                                    "users": [],
+                                    "fields": []
+                                },
+                                'post': {
+                                    "users": [],
+                                    "fields": []
+                                },
+                                'patch': {
+                                    "users": [],
+                                    "fields": []
+                                },
+                                'put': {
+                                    "users": [],
+                                    "fields": []
+                                }
+                            }
+                        }
+                    }
+                },
             },
         )
         return obj

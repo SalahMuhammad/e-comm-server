@@ -3,6 +3,7 @@ from rest_framework import serializers
 from common.encoder import MixedRadixEncoder
 from common.services.MultySubModelSerializerHandler import WritableMultipleNestedSubmodelsMixin
 from common.services.NumberValidator import NumberValidator
+from common.services.customeConfigurationHandler import hideFieldsConfigBased
 from common.utility.audit_info_dateformatter import audit_info_dateformatter
 
 from .models import Maintenance, TransactionSpareParts
@@ -106,7 +107,8 @@ class MaintenanceSerializer(WritableMultipleNestedSubmodelsMixin, serializers.Mo
             'notes',
             'parts',            # read
             'parts_json',       # write (FormData path)
-            '_client_name', '_item_name', '_maintained_by_name', '_hashed_id', '_audit_info'
+            '_client_name', '_item_name', '_maintained_by_name', '_hashed_id', '_audit_info',
+            'cost'
         ]
         read_only_fields = ['id', 'status', '_maintained_by_name']
         extra_kwargs = {
@@ -115,6 +117,13 @@ class MaintenanceSerializer(WritableMultipleNestedSubmodelsMixin, serializers.Mo
             # 'notes': {'allow_null': True},
             # 'age': {'required': False, 'allow_null': True}
         }
+
+
+    def get_fields(self):
+        feilds = super().get_fields()
+
+        hideFieldsConfigBased(self, feilds)
+        return feilds
     
     def get__hashed_id(self, obj):
         return MixedRadixEncoder().encode(obj.id)
@@ -124,14 +133,6 @@ class MaintenanceSerializer(WritableMultipleNestedSubmodelsMixin, serializers.Mo
     
     def get__maintained_by_name(self, obj):
         return f"{obj.maintained_by.first_name} {obj.maintained_by.last_name}" if obj.maintained_by else " - "
-
-    # ── normalise incoming parts ──────────────────────────────────────────────
-
-    def to_internal_value(self, data):
-        mutable = data.copy() if hasattr(data, 'copy') else dict(data)
-        if not mutable.get('date_in'):  
-            mutable.pop('date_in', None)
-        return super().to_internal_value(mutable)
 
     def validate_parts_row(self, row, action):
         """Custom row logic scoped specifically to the 'parts' field."""
@@ -171,14 +172,3 @@ class MaintenanceSerializer(WritableMultipleNestedSubmodelsMixin, serializers.Mo
             'quantity': row['_qty_decimal'],
             'last_updated_by': instance.last_updated_by,
         }
-
-
-
-
-class TransactionSparePartsSerializer(serializers.ModelSerializer):
-    _spare_part_name = serializers.ReadOnlyField(source='spare_part.name')
-
-    class Meta:
-        model = TransactionSpareParts
-        fields = ['id', 'spare_part', 'spare_part_name', 'quantity', 'created_at', 'last_updated_at']
-

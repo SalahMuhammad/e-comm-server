@@ -25,6 +25,8 @@ class Maintenance(UpdatedCreatedByV2):
     malfunctions = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
 
+    cost = models.DecimalField(max_digits=10, decimal_places=2, default=0, blank=True)
+
 
     def __str__(self):
         return f'client: {self.client}, S/N: {self.serial_number}, Date In: {self.date_in}'
