@@ -39,8 +39,9 @@ def customeViewsUserPermissionHandler(user, ___view_id):
 
 def hideFieldsConfigBased(self, field_list):
     request = self.context.get('request')
-    if not request:
-        return
+    if not request: return
+
+    if request.user.is_superuser: return
 
     # 1. Get the actual underlying HTTP method to catch OPTIONS requests
     if hasattr(request, '_request'):
