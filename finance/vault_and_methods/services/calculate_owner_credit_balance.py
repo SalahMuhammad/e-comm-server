@@ -4,6 +4,7 @@ from django.db.models import Q
 from invoices.buyer_supplier_party.models import InitialCreditBalance
 from invoices.purchase.models import PurchaseInvoices
 from invoices.sales.models import SalesInvoice, ReturnInvoice
+from invoices.maintenance.models import Maintenance
 from finance.debt_settlement.models import DebtSettlement
 from finance.payment.models import Payment2
 from finance.reverse_payment.models import ReversePayment2
@@ -16,66 +17,87 @@ def calculate_owner_credit_balance(client_id, date):
 
     total = 0
     try:
-        p_invs = PurchaseInvoices.objects.filter(issue_date, owner_id=client_id, repository_permit=True).prefetch_related('p_invoice_items__item')
-        s_invs = SalesInvoice.objects.filter(issue_date, owner_id=client_id, repository_permit=True).prefetch_related('s_invoice_items__item')
-        payments = Payment2.objects.filter(datee, owner_id=client_id, status=2)
-        return_sales_invs = ReturnInvoice.objects.filter(issue_date, owner_id=client_id, repository_permit=True)
-        reverse_payment = ReversePayment2.objects.filter(datee, owner_id=client_id, status=2)
-        initial_credit_balance = InitialCreditBalance.objects.filter(datee, party_id=client_id)
-        total_debt_settlement = DebtSettlement.objects.filter(
-            datee, 
-            owner_id=client_id, 
-            status="approved"
-        ).aggregate(
-            total=Sum('amount'),
-        )['total'] or 0
-    
-    
-        initial_credit_balance = initial_credit_balance.aggregate(
-            total=Sum('amount'),
-        )['total'] or 0
-        
-        p_inv_credit = 0
-        for inv in p_invs:
-            amount = 0
-            for item in inv.p_invoice_items.all():
-                amount   = item.quantity
-                amount   *= item.unit_price
-                amount   += item.tax_rate
-                amount   -= item.discount
-                p_inv_credit += amount
-        
-        s_inv_credit = 0
-        for inv in s_invs:
-            amount = 0
-            for item in inv.s_invoice_items.all():
-                amount   = item.quantity
-                amount   *= item.unit_price
-                amount   += item.tax_rate
-                amount   -= item.discount
-                s_inv_credit += amount
-        
-        payments = payments.aggregate(
-            total=Sum('amount'),
-        )['total'] or 0
+        p_invs_total = calculate_models_total(PurchaseInvoices, {
+                "owner_id": client_id, 
+                "repository_permit": True
+            }, 
+            'total_amount',
+            issue_date
+        )
 
-        sales_refund = return_sales_invs.aggregate(
-            total=Sum('total_amount'),
-        )['total'] or 0
+        s_invs_total = calculate_models_total(SalesInvoice, { 
+                "owner": client_id, 
+                "repository_permit": True
+            }, 
+            'total_amount',
+            issue_date
+        )
 
-        reverse_payment = reverse_payment.aggregate(
-            total=Sum('amount'),
-        )['total'] or 0
+        maintenance_total = calculate_models_total(Maintenance, {
+                "client": client_id,
+                "maintenance_date__isnull": False, 
+                "date_out__isnull": False,
+            }, 
+            'cost',
+            Q(date_out__lte=date) if date else Q(id__isnull=False)
+        )
 
-        total -= p_inv_credit 
-        total += s_inv_credit 
-        total += initial_credit_balance 
-        total -= payments 
-        total -= sales_refund 
-        total += reverse_payment
-        total -= total_debt_settlement
+        payment_total = calculate_models_total(Payment2, { 
+                "owner": client_id, 
+                "status": 2
+            }, 
+            'amount',
+            datee
+        )
+
+        sales_refund_total = calculate_models_total(ReturnInvoice, { 
+                "owner": client_id, 
+                "repository_permit": True
+            }, 
+            'total_amount',
+            issue_date
+        )
+
+        reverse_payment_total = calculate_models_total(ReversePayment2, { 
+                "owner": client_id, 
+                "status": 2
+            }, 
+            'amount',
+            datee
+        )
+
+        initial_credit_balance_total = calculate_models_total(InitialCreditBalance, { 
+                "party": client_id, 
+            }, 
+            'amount',
+            datee
+        )
+
+        total_debt_settlement_total = calculate_models_total(DebtSettlement, { 
+                "owner": client_id, 
+                "status": "approved"
+            }, 
+            'amount',
+            datee
+        )
+
+        total -= p_invs_total 
+        total += s_invs_total 
+        total += maintenance_total
+        total += initial_credit_balance_total 
+        total -= payment_total 
+        total -= sales_refund_total 
+        total += reverse_payment_total
+        total -= total_debt_settlement_total
     except Exception as e:
         return e
 
     return total
 
+def calculate_models_total(model, filter_obj, total_key, q_object_date):
+    return model.objects.filter(
+        q_object_date,
+        **filter_obj
+    ).aggregate(
+        total=Sum(total_key),
+    )['total'] or 0
