@@ -17,7 +17,8 @@ class MaintenanceFilter(filters.FilterSet):
 	client_name = filters.CharFilter(field_name='client__name', lookup_expr='icontains')
 	status = filters.CharFilter(field_name='status', lookup_expr='icontains')
 	
-	serial_number = filters.CharFilter(field_name='serial_number', lookup_expr='icontains')
+	serial_numbers = filters.CharFilter(field_name='serial_number', lookup_expr='icontains')
+	serial_number = filters.CharFilter(field_name='serial_number', lookup_expr='exact')
 	notes = filters.CharFilter(field_name='notes', lookup_expr='icontains')
 	malfunctions = filters.CharFilter(field_name='malfunctions', lookup_expr='icontains')
 
