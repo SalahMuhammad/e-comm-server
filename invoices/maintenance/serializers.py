@@ -7,7 +7,8 @@ from common.services.customeConfigurationHandler import hideFieldsConfigBased
 from common.utility.audit_info_dateformatter import audit_info_dateformatter
 
 from .models import Maintenance, TransactionSpareParts
-from items.models import Items    # adjust import to your actual Items location
+from items.models import Items
+from datetime import date
 
 
 class SparePartLineSerializer(serializers.ModelSerializer):
@@ -157,6 +158,33 @@ class MaintenanceSerializer(WritableMultipleNestedSubmodelsMixin, serializers.Mo
         if err:
             raise serializers.ValidationError(err)
         return row
+
+    def validate(self, data):
+        attrs = super(MaintenanceSerializer, self).validate(data)
+
+        # Fallback to existing instance values if doing a partial update (PATCH)
+        date_in = data.get('date_in', getattr(attrs, 'date_in', date.today()))
+        maintenance_date = data.get('maintenance_date', getattr(attrs, 'maintenance_date', None))
+        date_out = data.get('date_out', getattr(attrs, 'date_out', None))
+
+        errors = {}
+
+        # 1. Maintenance date cannot be before date_in
+        if maintenance_date and date_in and maintenance_date < date_in:
+            errors['maintenance_date'] = "Maintenance date cannot be earlier than the entry date (date_in)."
+
+        # 2. Date out cannot be before date_in
+        if date_out and date_in and date_out < date_in:
+            errors['date_out'] = "Exit date (date_out) cannot be earlier than the entry date (date_in)."
+
+        # 3. Date out should not be before maintenance date (if both are provided)
+        if date_out and maintenance_date and date_out < maintenance_date:
+            errors['date_out'] = "Exit date (date_out) cannot be earlier than the maintenance date."
+
+        if errors:
+            raise serializers.ValidationError(errors)
+
+        return attrs
 
     def get_parts_create_kwargs(self, instance, row):
         return {
