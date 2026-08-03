@@ -4,9 +4,11 @@ from finance.debt_settlement.models import DebtSettlement
 from invoices.buyer_supplier_party.models import InitialCreditBalance
 from invoices.sales.models import SalesInvoice, ReturnInvoice as ReturnSalesInvoice
 from invoices.purchase.models import PurchaseInvoices
+from invoices.maintenance.models import Maintenance
 # 
 from invoices.buyer_supplier_party.serializers import InitialCreditBalanceSerializer
 from invoices.sales.serializers import InvoiceSerializer, ReturnInvoiceSerializer as ReturnSalesInvoiceSerializer
+from invoices.maintenance.serializers import MaintenanceSerializer
 from finance.debt_settlement.serializers import DebtSettlementSerializer
 from invoices.purchase.serializers import InvoiceSerializer as PurchaseInvoiceSerializer
 from finance.payment.serializers import PaymentSerializer
@@ -30,6 +32,8 @@ def get_date(obj):
         return obj.issue_date
     elif isinstance(obj, ReturnSalesInvoice):
         return obj.issue_date
+    elif isinstance(obj, Maintenance):
+        return obj.date_out
 
     return None
 
@@ -48,7 +52,7 @@ def getOwnerAccountStatement(owner_id):
     return_sales_invs = ReturnSalesInvoice.objects.select_related(
 		'by', 
 		'owner', 
-		'original_invoice'
+		'original_invoice',
 	).filter(
         owner_id=owner_id,
         repository_permit=True
@@ -56,6 +60,13 @@ def getOwnerAccountStatement(owner_id):
 		's_invoice_items__item', 
 		's_invoice_items__repository'
 	)
+    maintenances = Maintenance.objects.select_related(
+        'client', 'created_by', 'last_updated_by'
+    ).filter(
+        client_id=owner_id,
+        maintenance_date__isnull=False,
+        date_out__isnull=False
+    ).prefetch_related('parts', 'parts__spare_part')
     purcahses_invs = PurchaseInvoices.objects.select_related(
         'by', 
         'owner'
@@ -89,15 +100,50 @@ def getOwnerAccountStatement(owner_id):
         owner_id=owner_id,
         status='approved'
     )
+    
+    models = [
+        {
+            "queryset": initial_credit_balance,
+            "price_key": "amount",
+        },
+        {
+            "queryset": sales_invs,
+            "price_key": "total_amount",
+        },
+        {
+            "queryset": return_sales_invs,
+            "price_key": "total_amount",
+        },
+        {
+            "queryset": maintenances,
+            "price_key": "cost",
+        },
+        {
+            "queryset": purcahses_invs,
+            "price_key": "total_amount",
+        },
+        {
+            "queryset": payments,
+            "price_key": "amount",
+        },
+        {
+            "queryset": revers_payments,
+            "price_key": "amount",
+        },
+        {
+            "queryset": debt_settlement,
+            "price_key": "amount",
+        },
+    ]
 
-
-    initial_credit_balance_total_credit = initial_credit_balance.aggregate(total_amount=Sum('amount'))
-    s_invs_total_credit = sales_invs.aggregate(total_amount=Sum('total_amount'))
-    return_sales_invs_total_credit = return_sales_invs.aggregate(total_amount=Sum('total_amount'))
-    purcahses_invs_total_credit = purcahses_invs.aggregate(total_amount=Sum('total_amount'))
-    payments_total_credit = payments.aggregate(total_amount=Sum('amount'))
-    revers_payments_total = revers_payments.aggregate(total=Sum('amount'))
-    # detbt_settlement_total = debt_settlement.aggregate(total=Sum('amount'))
+    totals = {}
+    transactionCount = {}
+    for m in models:
+        total = m["queryset"].aggregate(total=Sum(m["price_key"]))['total'] or 0
+        if total:
+            model_name = m["queryset"].model.__name__
+            transactionCount[model_name] = m["queryset"].count()
+            totals[model_name] = total
 
     result_list = sorted(
         chain(
@@ -108,6 +154,7 @@ def getOwnerAccountStatement(owner_id):
             initial_credit_balance, 
             revers_payments,
             debt_settlement,
+            maintenances,
         ),
         key=get_date,
         # reverse=True,
@@ -154,19 +201,23 @@ def getOwnerAccountStatement(owner_id):
             data_dict['type'] = 'debt settlement'
             data_dict['amount'] = Decimal(data_dict["amount"]) * -1
             list.append(data_dict)
+        elif isinstance(instance, Maintenance):
+            serializer = MaintenanceSerializer(instance)
+            data_dict = dict(serializer.data)
+            data_dict['type'] = 'maintenance'
+            data_dict['hashed_id'] = data_dict['_hashed_id']
+            data_dict['date'] = data_dict['date_out']
+            data_dict['amount'] = Decimal(data_dict["cost"])
+            if data_dict['amount'] == 0: continue
+            list.append(data_dict)
 
     return {
-        'sales_invs': sales_invs.count(),
-        'return_sales_invs': return_sales_invs.count(),
-        'purcahses_invs': purcahses_invs.count(),
-        'payments': payments.count(),
+        'owner_id': owner_id,
+        'count': {
+            **transactionCount
+        },
         'credit_totals': {
-            'Initial Credit Balance': initial_credit_balance_total_credit['total_amount'] if initial_credit_balance_total_credit['total_amount'] else 0,
-            'Sales Invoices': s_invs_total_credit['total_amount'] if s_invs_total_credit['total_amount'] else 0,
-            'Return Sales Invoices': - return_sales_invs_total_credit['total_amount'] if return_sales_invs_total_credit['total_amount'] else 0,
-            'Purchase Invoices': - purcahses_invs_total_credit['total_amount'] if purcahses_invs_total_credit['total_amount'] else 0,
-            'payments': - payments_total_credit['total_amount'] if payments_total_credit['total_amount'] else 0,
-            'Revers Payments': revers_payments_total['total'] if revers_payments_total['total'] else 0,
+            **totals
         },
         "list": list,
     }
