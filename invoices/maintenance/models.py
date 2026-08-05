@@ -53,4 +53,5 @@ class Maintenance(UpdatedCreatedByV2):
 class TransactionSpareParts(UpdatedCreatedByV2):
     maintenance = models.ForeignKey(Maintenance, on_delete=models.CASCADE, related_name='parts')
     spare_part = models.ForeignKey(Items, on_delete=models.PROTECT)
-    quantity = models.DecimalField(max_digits=10, decimal_places=2, default=1)
+    repository = models.ForeignKey('repositories.Repositories', on_delete=models.PROTECT)
+    quantity = models.DecimalField(max_digits=10, decimal_places=2, default=1, validators=[MinValueValidator(Decimal('0.00'))])

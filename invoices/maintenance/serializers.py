@@ -34,12 +34,13 @@ class SparePartLineSerializer(serializers.ModelSerializer):
     #     write_only=False,
     # )
     _spare_part_name = serializers.ReadOnlyField(source='spare_part.name')
+    _repository_name = serializers.ReadOnlyField(source='repository.name')
     _audit_info = serializers.SerializerMethodField()
 
 
     class Meta:
         model = TransactionSpareParts
-        fields = ['id', '_spare_part_name', 'spare_part', 'quantity', '_audit_info']
+        fields = ['id', '_spare_part_name', 'spare_part', 'quantity', 'repository', '_repository_name', '_audit_info']
         read_only_fields = ['id', '_spare_part_name', '_audit_info']
 
     def get__audit_info(self, obj):
@@ -198,6 +199,7 @@ class MaintenanceSerializer(WritableMultipleNestedSubmodelsMixin, serializers.Mo
         return {
             'spare_part': row['_spare_part_obj'],
             'quantity': row['_qty_decimal'],
+            'repository_id': row['repository'],
             'created_by': instance.created_by,
             'last_updated_by': instance.last_updated_by
         }
@@ -206,5 +208,6 @@ class MaintenanceSerializer(WritableMultipleNestedSubmodelsMixin, serializers.Mo
         return {
             'spare_part': row['_spare_part_obj'],
             'quantity': row['_qty_decimal'],
+            'repository_id': row['repository'],
             'last_updated_by': instance.last_updated_by,
         }
