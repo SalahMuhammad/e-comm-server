@@ -60,3 +60,16 @@ def hideFieldsConfigBased(self, field_list):
     if request.user and request.user.username in method_config['users']:
         for field in method_config['fields']:
             field_list.pop(field, None)
+
+def append_value_if_user_has_no_permission_to_field(config_key, request, instance, validated_data):
+    """Preserve old field values for users restricted by app_name hideFields permissions in configuration."""
+    config = get_config_data()
+
+    permission = config['serializers']['hideFields'][config_key].get('get', {})
+    if permission and request and request.user.username in permission['users']:
+        for field in permission['fields']:
+            old_value = getattr(instance, field, '')
+            if old_value and isinstance(old_value, str):
+                validated_data[field] = old_value + f'\n\n#{instance.last_updated_at}#{instance.last_updated_by}\n' + validated_data[field]
+
+    return validated_data

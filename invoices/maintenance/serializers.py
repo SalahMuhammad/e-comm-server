@@ -3,7 +3,7 @@ from rest_framework import serializers
 from common.encoder import MixedRadixEncoder
 from common.services.MultySubModelSerializerHandler import WritableMultipleNestedSubmodelsMixin
 from common.services.NumberValidator import NumberValidator
-from common.services.customeConfigurationHandler import hideFieldsConfigBased
+from common.services.customeConfigurationHandler import append_value_if_user_has_no_permission_to_field, hideFieldsConfigBased
 from common.utility.audit_info_dateformatter import audit_info_dateformatter
 
 from .models import Maintenance, TransactionSpareParts
@@ -185,6 +185,14 @@ class MaintenanceSerializer(WritableMultipleNestedSubmodelsMixin, serializers.Mo
             raise serializers.ValidationError(errors)
 
         return attrs
+
+    def prepare_update_data(self, instance, validated_data):
+        return append_value_if_user_has_no_permission_to_field(
+            'maintenance', 
+            self.context.get('request'),
+            instance,
+            validated_data
+        )
 
     def get_parts_create_kwargs(self, instance, row):
         return {

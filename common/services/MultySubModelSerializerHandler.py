@@ -117,9 +117,16 @@ class WritableMultipleNestedSubmodelsMixin:
     @transaction.atomic
     def update(self, instance, validated_data):
         multi_rows = validated_data.pop('_clean_multi_submodel_rows', {})
+
+        prepare_method = getattr(self, f'prepare_update_data', self.prepare_update_data)
+        validated_data = prepare_method(instance, validated_data)
+
         instance = super().update(instance, validated_data)
         self._apply_multi_submodel_rows(instance, multi_rows)
         return instance
+
+    def prepare_update_data(self, instance, validated_data):
+        return validated_data
 
     def _apply_multi_submodel_rows(self, instance, multi_rows):
         for field_name, rows in multi_rows.items():
