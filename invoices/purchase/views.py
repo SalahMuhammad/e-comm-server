@@ -25,13 +25,13 @@ def toggle_repository_permit(request, *args, **kwargs):
 	invoice = get_object_or_404(PurchaseInvoices, id=kwargs['pk'])
 
 	with transaction.atomic():
-		adjust_stock(invoice.p_invoice_items.all(), -1 if invoice.repository_permit else 1)
+		# adjust_stock(invoice.p_invoice_items.all(), -1 if invoice.repository_permit else 1)
 		invoice.repository_permit = not invoice.repository_permit
 		invoice.save()
 
-	a = ValidateItemsStock()
-	items_ids = [item.item.id for item in invoice.p_invoice_items.all()]
-	a.validate_stock(items=Items.objects.filter(id__in=items_ids))
+		a = ValidateItemsStock()
+		items_ids = [item.item.id for item in invoice.p_invoice_items.all()]
+		a.validate_stock(items=Items.objects.filter(id__in=items_ids), create_error_file=False)
 
 	return JsonResponse({
 		"success": True,

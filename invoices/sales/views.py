@@ -34,13 +34,13 @@ def toggle_repository_permit(request, *args, **kwargs):
 	invoice = get_object_or_404(SalesInvoice, id=kwargs['pk'])
 
 	with transaction.atomic():
-		adjust_stock(invoice.s_invoice_items.all(), 1 if invoice.repository_permit else -1)
+		# adjust_stock(invoice.s_invoice_items.all(), 1 if invoice.repository_permit else -1)
 		invoice.repository_permit = not invoice.repository_permit
 		invoice.save()
 
-	a = ValidateItemsStock()
-	items_ids = [item.item.id for item in invoice.s_invoice_items.all()]
-	a.validate_stock(items=Items.objects.filter(id__in=items_ids))
+		a = ValidateItemsStock()
+		items_ids = [item.item.id for item in invoice.s_invoice_items.all()]
+		a.validate_stock(items=Items.objects.filter(id__in=items_ids), create_error_file=False)
 
 	return JsonResponse({
 		"success": True,
@@ -48,16 +48,16 @@ def toggle_repository_permit(request, *args, **kwargs):
 	})
 
 class SalesAndRefundTotals(generics.ListAPIView):
-    permission_classes = (ConfigurationBasedCustomeViewsPermission, )
-    def get(self, request, *args, **kwargs):
-        try:
-            res = get_sold_and_items_totals_withen_period_as_http_response(
-                request.GET.get('fromdate', ''), 
-                request.GET.get('todate', '')
-            )
-            return res
-        except Exception as e:
-            raise Exception(f'SalesAndRefundTotals() issue: {e}')
+	permission_classes = (ConfigurationBasedCustomeViewsPermission, )
+	def get(self, request, *args, **kwargs):
+		try:
+			res = get_sold_and_items_totals_withen_period_as_http_response(
+				request.GET.get('fromdate', ''), 
+				request.GET.get('todate', '')
+			)
+			return res
+		except Exception as e:
+			raise Exception(f'SalesAndRefundTotals() issue: {e}')
 
 class ListCreateView(AbstractInvoiceListCreateView):
 	queryset = SalesInvoice.objects.select_related(
@@ -110,26 +110,26 @@ class RefundDetailView(
 	mixins.RetrieveModelMixin,
 	generics.GenericAPIView
 ):
-    queryset = ReturnInvoice.objects.select_related(
+	queryset = ReturnInvoice.objects.select_related(
 		'by', 
 		'owner', 
 		'original_invoice'
 	).all()
-    serializer_class = ReturnInvoiceSerializer
+	serializer_class = ReturnInvoiceSerializer
 
-    def get_object(self):
-        encoded_pk = self.kwargs.get('pk')
-        try:
-            # Decode the encoded ID from URL parameter
-            decoded_id = MixedRadixEncoder().decode(str(encoded_pk))
-            # Use the decoded ID to get the object
-            return self.get_queryset().get(id=decoded_id)
-        except Exception as e:
-            print(f"Invalid encoded ID: {self.kwargs['pk']}")
-            raise Http404("Object not found")    
+	def get_object(self):
+		encoded_pk = self.kwargs.get('pk')
+		try:
+			# Decode the encoded ID from URL parameter
+			decoded_id = MixedRadixEncoder().decode(str(encoded_pk))
+			# Use the decoded ID to get the object
+			return self.get_queryset().get(id=decoded_id)
+		except Exception as e:
+			print(f"Invalid encoded ID: {self.kwargs['pk']}")
+			raise Http404("Object not found")    
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+	def get(self, request, *args, **kwargs):
+		return self.retrieve(request, *args, **kwargs)
 
 
 
@@ -140,6 +140,6 @@ class RefundDetailView(
 
 
 class CashAndDeferredPercentages(generics.ListAPIView):
-    permission_classes = (ConfigurationBasedCustomeViewsPermission, )
-    def get(self, request, *args, **kwargs):
-        return Response(get_cash_deferred_percentages())
+	permission_classes = (ConfigurationBasedCustomeViewsPermission, )
+	def get(self, request, *args, **kwargs):
+		return Response(get_cash_deferred_percentages())
