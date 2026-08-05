@@ -5,6 +5,7 @@ from common.services.MultySubModelSerializerHandler import WritableMultipleNeste
 from common.services.NumberValidator import NumberValidator
 from common.services.customeConfigurationHandler import append_value_if_user_has_no_permission_to_field, hideFieldsConfigBased
 from common.utility.audit_info_dateformatter import audit_info_dateformatter
+from items.services.validate_items_stock import ValidateItemsStock
 
 from .models import Maintenance, TransactionSpareParts
 from items.models import Items
@@ -156,6 +157,11 @@ class MaintenanceSerializer(WritableMultipleNestedSubmodelsMixin, serializers.Mo
         else:
             row['_qty_decimal'] = v
 
+        # a = ValidateItemsStock()
+        # items_ids = [item.item.id for item in invoice.s_invoice_items.all()]
+        # a.validate_stock(items=Items.objects.filter(id__in=items_ids), create_error_file=False)
+        
+
         if err:
             raise serializers.ValidationError(err)
         return row
@@ -167,7 +173,7 @@ class MaintenanceSerializer(WritableMultipleNestedSubmodelsMixin, serializers.Mo
         date_in = data.get('date_in', getattr(attrs, 'date_in', date.today()))
         maintenance_date = data.get('maintenance_date', getattr(attrs, 'maintenance_date', None))
         date_out = data.get('date_out', getattr(attrs, 'date_out', None))
-
+        print(attrs, 222222222)
         errors = {}
 
         # 1. Maintenance date cannot be before date_in
@@ -199,7 +205,7 @@ class MaintenanceSerializer(WritableMultipleNestedSubmodelsMixin, serializers.Mo
         return {
             'spare_part': row['_spare_part_obj'],
             'quantity': row['_qty_decimal'],
-            'repository_id': row['repository'],
+            'repository_id': row['repository'] or 10000,
             'created_by': instance.created_by,
             'last_updated_by': instance.last_updated_by
         }
@@ -208,6 +214,6 @@ class MaintenanceSerializer(WritableMultipleNestedSubmodelsMixin, serializers.Mo
         return {
             'spare_part': row['_spare_part_obj'],
             'quantity': row['_qty_decimal'],
-            'repository_id': row['repository'],
+            'repository_id': row['repository'] or 10000,
             'last_updated_by': instance.last_updated_by,
         }
