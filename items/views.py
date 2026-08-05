@@ -201,13 +201,6 @@ class ItemsList(mixins.ListModelMixin,
 		if origin:
 			queryset = queryset.filter(origin__icontains=origin)
 
-		# Permission filtering
-		if not self.request.user.is_superuser:
-			group_permissions = set(self.request.user.groups.values_list('permissions__codename', flat=True))
-			user_permissions = set(self.request.user.user_permissions.values_list('codename', flat=True))
-			all_permissions = group_permissions | user_permissions
-			queryset = queryset.filter(type__name__in=all_permissions)
-
 		return queryset
 
 	def post(self, request, *args, **kwargs):
