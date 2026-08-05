@@ -3,6 +3,9 @@ from common.models import UpdatedCreatedByV2
 from invoices.buyer_supplier_party.models import Party
 from items.models import Items
 from datetime import date
+from decimal import Decimal
+from django.core.validators import MinValueValidator
+
 
 
 class Maintenance(UpdatedCreatedByV2):
@@ -25,7 +28,7 @@ class Maintenance(UpdatedCreatedByV2):
     malfunctions = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
 
-    cost = models.DecimalField(max_digits=10, decimal_places=2, default=0, blank=True)
+    cost = models.DecimalField(max_digits=10, decimal_places=2, default=0, blank=True, validators=[MinValueValidator(Decimal('0.00'))])
 
 
     def __str__(self):
