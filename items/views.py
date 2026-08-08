@@ -1,61 +1,31 @@
 from rest_framework import generics, mixins, status, viewsets
-# from rest_framework.generics import UpdateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.permissions import AllowAny
-
+from rest_framework.decorators import api_view
 from common.services.customeConfigurationHandler import customeFilters
 # 
-from .models import Items, Images, ItemPriceLog, Types
-from .serializers import ItemsSerializer, TypesSerializer, InitialStockSerializer, DamagedItemsSerializer
+from .models import Items, Images, Types
+from .serializers import ItemsSerializer, TypesSerializer, DamagedItemsSerializer
 # 
 from .services.item_fluctuation import get_item_fluctuation
-from .services.handle_images_insertion import http_request_images_handler
-from .services.handle_barcodes import http_request_barcodes_handler
-# 
 from .services.validate_items_stock import ValidateItemsStock
+# 
 from auth._permissions.CustomeViewsPermission import ConfigurationBasedCustomeViewsPermission
 # 
 from operator import and_
 from functools import reduce
 # 
 from django.db.models.deletion import ProtectedError
-from django.db.models import Q, Exists, OuterRef
-from django.db.utils import IntegrityError
-from django.db import IntegrityError, transaction
-# 
-from decimal import Decimal, ROUND_HALF_UP
+from django.db.models import Q
+from django.db import transaction
 # django filters
 from django_filters.rest_framework import DjangoFilterBackend
 # 
-import os
+from datetime import datetime
+import os, json
 from metadata.base import CompositeMetadata
 
 
-
-@api_view(['POST'])
-@authentication_classes([])  # Disable authentication (CSRF check is tied to authentication)
-@permission_classes([AllowAny])  # Allow any user
-def aaaa(request, *args, **kwargs):
-	# request.POST._mutable = True
-	item_id = kwargs['pk']
-	request.data['item'] = item_id
-	request.data['repository'] = 10000
-	request.data['by'] = 10000
-	a = Items.objects.get(pk=item_id).initial_stock.all()
-	if a.exists():
-		b = a[0]
-		b.quantity = request.data['quantity']
-		b.save()
-		ValidateItemsStock().validate_stock(Items.objects.filter(pk=item_id))
-		return Response(status=status.HTTP_202_ACCEPTED)
-	serializer = InitialStockSerializer(data=request.data)
-	if serializer.is_valid():
-		serializer.save()
-		ValidateItemsStock().validate_stock(Items.objects.filter(pk=item_id))
-		return Response(serializer.data, status=status.HTTP_200_OK)
-	return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # def read_barcode111(image):
 # 	barcodes = pyzbar.decode(Image.open(image))
@@ -91,13 +61,14 @@ def aaaa(request, *args, **kwargs):
 @api_view(['get'])
 def quantity_errors_corrector_view(request, *args, **kwargs):
 	a = ValidateItemsStock()
-	a.validate_stock(items=Items.objects.all())
-	return Response(status=status.HTTP_200_OK)
+	result = a.stock_validation()
+
+	return Response(result, status=status.HTTP_200_OK)
 
 @api_view(['get'])
 def quantity_errors_list_view(request, *args, **kwargs):
 	# Get the list of files in the directory
-	directory = 'quantity-errors'
+	directory = 'media/quantity-errors'
 	files = os.listdir(directory)
 
 	# Create a list to store the file paths
@@ -329,73 +300,3 @@ class DamagedItemsViewSet(viewsets.ModelViewSet):
 
 
 # _____________________________________________________________________________________#
-
-
-
-
-# from invoices.models import Invoice, InvoiceItem
-from transfer_items.models import Transfer
-from repositories.models import Repositories
-from .models import Stock
-from datetime import datetime
-import json
-
-
-def validate_stock(items=Items.objects.all()):
-	repositories = Repositories.objects.all()
-
-	for item_data in items:
-		for repo in repositories:
-			purchase_invoices_item_qty = get_invoices_quantities(True, [item_data.id], repo.id)
-			sales_invoices_item_qty = get_invoices_quantities(False, [item_data.id], repo.id)
-
-			transfer_from = get_transfer_quantities(item_ids=[item_data.id], from_id=repo.id)
-			transfer_to = get_transfer_quantities(item_ids=[item_data.id], to_id=repo.id)
-
-			purchase_invoices_item_qty = purchase_invoices_item_qty[0] if purchase_invoices_item_qty else [0,0]
-			sales_invoices_item_qty = sales_invoices_item_qty[0] if sales_invoices_item_qty else [0,0]
-			transfer_from = transfer_from[0] if transfer_from else [0,0]
-			transfer_to = transfer_to[0] if transfer_to else [0,0]
-
-			diff = purchase_invoices_item_qty[1] - sales_invoices_item_qty[1] - transfer_from[1] + transfer_to[1]
-
-			stock = Stock.objects.get(repository=repo, item=item_data)
-	
-			if stock.quantity != diff:
-				directory = 'quantity-errors'
-				os.makedirs(directory, exist_ok=True)
-
-				filename = f"{item_data.name}_{repo.name}_{datetime.now()}.json"
-				file_path = os.path.join(directory, filename)
-
-				data = {
-					'item_id': item_data.id,
-					'item_name': item_data.name,
-					'repo_id': repo.id,
-					'repo_name': repo.name,
-					'stock': stock.quantity,
-					'accurate_stock': diff
-				}
-
-				with open(file_path, 'w', encoding='utf-8') as f:
-					json.dump(data, f, indent=4)
-					stock.quantity = diff
-					stock.save()
-					# stock
-					
-
-
-
-
-
-from django.db.models import Count
-
-def delete_orphan_items_from_invoice_items():
-	# Find InvoiceItem objects with no associated Invoice
-	orphan_items = InvoiceItem.objects.annotate(invoice_count=Count('invoices')).filter(invoice_count=0)
-
-	# Delete these orphan items
-	deleted_count = orphan_items.delete()[0]
-
-	print(f"Deleted {deleted_count} orphan InvoiceItem objects.")
-
