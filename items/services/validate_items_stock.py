@@ -1,8 +1,8 @@
 from invoices.purchase.models import PurchaseInvoiceItems 
 from invoices.sales.models import SalesInvoiceItem, ReturnInvoiceItem 
-from repositories.models import Repositories 
+from repositories.models import Repositories
+from invoices.maintenance.models import TransactionSpareParts
 # from transfer_items.models import Transfer, TransferItem
-import os, json, datetime
  
 from refillable_items_system.models import ItemTransformer, RefundedRefillableItem, RefilledItem, OreItem 
 from rest_framework.serializers import ValidationError 
@@ -63,6 +63,10 @@ class ValidateItemsStock():
 		sales_refund_lookup = self._as_lookup(
 			self._get_quantities(ReturnInvoiceItem, extra_filters={'invoice__repository_permit': True})
 		)
+		maintenance_lookup = self._as_lookup(
+            self._get_quantities(TransactionSpareParts, item_field='spare_part_id', extra_filters={'maintenance__maintenance_date__isnull': False}),
+			item_field='spare_part_id'
+        )
 		damaged_lookup = self._as_lookup(
 			self._get_quantities(apps.get_model('items', 'DamagedItems'))
 		)
@@ -105,6 +109,7 @@ class ValidateItemsStock():
 				exact_qty += initial_stock_lookup.get(key, 0)
 				exact_qty += purchase_lookup.get(key, 0)
 				exact_qty -= sales_lookup.get(key, 0)
+				exact_qty -= maintenance_lookup.get(key, 0)
 				exact_qty += sales_refund_lookup.get(key, 0)
 				exact_qty -= damaged_lookup.get(key, 0)
 				
