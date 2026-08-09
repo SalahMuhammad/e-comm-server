@@ -31,7 +31,7 @@ def toggle_repository_permit(request, *args, **kwargs):
 
 		a = ValidateItemsStock()
 		items_ids = [item.item.id for item in invoice.p_invoice_items.all()]
-		a.validate_stock(items=Items.objects.filter(id__in=items_ids), create_error_file=False)
+		a.stock_validation(item_ids=items_ids, log_mismatches=False, raise_on_negative=True)
 
 	return JsonResponse({
 		"success": True,

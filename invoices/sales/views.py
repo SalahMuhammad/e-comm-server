@@ -2,13 +2,11 @@ from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404
 # models
 from .models import SalesInvoice, ReturnInvoice
-from items.models import Items
 from django.db import transaction
 # rest framework
 from rest_framework import mixins, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
 # services
 from .services.item_sales_and_refund_in_period import get_sold_and_items_totals_withen_period_as_http_response
 from .services.filters import SalesInvoiceFilter, ReturnInvoiceFilter
@@ -40,7 +38,7 @@ def toggle_repository_permit(request, *args, **kwargs):
 
 		a = ValidateItemsStock()
 		items_ids = [item.item.id for item in invoice.s_invoice_items.all()]
-		a.validate_stock(items=Items.objects.filter(id__in=items_ids), create_error_file=False)
+		a.stock_validation(item_ids=items_ids, log_mismatches=False, raise_on_negative=True)
 
 	return JsonResponse({
 		"success": True,
