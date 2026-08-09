@@ -7,6 +7,7 @@ from common.services.customeConfigurationHandler import append_value_if_user_has
 from common.utility.audit_info_dateformatter import audit_info_dateformatter
 from items.services.validate_items_stock import ValidateItemsStock
 
+from django.db import transaction
 from .models import Maintenance, TransactionSpareParts
 from items.models import Items
 from datetime import date
@@ -141,6 +142,10 @@ class MaintenanceSerializer(WritableMultipleNestedSubmodelsMixin, serializers.Mo
         """Custom row logic scoped specifically to the 'parts' field."""
         err = {}
         sp_id = row.get('spare_part')
+
+        if not row['repository']:
+            row['repository'] =  10000
+
         if not sp_id:
             err['spare_part'] = 'This field is required.'
         else:
@@ -155,12 +160,7 @@ class MaintenanceSerializer(WritableMultipleNestedSubmodelsMixin, serializers.Mo
         elif v <= 0 or v >= 9999999.99:
             err['quantity'] = 'unsupported value'
         else:
-            row['_qty_decimal'] = v
-
-        # a = ValidateItemsStock()
-        # items_ids = [item.item.id for item in invoice.s_invoice_items.all()]
-        # a.validate_stock(items=Items.objects.filter(id__in=items_ids), create_error_file=False)
-        
+            row['_qty_decimal'] = v        
 
         if err:
             raise serializers.ValidationError(err)
@@ -173,7 +173,7 @@ class MaintenanceSerializer(WritableMultipleNestedSubmodelsMixin, serializers.Mo
         date_in = data.get('date_in', getattr(attrs, 'date_in', date.today()))
         maintenance_date = data.get('maintenance_date', getattr(attrs, 'maintenance_date', None))
         date_out = data.get('date_out', getattr(attrs, 'date_out', None))
-        print(attrs, 222222222)
+
         errors = {}
 
         # 1. Maintenance date cannot be before date_in
@@ -205,7 +205,7 @@ class MaintenanceSerializer(WritableMultipleNestedSubmodelsMixin, serializers.Mo
         return {
             'spare_part': row['_spare_part_obj'],
             'quantity': row['_qty_decimal'],
-            'repository_id': row['repository'] or 10000,
+            'repository_id': row['repository'],
             'created_by': instance.created_by,
             'last_updated_by': instance.last_updated_by
         }
@@ -214,6 +214,6 @@ class MaintenanceSerializer(WritableMultipleNestedSubmodelsMixin, serializers.Mo
         return {
             'spare_part': row['_spare_part_obj'],
             'quantity': row['_qty_decimal'],
-            'repository_id': row['repository'] or 10000,
+            'repository_id': row['repository'],
             'last_updated_by': instance.last_updated_by,
         }
