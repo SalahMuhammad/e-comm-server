@@ -1,241 +1,250 @@
-from invoices.purchase.models import PurchaseInvoices
-from invoices.sales.models import SalesInvoice, ReturnInvoiceItem
-from repositories.models import Repositories
-from transfer_items.models import Transfer
-from django.db.models import Sum
-from django.db.models import Q
-from django.apps import apps
+from invoices.purchase.models import PurchaseInvoiceItems 
+from invoices.sales.models import SalesInvoiceItem, ReturnInvoiceItem 
+from repositories.models import Repositories 
+# from transfer_items.models import Transfer, TransferItem
 import os, json, datetime
-import re
-from refillable_items_system.models import ItemTransformer, RefundedRefillableItem, RefilledItem, OreItem
-from rest_framework.exceptions import ValidationError
+ 
+from refillable_items_system.models import ItemTransformer, RefundedRefillableItem, RefilledItem, OreItem 
+from rest_framework.serializers import ValidationError 
+from collections import defaultdict 
+from decimal import Decimal
+
+from django.db import transaction
+from django.conf import settings
+from django.db.models import Sum
+from django.apps import apps
+import os, json, datetime, re
+
 
 
 class ValidateItemsStock():
-	# def __init__(self, invoice_instance, items_relations_name, items):
-		# self.invoice_instance = invoice_instance
-		# self.items_relations_name = items_relations_name
-		# self.items = items
 
-	def validate_stock(self, items=None, repository_ids=None, create_error_file=True):
+	def stock_validation(self, item_ids=None, repository_ids=None, log_mismatches=True, raise_on_negative=False):
 		Items = apps.get_model('items', 'Items')
 		Stock = apps.get_model('items', 'Stock')
-		if items is None:
-			items = Items.objects.all()
 
-		repositories = Repositories.objects.all() if not repository_ids else Repositories.objects.filter(pk__in=repository_ids)
+		items = (
+			list(Items.objects.all()) if item_ids is None 
+			else list(Items.objects.filter(pk__in=item_ids))
+		)
+		repositories = (
+			list(Repositories.objects.all()) if repository_ids is None
+			else list(Repositories.objects.filter(pk__in=repository_ids))
+		)
+
+		self.item_ids = [i.id for i in items]
+		self.repo_ids = [r.id for r in repositories]
+		item_id_set = set(self.item_ids)
+
 		item_transformer = ItemTransformer.objects.all()
+		transformer_item_ids = set(item_transformer.values_list('item', flat=True))
+		transformer_transform_ids = set(item_transformer.values_list('transform', flat=True))
+		ore_item_ids = set(OreItem.objects.all().values_list('item', flat=True))
 
-		for item_data in items:
+		if any(i in self.item_ids for i in transformer_transform_ids):
+			self.item_ids.extend(transformer_item_ids)
+
+		# filled item id -> its paired refillable (empty) item id
+		transform_to_item = {}
+		for row in item_transformer.values('transform', 'item'):
+			transform_to_item.setdefault(row['transform'], row['item'])
+
+		initial_stock_lookup = self._as_lookup(
+			self._get_quantities(apps.get_model('items', 'InitialStock'))
+		)
+		purchase_lookup = self._as_lookup(
+			self._get_quantities(PurchaseInvoiceItems, extra_filters={'invoice__repository_permit': True})
+		)
+		sales_lookup = self._as_lookup(
+			self._get_quantities(SalesInvoiceItem, extra_filters={'invoice__repository_permit': True})
+		)
+		# NOTE: original get_sales_invoice_refund() did NOT filter by repository_permit —
+		# this adds it, matching your draft. Drop extra_filters here if that was accidental.
+		sales_refund_lookup = self._as_lookup(
+			self._get_quantities(ReturnInvoiceItem, extra_filters={'invoice__repository_permit': True})
+		)
+		damaged_lookup = self._as_lookup(
+			self._get_quantities(apps.get_model('items', 'DamagedItems'))
+		)
+
+		refunded_refillable_lookup = {}
+		refilled_lookup = {}
+		if (item_id_set & transformer_item_ids) or (item_id_set & transformer_transform_ids):
+			# One query serves both directions:
+			#  - looked up directly by item id for refillable (empty) items -> subtracted
+			#  - looked up via transform_to_item for filled items -> added
+			refilled_lookup = self._as_lookup(
+				self._get_quantities(RefilledItem, item_field='refilled_item', quantity_field='refilled_quantity'),
+				item_field='refilled_item',
+			)
+
+		if item_id_set & transformer_item_ids:
+			refunded_refillable_lookup = self._as_lookup(
+				self._get_quantities(RefundedRefillableItem)
+			)
+
+		used_lookup = {}
+		if item_id_set & ore_item_ids:
+			used_lookup = self._as_lookup(
+				self._get_quantities(RefilledItem, item_field='used_item__item', quantity_field='used_quantity'),
+				item_field='used_item__item',
+			)
+
+		existing_stocks = {
+			(s.item_id, s.repository_id): s
+			for s in Stock.objects.filter(item_id__in=self.item_ids, repository_id__in=self.repo_ids)
+		}
+
+		to_update, to_create, mismatches, negative = [], [], [], []
+
+		for item in items:
 			for repo in repositories:
-				initial_stock = self.get_initial_stock_quantities(item_data, repo)
-				initial_stock = initial_stock['quantity__sum'] if initial_stock['quantity__sum'] else 0
-
-				purchased_item_qty = self.get_invoices_quantities(
-					PurchaseInvoices,
-					'p',
-					[item_data.id], 
-					repo.id
-				)
-
-				sold_item_qty = self.get_invoices_quantities(
-					SalesInvoice,
-					's',
-					[item_data.id],
-					repo.id
-				)
-
-				sales_invoice_refund = self.get_sales_invoice_refund(
-					item_data,
-					repo
-				)
-
-				refunded_refillable_items_qty = 0
-				refunded_refilled = 0
-				if item_data.id in item_transformer.values_list('item', flat=True):
-					refunded_refillable_items_qty = self.get_refunded_refillable_items_quantities(
-						item_data,
-						repo
-					)
-
-					refunded_refilled = self.get_refilled_items_quantities(
-						item_data,
-						repo
-					)
-
-				filled_items_qty = 0
-				if item_data.id in item_transformer.values_list('transform', flat=True):
-					filled_items_qty = self.get_refilled_items_quantities(
-						item_transformer.filter(transform=item_data).first().item,
-						repo
-					)
-
-				used_items_qty = 0
-				if item_data.id in OreItem.objects.all().values_list('item', flat=True):
-					used_items_qty = self.get_used_items_quantities(
-						item_data,
-						repo
-					)
-
-				damaged = self.get_quantity_of_damaged_item(
-					item_data, 
-					repo
-				)
-				# transfer_from = self.get_transfer_quantities(item_ids=[item_data.id], from_id=repo.id)
-				# transfer_to = self.get_transfer_quantities(item_ids=[item_data.id], to_id=repo.id)
-
-				# git first item from the list otherwise return [0, 0]
-				purchased_item_qty = purchased_item_qty[0] if purchased_item_qty else [0,0]
-				sold_item_qty = sold_item_qty[0] if sold_item_qty else [0,0]
-				# transfer_from = transfer_from[0] if transfer_from else [0,0]
-				# transfer_to = transfer_to[0] if transfer_to else [0,0]
+				key = (item.id, repo.id)
 
 				exact_qty = 0
-				exact_qty += initial_stock
-				exact_qty += purchased_item_qty[1]
-				exact_qty += refunded_refillable_items_qty
-				exact_qty += filled_items_qty
-				exact_qty -= sold_item_qty[1]
-				exact_qty -= refunded_refilled
-				exact_qty -= used_items_qty
-				exact_qty += sales_invoice_refund
-				exact_qty -= damaged
+				exact_qty += initial_stock_lookup.get(key, 0)
+				exact_qty += purchase_lookup.get(key, 0)
+				exact_qty -= sales_lookup.get(key, 0)
+				exact_qty += sales_refund_lookup.get(key, 0)
+				exact_qty -= damaged_lookup.get(key, 0)
+				
+				if item.id in transformer_item_ids:
+					exact_qty += refunded_refillable_lookup.get(key, 0)
+					exact_qty -= refilled_lookup.get(key, 0)
 
-				stock, created = Stock.objects.get_or_create(repository=repo, item=item_data)
-				stock_quantity = stock.quantity
-				stock.quantity = exact_qty
-				stock.save()
+				if item.id in transformer_transform_ids:
+					paired_item_id = transform_to_item.get(item.id)
+					if paired_item_id is not None:
+						exact_qty += refilled_lookup.get((paired_item_id, repo.id), 0)
 
-				if create_error_file and stock_quantity != exact_qty:
-					directory = 'media/quantity-errors'
-					os.makedirs(directory, exist_ok=True)
+				if item.id in ore_item_ids:
+					exact_qty -= used_lookup.get(key, 0)
 
-					raw_filename = f"{item_data.name}_{repo.name}_{datetime.datetime.now(datetime.timezone.utc)}.json"
-					# Replace unsafe characters with underscores
-					safe_filename = re.sub(r'[^\w\-_\.]', '_', raw_filename)
-					file_path = os.path.join(directory, safe_filename)
+				stock = existing_stocks.get(key)
+				if stock is None:
+					stock = Stock(item=item, repository=repo)
+					previous_qty = stock.quantity  # model default, e.g. 0
+					stock.quantity = exact_qty
+					to_create.append(stock)
+				else:
+					previous_qty = stock.quantity
+					if previous_qty != exact_qty:
+						stock.quantity = exact_qty
+						to_update.append(stock)
 
-					data = {
-						'date': datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S'),
-						'item_id': item_data.id,
-						'item_name': item_data.name,
+				if log_mismatches and previous_qty != exact_qty:
+					mismatches.append({
+						'item_id': item.id,
+						'item_name': item.name,
 						'repo_id': repo.id,
 						'repo_name': repo.name,
-						'stock': str(stock_quantity),
-						'accurate_stock': str(exact_qty)
-					}
+						'stock': str(previous_qty),
+						'accurate_stock': str(exact_qty),
+					})
 
-					with open(file_path, 'w', encoding='utf-8') as f:
-						json.dump(data, f, indent=4)
-				
-				if stock.quantity < 0 and not create_error_file:
-					raise ValidationError({'detail': 'no enough items...'})
+				if exact_qty < 0:
+					negative.append(f'{item.name} @ {repo.name} @ {exact_qty}')
 
-	def get_invoices_quantities(
+		with transaction.atomic():
+			if raise_on_negative and negative:
+				raise ValidationError({
+					'detail': f"Not enough stock for: {', '.join(sorted(set(negative)))}"
+				})
+
+			if to_update:
+				Stock.objects.bulk_update(to_update, ['quantity'], batch_size=500)
+			if to_create:
+				Stock.objects.bulk_create(to_create, batch_size=500)
+
+		if log_mismatches and mismatches:
+			self._write_mismatch_files(mismatches)
+
+		return {
+			'checked': len(items) * len(repositories),
+			'updated': len(to_update),
+			'created': len(to_create),
+			'mismatches': len(mismatches),
+		}
+
+	def _as_lookup(self, rows, item_field='item_id', repo_field='repository_id'):
+		"""Turn get_quantities()'s grouped rows into a {(item_id, repo_id): total_quantity} dict."""
+		if not rows:
+			return {}
+		return {(row[item_field], row[repo_field]): row['total_quantity'] for row in rows}
+
+	def _write_mismatch_files(self, mismatches):
+		directory = os.path.join(settings.MEDIA_ROOT, 'quantity-errors')
+		os.makedirs(directory, exist_ok=True)
+		timestamp = datetime.datetime.now(datetime.timezone.utc)
+		for row in mismatches:
+			raw_filename = f"{row['item_name']}_{row['repo_name']}_{timestamp}.json"
+			safe_filename = re.sub(r'[^\w\-_\.]', '_', raw_filename)
+			file_path = os.path.join(directory, safe_filename)
+			with open(file_path, 'w', encoding='utf-8') as f:
+				json.dump({**row, 'date': timestamp.strftime('%Y-%m-%d %H:%M:%S')}, f, indent=4)
+
+	def _get_quantities(
 		self,
-		invoice_instance=PurchaseInvoices, 
-		items_relations_name='p', 
-		item_ids=None, 
-		repository_id=1
+		model,
+		repo_field='repository_id',
+		item_field='item_id',
+		group_by=None,
+		quantity_field='quantity',
+		extra_filters=None
 	):
-		Items = apps.get_model('items', 'Items')
-		if item_ids is None:
-			item_ids = Items.objects.all()
-		relation_name = f"{items_relations_name}_invoice_items"
-		items_path = f"{relation_name}__item_id"
-		repo_path = f"{relation_name}__repository_id"
-		quantity_path = f"{relation_name}__quantity"
+		"""
+		Fetches and aggregates quantities with dynamic filter field names
+		and optional extra filters (e.g., related model fields).
+		Assumes self.item_ids / self.repo_ids are already resolved to concrete
+		(possibly empty) id lists before this is called.
+		"""
+		queryset = model.objects.all()
 
-		return invoice_instance.objects.filter(
-			Q(**{f"{items_path}__in": item_ids}),
-			Q(**{f"{repo_path}": repository_id}),
-			repository_permit=True,
-		).values(
-			items_path
-		).annotate(
-			total_quantity=Sum(quantity_path)
-		).values_list(items_path, 'total_quantity')
+		filters = {}
+		if self.repo_ids is not None:
+			filters[f"{repo_field}__in"] = self.repo_ids
+		if self.item_ids is not None:
+			filters[f"{item_field}__in"] = self.item_ids
 
-	def get_refunded_refillable_items_quantities(
-		self,
-		item,
-		repository
-	):
-		return RefundedRefillableItem.objects.filter(
-			item=item,
-			repository=repository,
-		).aggregate(
-			total_quantity=Sum('quantity')
-		)['total_quantity'] or 0
+		if extra_filters:
+			filters.update(extra_filters)
+
+		if filters:
+			queryset = queryset.filter(**filters)
+
+		if group_by is None:
+			group_by = [repo_field, item_field]
+
+		return (
+			queryset.values(*group_by)
+			.annotate(total_quantity=Sum(quantity_field))
+		)
 	
-	def get_refilled_items_quantities(
-		self,
-		item,
-		repository
-	):
-		return RefilledItem.objects.filter(
-			refilled_item=item,
-			repository=repository,
-		).aggregate(
-			total_refilled_quantity=Sum('refilled_quantity'), 
-		)['total_refilled_quantity'] or 0
-	
-	def get_sales_invoice_refund(
-		self,
-		item,
-		repository
-	):
-		return ReturnInvoiceItem.objects.filter(
-			item=item,
-			repository=repository,
-		).aggregate(
-			total=Sum('quantity'), 
-		)['total'] or 0
+	def _aggregate_item_quantities_for_validation(self, rows, values_keys):
+		"""Aggregate item quantities grouped by repository and item for validation.
 
-	def get_used_items_quantities(
-		self,
-		item,
-		repository
-	):
-		return RefilledItem.objects.filter(
-			used_item__item=item,
-			repository=repository,
-		).aggregate(
-			total_used_quantity=Sum('used_quantity')
-		)['total_used_quantity'] or 0
+		Args:
+			rows: Iterable of item data rows, each row may include a nested '_row'.
+			values_keys: A sequence of keys for item, repository, and quantity values.
 
-	def get_quantity_of_damaged_item(
-		self,
-		item,
-		repository
-	):
-		DamagedItems = apps.get_model('items', 'DamagedItems')
-		return DamagedItems.objects.filter(
-			item=item,
-			repository=repository,
-		).aggregate(
-			total=Sum('quantity')
-		)['total'] or 0
+		Returns:
+			A mapping of (repository, item, row_index) to accumulated quantity.
+		"""
+		filtered_objects = [
+			{
+				'index': index,
+				# Fallback to item itself if '_row' key doesn't exist
+				'item':         item.get('_row', item).get(values_keys[0]),
+				'repository':   item.get('_row', item).get(values_keys[1]),
+				'quantity':     item.get('_row', item).get(values_keys[2])
+			}
+			for index, item in enumerate(rows)
+		]
 
-	def get_transfer_quantities(self, item_ids, from_id=False, to_id=False):
-		q = Q(fromm_id=from_id) if from_id else Q(too_id=to_id)
-		return Transfer.objects.filter(
-			q,
-			Q(items__item_id__in=item_ids)
-		).values(
-			'items__item_id'
-		).annotate(
-			total_quantity=Sum('items__quantity')
-		).values_list('items__item_id', 'total_quantity')
-	
-	def get_initial_stock_quantities(self, item, repo):
-		InitialStock = apps.get_model('items', 'InitialStock')
-		return InitialStock.objects.filter(
-			repository=repo,
-			item=item,
-		).aggregate(Sum('quantity'))
-	# .values(
-	# 		'item_id'
-	# 	).annotate(
-	# 		total_quantity=Sum('quantity')
-	# 	).values_list('total_quantity')
+		accumulated_data = defaultdict(Decimal)
+
+		for obj in filtered_objects:
+			key = (obj['repository'], obj['item'], obj['index'])
+			accumulated_data[key] += obj['quantity']
+
+		return accumulated_data
