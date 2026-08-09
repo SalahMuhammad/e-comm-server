@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ListCreateView, DetailView, OwnerView, customerAccountStatement, ListClientCredits
+from .views import ListCreateView, DetailView, OwnerView, AccountStatement, ListClientCredits
 
 
 urlpatterns = [
@@ -17,7 +17,7 @@ urlpatterns = [
     ),
     path(
         'customer-account-statement/<int:pk>/', 
-        customerAccountStatement,
+        AccountStatement.as_view(),
         {'___view_id': 'buyerSupplier_accountStatement'},
     ),
 ]

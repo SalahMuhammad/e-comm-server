@@ -17,6 +17,7 @@ from .services.ownerView import ownerViewAsHttpResponse
 from auth._permissions.CustomeViewsPermission import ConfigurationBasedCustomeViewsPermission
 # 
 from django.db.models import ProtectedError
+from rest_framework.decorators import api_view, permission_classes
 
 
 
@@ -40,12 +41,11 @@ class ListClientCredits(APIView):
 
 
 
-@api_view(['GET'])
-def customerAccountStatement(request, *args, **kwargs):
-    ___view_id = kwargs.get('___view_id', None)
-    if not customeViewsUserPermissionHandler(request.user, ___view_id):
-        raise 'exceptionssssssssssssssssssssssss'
-    return getOwnerAccountStatementAsHttpResponse(kwargs['pk'])
+class AccountStatement(APIView):
+    permission_classes = (ConfigurationBasedCustomeViewsPermission, )
+
+    def get(self, request, *args, **kwargs):
+        return getOwnerAccountStatementAsHttpResponse(kwargs['pk'])
 
 
 
