@@ -164,12 +164,12 @@ class DamagedItems(UpdatedCreatedBy):
 			super().full_clean()
 			super().save(*args, **kwargs)
 			from .services.validate_items_stock import ValidateItemsStock
-			ValidateItemsStock().validate_stock(Items.objects.filter(pk__in=ids), repository_ids=repository_ids ,create_error_file=False)
+			ValidateItemsStock().stock_validation(item_ids=ids, repository_ids=repository_ids ,raise_on_negative=True, log_mismatches=False)
 
 	def delete(self, *args, **kwargs):
 		super().delete(*args, **kwargs)
 		from .services.validate_items_stock import ValidateItemsStock
-		ValidateItemsStock().validate_stock(Items.objects.filter(pk=self.item.pk), repository_ids=[self.repository.id], create_error_file=False)
+		ValidateItemsStock().stock_validation(item_ids=[self.item.id], repository_ids=[self.repository.id] ,raise_on_negative=True, log_mismatches=False)
 
 
 	class Meta:
