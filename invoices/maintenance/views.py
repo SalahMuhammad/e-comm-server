@@ -1,7 +1,9 @@
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, status
+from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
 from common.services.customeConfigurationHandler import customeFilters
+from items.services.validate_items_stock import ValidateItemsStock
 from metadata.base import CompositeMetadata
 
 from .models import Maintenance
@@ -11,6 +13,7 @@ from common.encoder import MixedRadixEncoder
 from django.http import Http404
 
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db import transaction
 
 
 
@@ -37,8 +40,25 @@ class MaintenanceView(mixins.CreateModelMixin, mixins.ListModelMixin, generics.G
 	def get(self, request, *args, **kwargs):
 		return self.list(request, *args, **kwargs)
 
+	@transaction.atomic
 	def post(self, request, *args, **kwargs):
-		return self.create(request, *args, **kwargs)
+		serializer = self.get_serializer(data=request.data)
+		serializer.is_valid(raise_exception=True)
+		self.perform_create(serializer)
+		
+		# serializer.instance is your actual Django model object
+		instance = serializer.instance 
+
+		a = ValidateItemsStock()
+		items_ids = [item.spare_part.id for item in instance.parts.all()]
+		a.stock_validation(
+			item_ids=items_ids, 
+			log_mismatches=False, 
+			raise_on_negative=True if instance.maintenance_date else False
+		)
+
+		headers = self.get_success_headers(serializer.data)
+		return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class MaintenanceDetailView(
@@ -75,8 +95,26 @@ class MaintenanceDetailView(
 	# def put(self, request, *args, **kwargs):
 	# 	return self.update(request, *args, **kwargs)
 
+	@transaction.atomic
 	def patch(self, request, *args, **kwargs):
-		return self.partial_update(request, *args, **kwargs)
+		instance = self.get_object()
+		
+		serializer = self.get_serializer(instance, data=request.data, partial=True)
+		serializer.is_valid(raise_exception=True)
+		self.perform_update(serializer)
+		
+		# 3. Refresh or use the updated instance directly
+		instance.refresh_from_db()
+
+		a = ValidateItemsStock()
+		items_ids = [item.spare_part.id for item in instance.parts.all()]
+		a.stock_validation(
+			item_ids=items_ids, 
+			log_mismatches=False, 
+			raise_on_negative=True if instance.maintenance_date else False
+		)
+
+		return Response(serializer.data)
 
 	def delete(self, request, *args, **kwargs):
 		return self.destroy(request, *args, **kwargs)
