@@ -90,7 +90,7 @@ INSTALLED_APPS = [
     "employees.apps.EmployeesConfig",
     "refillable_items_system",
 
-    "requests_logs",
+    # "requests_logs",
     "django_extensions",
 
     'debug_toolbar',

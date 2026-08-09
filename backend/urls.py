@@ -68,9 +68,6 @@ urlpatterns += [
 
 
 
-    path('api/requests-logs/', include('requests_logs.urls')),
-
-
     path('api/reports/', include('reports.urls')),
     
     

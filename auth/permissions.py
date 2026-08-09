@@ -1,7 +1,5 @@
 from rest_framework.permissions import BasePermission
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from requests_logs.models import RequestLog
-from auth.utilities import JWTUtilities
 from django.contrib.sessions.models import Session
 from users.models import User
 
