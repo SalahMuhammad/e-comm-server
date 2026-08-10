@@ -4,6 +4,9 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+/request_logs/*
+/request_logs
+request_logs
 pnpm-debug.log*
 lerna-debug.log*
 *.sql
