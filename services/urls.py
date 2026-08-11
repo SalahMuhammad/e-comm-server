@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import MediaBrowser, CreateDbBackup, CreateItemsAsXLSX, RestoreDbBackup, BackupConfigView, ConfigurationRetrieveUpdateAPIView
-
+from .views import MediaBrowser, CreateDbBackup, CreateItemsAsXLSX, RestoreDbBackup, BackupConfigView, ConfigurationRetrieveUpdateAPIView#, RequestLogManagerView
+from services.my_views.RequestLogManagerView import RequestLogManagerView
 
 
 urlpatterns = [
@@ -16,4 +16,11 @@ urlpatterns = [
         {'___view_id': 'services_configuration'},
         name="app-configuration",
     ),
+
+
+
+    path('logs/', RequestLogManagerView.as_view(), name='request-log-list'),
+    
+    # Retrieve single file content or Delete a specific file (e.g., /api/logs/post/salah_2026-03-30_...json/)
+    path('logs/<str:method>/<str:filename>/', RequestLogManagerView.as_view(), name='request-log-detail'),
 ]
