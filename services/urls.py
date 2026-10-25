@@ -1,9 +1,15 @@
 from django.urls import path
 from .views import MediaBrowser, CreateDbBackup, CreateItemsAsXLSX, RestoreDbBackup, BackupConfigView, ConfigurationRetrieveUpdateAPIView#, RequestLogManagerView
 from services.my_views.RequestLogManagerView import RequestLogManagerView
+from services.my_views.ItemInventorySummaryAPIView import ItemInventorySummaryAPIView
+from services.my_views.ItemInventorySummaryAPIViewFromCSV.InventorySummaryAPIView import InventorySummaryAPIView, InventoryDetailAPIView
 
 
 urlpatterns = [
+    path('inventory-summary/', ItemInventorySummaryAPIView.as_view(), name='inventory-summary'),
+    path('inventory-summary-from-csvs/', InventorySummaryAPIView.as_view(), name='inventory-summary'),
+    path('inventory/detailed/<path:safe_item_name>/', InventoryDetailAPIView.as_view(), name='inventory-detail-api'),
+
 	path('media-browser/', MediaBrowser().as_view()),
     path('create-db-backup/', CreateDbBackup().as_view()),
     path('restore-db-backup/', RestoreDbBackup().as_view()),
