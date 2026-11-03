@@ -4,7 +4,7 @@ from common.encoder import MixedRadixEncoder
 from common.services.MultySubModelSerializerHandler import WritableMultipleNestedSubmodelsMixin
 from common.services.NumberValidator import NumberValidator
 from common.services.customeConfigurationHandler import append_value_if_user_has_no_permission_to_field, hideFieldsConfigBased
-from common.utility.audit_info_dateformatter import audit_info_dateformatter
+from common.serializers.utils.audit_info_dateformatter import audit_info_dateformatter
 from items.services.validate_items_stock import ValidateItemsStock
 
 from django.db import transaction
