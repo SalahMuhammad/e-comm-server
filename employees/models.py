@@ -1,5 +1,5 @@
 from django.db import models
-from common.models import UpdatedCreatedBy
+from common.modelsDIR.audit_fields import UpdatedCreatedBy
 
 # Create your models here.
 class Employee(UpdatedCreatedBy):

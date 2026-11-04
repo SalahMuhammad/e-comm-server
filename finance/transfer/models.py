@@ -1,5 +1,5 @@
 from django.db import models, transaction
-from common.models import UpdatedCreatedByV2
+from common.modelsDIR.audit_fields import UpdatedCreatedByV2
 from finance.vault_and_methods.models import BusinessAccount
 from django.core.validators import MinValueValidator
 from datetime import date

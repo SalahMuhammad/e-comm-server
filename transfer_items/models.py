@@ -2,7 +2,7 @@ from django.db import models
 from items.models import Items
 from repositories.models import Repositories
 from rest_framework import serializers
-from common.models import UpdatedCreatedBy
+from common.modelsDIR.audit_fields import UpdatedCreatedBy
 
 
 class Transfer(UpdatedCreatedBy):
