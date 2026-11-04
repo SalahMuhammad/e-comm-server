@@ -281,7 +281,7 @@ class DamagedItemsFilter(filters.FilterSet):
 		fields = ['item__name', 'owner__name', 'repository__name', 'notes']
 
 class DamagedItemsViewSet(viewsets.ModelViewSet):
-	queryset = DamagedItems.objects.select_related(
+	queryset = DamagedItems.active_objects.select_related(
 		'repository',
 		'by',
 		'owner',

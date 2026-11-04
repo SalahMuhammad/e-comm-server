@@ -349,7 +349,7 @@ class ItemMovementService:
         """Get sales refund movements."""
         from items.models import DamagedItems
 
-        queryset = DamagedItems.objects.select_related(
+        queryset = DamagedItems.active_objects.select_related(
             'owner',
         ).filter(Q(item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)
