@@ -6,6 +6,8 @@ from rest_framework.exceptions import ValidationError
 from common.modelsDIR.AbstractAuditClasses import UpdatedCreatedBy
 import os
 from django.utils.timezone import now
+from common.modelsDIR.AbstractYearClosure import YearClosureUtilClass
+
 
 
 class Types(UpdatedCreatedBy):
@@ -17,6 +19,7 @@ class Types(UpdatedCreatedBy):
 
 	class Meta:
 		ordering = ['name', '-created_at']
+
 
 
 class Items(UpdatedCreatedBy):
@@ -53,6 +56,7 @@ class Items(UpdatedCreatedBy):
 
 	class Meta:
 		ordering = ['name', '-created_at']
+
 
 
 class Images(models.Model):
@@ -116,7 +120,7 @@ class Barcode(models.Model):
 		]
 
 
-class InitialStock(UpdatedCreatedBy):
+class InitialStock(UpdatedCreatedBy, YearClosureUtilClass):
 	item = models.ForeignKey(Items, related_name='initial_stock', on_delete=models.CASCADE)
 	repository = models.ForeignKey(Repositories, on_delete=models.PROTECT)
 	quantity = models.DecimalField(max_digits=10, decimal_places=2)
@@ -128,7 +132,7 @@ class InitialStock(UpdatedCreatedBy):
 		return f'item: {self.item.name}, repository: {self.repository.name}, quantity: {self.quantity}'
 
 
-class DamagedItems(UpdatedCreatedBy):
+class DamagedItems(UpdatedCreatedBy, YearClosureUtilClass):
 	item = models.ForeignKey(Items, related_name='damaged_items', on_delete=models.CASCADE)
 	owner = models.ForeignKey('buyer_supplier_party.Party', on_delete=models.PROTECT, null=True, blank=True)
 	repository = models.ForeignKey(Repositories, on_delete=models.PROTECT)
@@ -176,7 +180,7 @@ class DamagedItems(UpdatedCreatedBy):
 		ordering = ['-date']
 
 
-class ItemPriceLog(UpdatedCreatedBy):
+class ItemPriceLog(UpdatedCreatedBy, YearClosureUtilClass):
 	item = models.ForeignKey(Items, related_name='item_price_log', on_delete=models.CASCADE)
 	price = models.DecimalField(max_digits=20, decimal_places=2)
 	date = models.DateField(default=now)
