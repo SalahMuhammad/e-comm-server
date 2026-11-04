@@ -1,7 +1,7 @@
 from django.db import models
 from rest_framework.serializers import ValidationError
-from common.modelsDIR.year_closeure import YearCloseureUtilClass
-from common.modelsDIR.audit_fields import UpdatedCreatedBy
+from common.modelsDIR.AbstractYearClosure import YearClosureUtilClass
+from common.modelsDIR.AbstractAuditClasses import UpdatedCreatedBy
 
 
 
@@ -19,7 +19,7 @@ class InvoiceStatus(models.IntegerChoices):
 
 
 
-class AbstractInvoice(UpdatedCreatedBy, YearCloseureUtilClass):
+class AbstractInvoice(UpdatedCreatedBy, YearClosureUtilClass):
     owner = models.ForeignKey("buyer_supplier_party.Party", on_delete=models.PROTECT, null=True, blank=True)
     issue_date = models.DateField()
     due_date = models.DateField()
