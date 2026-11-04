@@ -1,9 +1,6 @@
 from django.db import models
-# from django.contrib.contenttypes.fields import GenericForeignKey
-# from django.contrib.contenttypes.models import ContentType
-from common.models import AbstractInvoice, AbstractInvoiceItems
+from common.modelsDIR.AbstractInvoice import AbstractInvoice, AbstractInvoiceItems
 from invoices.sales.models import invoice_status_handler
-# from django.core.exceptions import ValidationError
 
 
 
@@ -17,6 +14,7 @@ class PurchaseInvoices(AbstractInvoice):
         
         super().full_clean()
         super().save(*args, **kwargs)
+
 
 
 class PurchaseInvoiceItems(AbstractInvoiceItems):

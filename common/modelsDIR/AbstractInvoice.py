@@ -1,34 +1,7 @@
 from django.db import models
 from rest_framework.serializers import ValidationError
-from users.models import User
-
-
-class UpdatedCreatedBy(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    by = models.ForeignKey(User, on_delete=models.PROTECT)
-
-    # @property
-    # def alive(self):
-    #     return (now() - updated_at).days < 7
-
-    class Meta:
-        abstract = True
-
-
-class UpdatedCreatedByV2(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
-    last_updated_at = models.DateTimeField(auto_now=True)
-    last_updated_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name='%(class)s_last_updated_by')
-
-
-    # @property
-    # def alive(self):
-    #     return (now() - updated_at).days < 7
-
-    class Meta:
-        abstract = True
+from common.modelsDIR.year_closeure import YearCloseureUtilClass
+from common.modelsDIR.audit_fields import UpdatedCreatedBy
 
 
 
@@ -45,7 +18,8 @@ class InvoiceStatus(models.IntegerChoices):
     REFUNDED = 10, "Refunded"
 
 
-class AbstractInvoice(UpdatedCreatedBy):
+
+class AbstractInvoice(UpdatedCreatedBy, YearCloseureUtilClass):
     owner = models.ForeignKey("buyer_supplier_party.Party", on_delete=models.PROTECT, null=True, blank=True)
     issue_date = models.DateField()
     due_date = models.DateField()
@@ -86,6 +60,7 @@ class AbstractInvoice(UpdatedCreatedBy):
         ordering = ['-issue_date', '-created_at']
 
 
+
 class AbstractInvoiceItems(models.Model):
     item = models.ForeignKey('items.Items', on_delete=models.PROTECT)
     repository = models.ForeignKey('repositories.Repositories', on_delete=models.PROTECT)
@@ -114,6 +89,7 @@ class AbstractInvoiceItems(models.Model):
         
         if self.total < 0:
             raise ValidationError({"detail": ["Total cannot be negative."]})
+
 
 
     class Meta:

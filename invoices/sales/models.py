@@ -1,6 +1,6 @@
 from decimal import Decimal
 from django.db import models
-from common.models import AbstractInvoice, AbstractInvoiceItems
+from common.modelsDIR.AbstractInvoice import AbstractInvoice, AbstractInvoiceItems
 
 
 
