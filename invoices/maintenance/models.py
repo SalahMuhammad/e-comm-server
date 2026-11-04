@@ -1,5 +1,5 @@
 from django.db import models
-from common.modelsDIR.audit_fields import UpdatedCreatedByV2
+from common.modelsDIR.AbstractAuditClasses import UpdatedCreatedByV2
 from invoices.buyer_supplier_party.models import Party
 from items.models import Items
 from datetime import date

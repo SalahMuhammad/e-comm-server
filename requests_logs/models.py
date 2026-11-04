@@ -1,5 +1,5 @@
 from django.db import models
-from common.modelsDIR.audit_fields import UpdatedCreatedBy
+from common.modelsDIR.AbstractAuditClasses import UpdatedCreatedBy
 
 
 class RequestLog(UpdatedCreatedBy):

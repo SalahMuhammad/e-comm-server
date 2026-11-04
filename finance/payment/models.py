@@ -1,5 +1,5 @@
 from django.db import models, transaction
-from common.modelsDIR.audit_fields import UpdatedCreatedByV2
+from common.modelsDIR.AbstractAuditClasses import UpdatedCreatedByV2
 from finance.vault_and_methods.models import BusinessAccount
 from invoices.buyer_supplier_party.models import Party
 from invoices.sales.models import SalesInvoice

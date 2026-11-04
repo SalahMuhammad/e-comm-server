@@ -1,5 +1,5 @@
 from django.db import models
-from common.modelsDIR.audit_fields import UpdatedCreatedBy
+from common.modelsDIR.AbstractAuditClasses import UpdatedCreatedBy
 from invoices.buyer_supplier_party.models import Party
 from repositories.models import Repositories
 from rest_framework.exceptions import ValidationError

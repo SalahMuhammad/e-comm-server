@@ -3,7 +3,7 @@ from repositories.models import Repositories
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 # from django.core.exceptions import ValidationError
-from common.modelsDIR.audit_fields import UpdatedCreatedBy
+from common.modelsDIR.AbstractAuditClasses import UpdatedCreatedBy
 import os
 from django.utils.timezone import now
 
