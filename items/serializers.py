@@ -174,13 +174,22 @@ class ItemsSerializer(WritableMultipleNestedSubmodelsMixin, serializers.ModelSer
 	images = ImagesSerializer(many=True, required=False)
 	stock = StockSerializer(many=True, read_only=True)
 	barcodes = BarcodeSerializer(many=True, required=False)
-	item_price_log = PriceLogSerializer(many=True, read_only=True)
+	item_price_log = serializers.SerializerMethodField()
 	_type_name = serializers.ReadOnlyField(source='type.name')
+
 
 
 	class Meta:
 		model = Items
 		fields = '__all__'
+
+
+
+	def get_item_price_log(self, obj):
+		# Pull active logs specifically for this item instance
+		active_logs = obj.item_price_log.model.active_objects.filter(item=obj)
+		return PriceLogSerializer(active_logs, many=True, context=self.context).data
+
 
 	def validate_barcodes_row(self, row, action):
 		err = {}
