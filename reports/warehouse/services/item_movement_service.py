@@ -65,7 +65,7 @@ class ItemMovementService:
         """Get initial stock quantity."""
         from items.models import InitialStock
         
-        queryset = InitialStock.objects.filter(Q(item=self.item) if self.item else Q())
+        queryset = InitialStock.active_objects.filter(Q(item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)
         
         if repository_id:
