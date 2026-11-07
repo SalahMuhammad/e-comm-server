@@ -61,7 +61,7 @@ class AbstractInvoice(UpdatedCreatedBy, YearClosureUtilClass):
 
 
 
-class AbstractInvoiceItems(models.Model):
+class AbstractInvoiceItems(YearClosureUtilClass, models.Model):
     item = models.ForeignKey('items.Items', on_delete=models.PROTECT)
     repository = models.ForeignKey('repositories.Repositories', on_delete=models.PROTECT)
     description = models.CharField(max_length=255, blank=True)
