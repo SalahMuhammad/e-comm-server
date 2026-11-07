@@ -1,6 +1,8 @@
 from django.db import models
 from common.modelsDIR.AbstractAuditClasses import UpdatedCreatedBy
 from django.utils.timezone import now
+from common.modelsDIR.AbstractYearClosure import YearClosureUtilClass
+
 
 
 class Party(UpdatedCreatedBy):
@@ -17,11 +19,13 @@ class Party(UpdatedCreatedBy):
         return self.name 
 
 
-class InitialCreditBalance(UpdatedCreatedBy):
+
+class InitialCreditBalance(UpdatedCreatedBy, YearClosureUtilClass):
     party = models.ForeignKey(Party, on_delete=models.PROTECT)
     amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     date = models.DateField(default=now)
-
+    notes = models.TextField(blank=True)
+    year_closure = models.ForeignKey('year_closure.ClosurePeriod', on_delete=models.CASCADE, null=True, related_name="ycicb")
 
     class Meta:
         ordering = ['created_at']

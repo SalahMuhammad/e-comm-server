@@ -38,7 +38,7 @@ def get_date(obj):
     return None
 
 def getOwnerAccountStatement(owner_id):
-    initial_credit_balance = InitialCreditBalance.objects.filter(party_id=owner_id)
+    initial_credit_balance = InitialCreditBalance.active_objects.filter(party_id=owner_id)
     sales_invs = SalesInvoice.objects.select_related(
         'by', 
         'owner'
