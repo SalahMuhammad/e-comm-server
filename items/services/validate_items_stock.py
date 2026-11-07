@@ -19,7 +19,7 @@ import os, json, datetime, re
 
 class ValidateItemsStock():
 
-	def stock_validation(self, item_ids=None, repository_ids=None, log_mismatches=True, raise_on_negative=False):
+	def stock_validation(self, item_ids=None, repository_ids=None, log_mismatches=True, raise_on_negative=False, option=None):
 		Items = apps.get_model('items', 'Items')
 		Stock = apps.get_model('items', 'Stock')
 
@@ -64,9 +64,9 @@ class ValidateItemsStock():
 			self._get_quantities(ReturnInvoiceItem, extra_filters={'invoice__repository_permit': True})
 		)
 		maintenance_lookup = self._as_lookup(
-            self._get_quantities(TransactionSpareParts, item_field='spare_part_id', extra_filters={'maintenance__maintenance_date__isnull': False}),
+			self._get_quantities(TransactionSpareParts, item_field='spare_part_id', extra_filters={'maintenance__maintenance_date__isnull': False}),
 			item_field='spare_part_id'
-        )
+		)
 		damaged_lookup = self._as_lookup(
 			self._get_quantities(apps.get_model('items', 'DamagedItems'))
 		)
@@ -101,6 +101,8 @@ class ValidateItemsStock():
 
 		to_update, to_create, mismatches, negative = [], [], [], []
 
+		obj = {}
+
 		for item in items:
 			for repo in repositories:
 				key = (item.id, repo.id)
@@ -124,6 +126,8 @@ class ValidateItemsStock():
 
 				if item.id in ore_item_ids:
 					exact_qty -= used_lookup.get(key, 0)
+
+				obj[(item.id, repo.id)] = exact_qty
 
 				stock = existing_stocks.get(key)
 				if stock is None:
@@ -163,6 +167,9 @@ class ValidateItemsStock():
 
 		if log_mismatches and mismatches:
 			self._write_mismatch_files(mismatches)
+
+		if option == 1:
+			return obj
 
 		return {
 			'checked': len(items) * len(repositories),
