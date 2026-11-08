@@ -1,14 +1,12 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 # models
-from items.models import Items
 from .models import PurchaseInvoices
 from django.db import transaction
 # 
 from .serializers import InvoiceSerializer
 from items.services.validate_items_stock import ValidateItemsStock
 from common.views import AbstractInvoiceDetailView, AbstractInvoiceListCreateView
-from common.utilities import adjust_stock
 # 
 from rest_framework.decorators import api_view
 # django filters
@@ -39,7 +37,7 @@ def toggle_repository_permit(request, *args, **kwargs):
 	})
 
 class ListCreateView(AbstractInvoiceListCreateView):
-	queryset = PurchaseInvoices.objects.select_related(
+	queryset = PurchaseInvoices.active_objects.select_related(
 		'by', 
 		'owner', 
 	).prefetch_related(
@@ -55,7 +53,7 @@ class ListCreateView(AbstractInvoiceListCreateView):
 
 
 class DetailView(AbstractInvoiceDetailView):
-	queryset = PurchaseInvoices.objects.select_related(
+	queryset = PurchaseInvoices.active_objects.select_related(
 		'by', 
 		'owner', 
 	).prefetch_related(
@@ -65,4 +63,3 @@ class DetailView(AbstractInvoiceDetailView):
 	serializer_class = InvoiceSerializer
 	adjust_stock_sign = 1
 	items_relation_name = 'p_invoice_items'
-

@@ -12,7 +12,7 @@ class PurchaseInvoices(AbstractInvoice):
         self.status = res[0]
         self.remaining_balance = res[1]
         
-        super().full_clean()
+        # super().full_clean() # cleaned from year-closure
         super().save(*args, **kwargs)
 
 
@@ -25,5 +25,5 @@ class PurchaseInvoiceItems(AbstractInvoiceItems):
         return f"{self.item.name} - {self.quantity} @ {self.unit_price}"
     
     def save(self, *args, **kwargs):
-        super().full_clean()
+        # super().full_clean() # cleaned from year-closure
         super().save(*args, **kwargs)
