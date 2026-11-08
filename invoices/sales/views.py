@@ -59,7 +59,7 @@ class SalesAndRefundTotals(generics.ListAPIView):
 			raise Exception(f'SalesAndRefundTotals() issue: {e}')
 
 class ListCreateView(AbstractInvoiceListCreateView):
-	queryset = SalesInvoice.objects.select_related(
+	queryset = SalesInvoice.active_objects.select_related(
 		'by', 
 		'owner'
 	).prefetch_related(
@@ -75,7 +75,7 @@ class ListCreateView(AbstractInvoiceListCreateView):
 
 
 class DetailView(AbstractInvoiceDetailView):
-	queryset = SalesInvoice.objects.select_related(
+	queryset = SalesInvoice.active_objects.select_related(
 		'by', 
 		'owner'
 	).prefetch_related(
@@ -88,7 +88,7 @@ class DetailView(AbstractInvoiceDetailView):
 
 
 class ReturnListCreateView(AbstractInvoiceListCreateView):
-	queryset = ReturnInvoice.objects.select_related(
+	queryset = ReturnInvoice.active_objects.select_related(
 		'by', 
 		'owner', 
 		'original_invoice'
@@ -109,7 +109,7 @@ class RefundDetailView(
 	mixins.RetrieveModelMixin,
 	generics.GenericAPIView
 ):
-	queryset = ReturnInvoice.objects.select_related(
+	queryset = ReturnInvoice.active_objects.select_related(
 		'by', 
 		'owner', 
 		'original_invoice'
