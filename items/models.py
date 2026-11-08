@@ -126,6 +126,7 @@ class InitialStock(UpdatedCreatedBy, YearClosureUtilClass):
 	quantity = models.DecimalField(max_digits=10, decimal_places=2)
 	date = models.DateField(default=now)
 	notes = models.TextField(blank=True)
+	year_closure = models.ForeignKey('year_closure.ClosurePeriod', on_delete=models.CASCADE, null=True, related_name="ycis")
 
 
 	def __str__(self):
