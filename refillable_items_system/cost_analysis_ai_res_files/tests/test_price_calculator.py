@@ -22,7 +22,7 @@ from items.models import Items, ItemPriceLog, Types
 from employees.models import Employee
 from repositories.models import Repositories
 from invoices.buyer_supplier_party.models import Party
-from common.models import User
+from common.modelsDIR.AbstractInvoice import User
 
 
 class RefillableItemPriceCalculatorTestCase(TestCase):

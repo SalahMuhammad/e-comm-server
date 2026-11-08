@@ -46,6 +46,7 @@ def toggle_repository_permit(request, *args, **kwargs):
 	})
 
 class SalesAndRefundTotals(generics.ListAPIView):
+	queryset = True
 	permission_classes = (ConfigurationBasedCustomeViewsPermission, )
 	def get(self, request, *args, **kwargs):
 		try:
