@@ -465,10 +465,10 @@ def get_cans_data_list(owner_id):
     empty = items.values_list('item')
     filled = items.values_list('transform')
 
-    initial_stock_client_has = RefillableItemsInitialStockClientHas.objects.filter(owner_id=owner_id, item_id__in=empty)
-    sales_invs = SalesInvoice.objects.filter(owner_id=owner_id, repository_permit=True)
-    refund_sales_invs = ReturnInvoice.objects.filter(owner_id=owner_id, repository_permit=True)
-    refund = RefundedRefillableItem.objects.filter(owner_id=owner_id)
+    initial_stock_client_has = RefillableItemsInitialStockClientHas.acttive_objects.filter(owner_id=owner_id, item_id__in=empty)
+    sales_invs = SalesInvoice.acttive_objects.filter(owner_id=owner_id, repository_permit=True)
+    refund_sales_invs = ReturnInvoice.acttive_objects.filter(owner_id=owner_id, repository_permit=True)
+    refund = RefundedRefillableItem.acttive_objects.filter(owner_id=owner_id)
 
     result_list = sorted(
         chain(sales_invs, refund_sales_invs, refund, initial_stock_client_has),

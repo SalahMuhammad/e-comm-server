@@ -71,7 +71,7 @@ class Command(BaseCommand):
             )
 
         # Get refilled items
-        queryset = RefilledItem.objects.select_related(
+        queryset = RefilledItem.active_objects.select_related(
             'refilled_item',
             'used_item',
             'used_item__item',

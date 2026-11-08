@@ -5,6 +5,8 @@ from repositories.models import Repositories
 from rest_framework.exceptions import ValidationError
 from items.models import Items
 from employees.models import Employee
+from common.modelsDIR.AbstractYearClosure import YearClosureUtilClass
+
 
 
 # Create your models here.
@@ -24,7 +26,7 @@ class OreItem(UpdatedCreatedBy):
         return self.item.name
 
 
-class RefillableItemsInitialStockClientHas(UpdatedCreatedBy):
+class RefillableItemsInitialStockClientHas(UpdatedCreatedBy, YearClosureUtilClass):
     item = models.ForeignKey(Items, related_name='refillable_initial_stock', on_delete=models.CASCADE)
     owner = models.ForeignKey(Party, related_name='refillable_initial_stock', on_delete=models.CASCADE)
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
@@ -52,7 +54,7 @@ class RefillableItemsInitialStockClientHas(UpdatedCreatedBy):
         ordering = ['-date', '-created_at']
 
 
-class RefundedRefillableItem(UpdatedCreatedBy):
+class RefundedRefillableItem(UpdatedCreatedBy, YearClosureUtilClass):
     item = models.ForeignKey(Items, on_delete=models.CASCADE)
     owner = models.ForeignKey(Party, on_delete=models.CASCADE)
     repository = models.ForeignKey(Repositories, on_delete=models.CASCADE)
@@ -86,7 +88,7 @@ class RefundedRefillableItem(UpdatedCreatedBy):
         ordering = ['-date', '-created_at']
 
 
-class RefilledItem(UpdatedCreatedBy):
+class RefilledItem(UpdatedCreatedBy, YearClosureUtilClass):
     refilled_item = models.ForeignKey(Items, on_delete=models.CASCADE)
     used_item = models.ForeignKey(OreItem, on_delete=models.CASCADE, related_name='used_item')
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)

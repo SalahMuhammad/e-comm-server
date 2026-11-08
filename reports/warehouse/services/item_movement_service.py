@@ -258,7 +258,7 @@ class ItemMovementService:
         """Get sales refund movements."""
         from refillable_items_system.models import RefundedRefillableItem
         
-        queryset = RefundedRefillableItem.objects.select_related(
+        queryset = RefundedRefillableItem.active_objects.select_related(
             'owner',
         ).filter(Q(item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)
@@ -289,7 +289,7 @@ class ItemMovementService:
         """Get sales refund movements."""
         from refillable_items_system.models import RefilledItem
         # has an issue you should solve
-        queryset = RefilledItem.objects.select_related(
+        queryset = RefilledItem.active_objects.select_related(
             'employee',
         ).filter(Q(refilled_item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)
@@ -319,7 +319,7 @@ class ItemMovementService:
         """Get sales refund movements."""
         from refillable_items_system.models import RefilledItem
 
-        queryset = RefilledItem.objects.select_related(
+        queryset = RefilledItem.active_objects.select_related(
             'employee',
         ).filter(Q(used_item__item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)

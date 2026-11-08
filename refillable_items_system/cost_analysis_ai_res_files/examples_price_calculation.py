@@ -12,7 +12,7 @@ from refillable_items_system.services.analysis_item_unit_cost import RefillableI
 # Example 1: Calculate price for a single RefilledItem
 def example_single_refilled_item():
     """Calculate the price of a single refilled item"""
-    refilled_item = RefilledItem.objects.first()
+    refilled_item = RefilledItem.active_objects.first()
     
     if refilled_item:
         # Get the calculated price using the model method
@@ -36,7 +36,7 @@ def example_batch_calculation():
     
     # Get refilled items from last 30 days
     start_date = timezone.now().date() - timedelta(days=30)
-    refilled_items = RefilledItem.objects.filter(date__gte=start_date)
+    refilled_items = RefilledItem.active_objects.filter(date__gte=start_date)
     
     results = RefillableItemPriceCalculator.calculate_batch_refilled_prices(
         refilled_items
@@ -83,7 +83,7 @@ def example_api_serialization():
     """
     from refillable_items_system.serializers import RefilledItemSerializer
     
-    refilled_item = RefilledItem.objects.first()
+    refilled_item = RefilledItem.active_objects.first()
     
     if refilled_item:
         serializer = RefilledItemSerializer(refilled_item)
@@ -100,7 +100,7 @@ def example_api_serialization():
 # Example 5: Filtering refilled items by price range
 def example_filter_by_price():
     """Filter refilled items based on calculated price"""
-    refilled_items = RefilledItem.objects.all()[:10]  # Get first 10
+    refilled_items = RefilledItem.active_objects.all()[:10]  # Get first 10
     
     expensive_items = []
     for item in refilled_items:
