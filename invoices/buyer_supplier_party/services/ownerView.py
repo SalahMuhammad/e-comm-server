@@ -15,7 +15,7 @@ import json
 def ownerView(datee, client_id):
     credit = calculate_owner_credit_balance(client_id, datee)
     refillable_items = calculateRefillableItemsClientHas(client_id)
-    paid = Payment2.objects.filter(date__range=[datee, datee], status=2, owner_id=client_id).aggregate(total=Sum('amount'),)['total'] or 0
+    paid = Payment2.active_objects.filter(date__range=[datee, datee], status=2, owner_id=client_id).aggregate(total=Sum('amount'),)['total'] or 0
     owner = Party.objects.filter(id=client_id).first()
     
     owner_detail_json = None

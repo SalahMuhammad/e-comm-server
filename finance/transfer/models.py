@@ -4,10 +4,11 @@ from finance.vault_and_methods.models import BusinessAccount
 from django.core.validators import MinValueValidator
 from datetime import date
 from rest_framework.exceptions import ValidationError
+from common.modelsDIR.AbstractYearClosure import YearClosureUtilClass
 
 
 
-class MoneyTransfer(UpdatedCreatedByV2):
+class MoneyTransfer(UpdatedCreatedByV2, YearClosureUtilClass):
 	"""Transfer between vaults"""
 	# transaction = models.OneToOneField(Transaction, on_delete=models.CASCADE, related_name='transfer_details')
 	from_vault = models.ForeignKey(BusinessAccount, on_delete=models.CASCADE, related_name='outgoing_transfers')

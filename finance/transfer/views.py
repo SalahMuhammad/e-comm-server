@@ -18,7 +18,7 @@ class ListCreateView(
 	mixins.CreateModelMixin,
 	GenericAPIView,
 ):
-	queryset = MoneyTransfer.objects.select_related(
+	queryset = MoneyTransfer.active_objects.select_related(
 		'created_by',
 		'last_updated_by',
 		'from_vault',
@@ -49,7 +49,7 @@ class DetailView(
 	mixins.DestroyModelMixin,
 	GenericAPIView
 ):
-	queryset = MoneyTransfer.objects.select_related(
+	queryset = MoneyTransfer.active_objects.select_related(
 		'created_by',
 		'last_updated_by',
 		'from_vault',

@@ -18,7 +18,7 @@ class ExpenseListCreateView(
 	CreateModelMixin,
 	GenericAPIView
 ):
-	queryset = Expense.objects.select_related(
+	queryset = Expense.active_objects.select_related(
 		'category',
 		'business_account',
 		'business_account__account_type',
@@ -47,7 +47,7 @@ class ExpenseDetailView(
 	DestroyModelMixin,
 	GenericAPIView
 ):
-	queryset = Expense.objects.select_related(
+	queryset = Expense.active_objects.select_related(
 		'category',
 		'business_account',
 		'business_account__account_type',

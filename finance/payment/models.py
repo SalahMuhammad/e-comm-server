@@ -10,10 +10,11 @@ import uuid
 from rest_framework.exceptions import ValidationError
 from datetime import date
 from decimal import Decimal
+from common.modelsDIR.AbstractYearClosure import YearClosureUtilClass
 
 
 
-class AbstractTransaction(UpdatedCreatedByV2):
+class AbstractTransaction(UpdatedCreatedByV2, YearClosureUtilClass):
 	"""
 	Payment2
 	---------

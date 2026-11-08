@@ -39,7 +39,7 @@ def get_date(obj):
 
 def getOwnerAccountStatement(owner_id):
     initial_credit_balance = InitialCreditBalance.active_objects.filter(party_id=owner_id)
-    sales_invs = SalesInvoice.objects.select_related(
+    sales_invs = SalesInvoice.active_objects.select_related(
         'by', 
         'owner'
     ).filter(
@@ -49,7 +49,7 @@ def getOwnerAccountStatement(owner_id):
         's_invoice_items__item', 
 		's_invoice_items__repository'
     )
-    return_sales_invs = ReturnSalesInvoice.objects.select_related(
+    return_sales_invs = ReturnSalesInvoice.active_objects.select_related(
 		'by', 
 		'owner', 
 		'original_invoice',
@@ -60,14 +60,14 @@ def getOwnerAccountStatement(owner_id):
 		's_invoice_items__item', 
 		's_invoice_items__repository'
 	)
-    maintenances = Maintenance.objects.select_related(
+    maintenances = Maintenance.active_objects.select_related(
         'client', 'created_by', 'last_updated_by'
     ).filter(
         client_id=owner_id,
         maintenance_date__isnull=False,
         date_out__isnull=False
     ).prefetch_related('parts', 'parts__spare_part')
-    purcahses_invs = PurchaseInvoices.objects.select_related(
+    purcahses_invs = PurchaseInvoices.active_objects.select_related(
         'by', 
         'owner'
     ).filter(
@@ -77,7 +77,7 @@ def getOwnerAccountStatement(owner_id):
         'p_invoice_items__item', 
 		'p_invoice_items__repository'
     )
-    payments = Payment2.objects.select_related(
+    payments = Payment2.active_objects.select_related(
         'owner',
         'created_by',
         'last_updated_by',
@@ -85,7 +85,7 @@ def getOwnerAccountStatement(owner_id):
         'business_account__account_type',
         'sale'
     ).filter(owner_id=owner_id)
-    revers_payments = ReversePayment2.objects.select_related(
+    revers_payments = ReversePayment2.active_objects.select_related(
         'owner',
         'created_by',
         'last_updated_by',
@@ -93,7 +93,7 @@ def getOwnerAccountStatement(owner_id):
         'business_account__account_type',
         'purchase'
     ).filter(owner_id=owner_id)
-    debt_settlement = DebtSettlement.objects.select_related(
+    debt_settlement = DebtSettlement.active_objects.select_related(
         'owner',
         'by',
     ).filter(

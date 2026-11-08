@@ -1,5 +1,6 @@
 from django.db import models, transaction
 from common.modelsDIR.AbstractAuditClasses import UpdatedCreatedByV2
+from common.modelsDIR.AbstractYearClosure import YearClosureUtilClass
 # 
 from finance.vault_and_methods.models import BusinessAccount
 from django.core.validators import MinValueValidator
@@ -15,7 +16,7 @@ class Category(UpdatedCreatedByV2):
 		return f'{self.name} ({self.description})'
 
 
-class Expense(UpdatedCreatedByV2):
+class Expense(UpdatedCreatedByV2, YearClosureUtilClass):
 	status_choices = (
 		('1', 'Pending'),
 		('2', 'Confirmed'),

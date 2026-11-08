@@ -20,7 +20,7 @@ class ListCreateView(
 	mixins.CreateModelMixin,
 	GenericAPIView,
 ):
-	queryset = ReversePayment2.objects.select_related(
+	queryset = ReversePayment2.active_objects.select_related(
 		'owner',
 		'created_by',
 		'last_updated_by',
@@ -60,7 +60,7 @@ class DetailView(
 	mixins.DestroyModelMixin,
 	GenericAPIView
 ):
-	queryset = ReversePayment2.objects.select_related(
+	queryset = ReversePayment2.active_objects.select_related(
 		'owner',
 		'created_by',
 		'last_updated_by',

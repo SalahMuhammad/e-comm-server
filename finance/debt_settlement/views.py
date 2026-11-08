@@ -14,7 +14,7 @@ class ListCreateDebtSettlementView(
     CreateModelMixin,
     GenericAPIView
 ):
-    queryset = DebtSettlement.objects.select_related(
+    queryset = DebtSettlement.active_objects.select_related(
         'owner',
         'by',
     ).all()
@@ -36,7 +36,7 @@ class DetailDebtSettlementView(
     DestroyModelMixin,
     GenericAPIView
 ):
-    queryset = DebtSettlement.objects.select_related(
+    queryset = DebtSettlement.active_objects.select_related(
         'owner',
         'by',
     ).all()

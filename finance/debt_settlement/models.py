@@ -1,9 +1,11 @@
 from django.db import models
 from common.modelsDIR.AbstractAuditClasses import UpdatedCreatedBy
 from invoices.buyer_supplier_party.models import Party
+from common.modelsDIR.AbstractYearClosure import YearClosureUtilClass
 
 
-class DebtSettlement(UpdatedCreatedBy):
+
+class DebtSettlement(UpdatedCreatedBy, YearClosureUtilClass):
     status = (
         ('not_approved', 'not_approved'),
         ('approved', 'approved'),

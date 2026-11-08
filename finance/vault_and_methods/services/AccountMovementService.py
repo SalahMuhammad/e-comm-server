@@ -60,7 +60,7 @@ class AccountMovementService:
             status_filter = Q(status__in=[2, 4])
         
         # 1. Collect Payments (Money IN)
-        payments = Payment2.objects.filter(
+        payments = Payment2.active_objects.filter(
             account_filter & date_filter & status_filter
         ).select_related('business_account', 'owner', 'sale').values(
             'id',
@@ -93,7 +93,7 @@ class AccountMovementService:
             })
         
 
-        reverse_payments = ReversePayment2.objects.filter(
+        reverse_payments = ReversePayment2.active_objects.filter(
             account_filter & date_filter & status_filter
         ).select_related('business_account', 'owner', 'purchase').values(
             'id',
@@ -126,7 +126,7 @@ class AccountMovementService:
             })
         
 
-        expenses = Expense.objects.filter(
+        expenses = Expense.active_objects.filter(
             account_filter & date_filter & status_filter
         ).select_related('business_account', 'category').values(
             'id',
@@ -163,7 +163,7 @@ class AccountMovementService:
         elif account_ids:
             transfer_out_filter = Q(from_vault_id__in=account_ids)
         
-        transfers_out = MoneyTransfer.objects.filter(
+        transfers_out = MoneyTransfer.active_objects.filter(
             transfer_out_filter & date_filter
         ).select_related('from_vault', 'to_vault').values(
             'id',
@@ -200,7 +200,7 @@ class AccountMovementService:
         elif account_ids:
             transfer_in_filter = Q(to_vault_id__in=account_ids)
         
-        transfers_in = MoneyTransfer.objects.filter(
+        transfers_in = MoneyTransfer.active_objects.filter(
             transfer_in_filter & date_filter
         ).select_related('from_vault', 'to_vault').values(
             'id',

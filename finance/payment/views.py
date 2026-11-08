@@ -20,7 +20,7 @@ from rest_framework.response import Response
 @staff_member_required
 def get_sales_for_owner(request):
 	owner_id = request.GET.get('owner_id')
-	sales = SalesInvoice.objects.filter(owner_id=owner_id).values('id', 'reference', 'total_amount')
+	sales = SalesInvoice.active_objects.filter(owner_id=owner_id).values('id', 'reference', 'total_amount')
 	return JsonResponse(list(sales), safe=False)
 
 
@@ -30,7 +30,7 @@ class ListCreateView(
 	mixins.CreateModelMixin,
 	GenericAPIView,
 ):
-	queryset = Payment2.objects.select_related(
+	queryset = Payment2.active_objects.select_related(
 		'owner',
 		'created_by',
 		'last_updated_by',
@@ -71,7 +71,7 @@ class DetailView(
 	mixins.DestroyModelMixin,
 	GenericAPIView
 ):
-	queryset = Payment2.objects.select_related(
+	queryset = Payment2.active_objects.select_related(
 		'owner',
 		'created_by',
 		'last_updated_by',
