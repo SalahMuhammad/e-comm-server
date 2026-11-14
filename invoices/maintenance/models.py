@@ -5,10 +5,11 @@ from items.models import Items
 from datetime import date
 from decimal import Decimal
 from django.core.validators import MinValueValidator
+from common.modelsDIR.AbstractYearClosure import YearClosureUtilClass
 
 
 
-class Maintenance(UpdatedCreatedByV2):
+class Maintenance(UpdatedCreatedByV2, YearClosureUtilClass):
     client = models.ForeignKey(Party, on_delete=models.PROTECT, related_name='maintenance_transactions')
     serial_number = models.CharField(max_length=100, blank=True)
     item = models.ForeignKey(Items, on_delete=models.PROTECT)
@@ -50,7 +51,7 @@ class Maintenance(UpdatedCreatedByV2):
         ordering = ['-date_in']
 
 
-class TransactionSpareParts(UpdatedCreatedByV2):
+class TransactionSpareParts(UpdatedCreatedByV2, YearClosureUtilClass):
     maintenance = models.ForeignKey(Maintenance, on_delete=models.CASCADE, related_name='parts')
     spare_part = models.ForeignKey(Items, on_delete=models.PROTECT)
     repository = models.ForeignKey('repositories.Repositories', on_delete=models.PROTECT)

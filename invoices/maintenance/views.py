@@ -18,7 +18,7 @@ from django.db import transaction
 
 
 class MaintenanceView(mixins.CreateModelMixin, mixins.ListModelMixin, generics.GenericAPIView):
-	queryset = Maintenance.objects.select_related(
+	queryset = Maintenance.active_objects.select_related(
 		'client', 'item', 'maintained_by', 'created_by', 'last_updated_by'
 	).prefetch_related('parts')
 	metadata_class = CompositeMetadata
@@ -67,7 +67,7 @@ class MaintenanceDetailView(
 	mixins.DestroyModelMixin,
 	generics.GenericAPIView
 ):
-	queryset = Maintenance.objects.select_related(
+	queryset = Maintenance.active_objects.select_related(
 		'client', 'item', 'maintained_by', 'created_by', 'last_updated_by'
 	).prefetch_related('parts')
 	serializer_class = MaintenanceSerializer
