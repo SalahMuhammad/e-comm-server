@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from common.services.customeConfigurationHandler import customeFilters
+from common.views.CustomQuerysetManager import CustomQuerysetManager
 # 
 from .models import Items, Images, Types
 from .serializers import ItemsSerializer, TypesSerializer, DamagedItemsSerializer
@@ -280,13 +281,13 @@ class DamagedItemsFilter(filters.FilterSet):
 		model = DamagedItems
 		fields = ['item__name', 'owner__name', 'repository__name', 'notes']
 
-class DamagedItemsViewSet(viewsets.ModelViewSet):
-	queryset = DamagedItems.active_objects.select_related(
-		'repository',
-		'by',
-		'owner',
-		'item'
-	).all()
+class DamagedItemsViewSet(CustomQuerysetManager, viewsets.ModelViewSet):
+	CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					DamagedItems,
+        "select_related_fields": 	('repository', 'by', 'owner', 'item', ),
+        "prefetch_related_fields":  ()
+    }
+
 	serializer_class = DamagedItemsSerializer
 	
 	# Adding filtering backends

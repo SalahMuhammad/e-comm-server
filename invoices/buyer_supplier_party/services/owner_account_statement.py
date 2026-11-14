@@ -20,6 +20,10 @@ from decimal import Decimal
 from django.db.models import Sum
 # 
 from rest_framework.response import Response
+from common.views.CustomQuerysetManager import CustomQuerysetManager
+
+
+CQM = CustomQuerysetManager()
 
 
 
@@ -38,8 +42,8 @@ def get_date(obj):
     return None
 
 def getOwnerAccountStatement(owner_id):
-    initial_credit_balance = InitialCreditBalance.active_objects.filter(party_id=owner_id)
-    sales_invs = SalesInvoice.active_objects.select_related(
+    initial_credit_balance = CQM.get_manager(InitialCreditBalance).filter(party_id=owner_id)
+    sales_invs = CQM.get_manager(SalesInvoice).select_related(
         'by', 
         'owner'
     ).filter(
@@ -49,7 +53,7 @@ def getOwnerAccountStatement(owner_id):
         's_invoice_items__item', 
 		's_invoice_items__repository'
     )
-    return_sales_invs = ReturnSalesInvoice.active_objects.select_related(
+    return_sales_invs = CQM.get_manager(ReturnSalesInvoice).select_related(
 		'by', 
 		'owner', 
 		'original_invoice',
@@ -60,14 +64,14 @@ def getOwnerAccountStatement(owner_id):
 		's_invoice_items__item', 
 		's_invoice_items__repository'
 	)
-    maintenances = Maintenance.active_objects.select_related(
+    maintenances = CQM.get_manager(Maintenance).select_related(
         'client', 'created_by', 'last_updated_by'
     ).filter(
         client_id=owner_id,
         maintenance_date__isnull=False,
         date_out__isnull=False
     ).prefetch_related('parts', 'parts__spare_part')
-    purcahses_invs = PurchaseInvoices.active_objects.select_related(
+    purcahses_invs = CQM.get_manager(PurchaseInvoices).select_related(
         'by', 
         'owner'
     ).filter(
@@ -77,7 +81,7 @@ def getOwnerAccountStatement(owner_id):
         'p_invoice_items__item', 
 		'p_invoice_items__repository'
     )
-    payments = Payment2.active_objects.select_related(
+    payments = CQM.get_manager(Payment2).select_related(
         'owner',
         'created_by',
         'last_updated_by',
@@ -85,7 +89,7 @@ def getOwnerAccountStatement(owner_id):
         'business_account__account_type',
         'sale'
     ).filter(owner_id=owner_id)
-    revers_payments = ReversePayment2.active_objects.select_related(
+    revers_payments = CQM.get_manager(ReversePayment2).select_related(
         'owner',
         'created_by',
         'last_updated_by',
@@ -93,7 +97,7 @@ def getOwnerAccountStatement(owner_id):
         'business_account__account_type',
         'purchase'
     ).filter(owner_id=owner_id)
-    debt_settlement = DebtSettlement.active_objects.select_related(
+    debt_settlement = CQM.get_manager(DebtSettlement).select_related(
         'owner',
         'by',
     ).filter(

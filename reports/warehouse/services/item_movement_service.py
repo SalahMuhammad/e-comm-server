@@ -4,6 +4,10 @@ from typing import Dict, List, Optional
 from datetime import date
 from django.db.models import Q
 from common.encoder import MixedRadixEncoder
+from common.views.CustomQuerysetManager import CustomQuerysetManager
+
+manager_name = CustomQuerysetManager().get_manager_name()
+def get_manager(obj): return getattr(obj, manager_name)
 
 
 class ItemMovementService:
@@ -65,7 +69,7 @@ class ItemMovementService:
         """Get initial stock quantity."""
         from items.models import InitialStock
         
-        queryset = InitialStock.active_objects.filter(Q(item=self.item) if self.item else Q())
+        queryset = get_manager(InitialStock).filter(Q(item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)
         
         if repository_id:
@@ -138,7 +142,7 @@ class ItemMovementService:
         """Get sales movements."""
         from invoices.sales.models import SalesInvoice, SalesInvoiceItem
                 
-        queryset = SalesInvoice.objects.select_related(
+        queryset = get_manager(SalesInvoice).select_related(
             'owner'
         ).filter(Q(s_invoice_items__item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)
@@ -181,7 +185,7 @@ class ItemMovementService:
         """Get purchase movements."""
         from invoices.purchase.models import PurchaseInvoices, PurchaseInvoiceItems
         
-        queryset = PurchaseInvoices.objects.select_related(
+        queryset = get_manager(PurchaseInvoices).select_related(
             'owner'
         ).filter(Q(p_invoice_items__item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)
@@ -224,7 +228,7 @@ class ItemMovementService:
         """Get sales refund movements."""
         from invoices.sales.models import ReturnInvoice
         
-        queryset = ReturnInvoice.objects.select_related(
+        queryset = get_manager(ReturnInvoice).select_related(
             'owner',
             'original_invoice'
         ).filter(Q(s_invoice_items__item=self.item) if self.item else Q())
@@ -258,7 +262,7 @@ class ItemMovementService:
         """Get sales refund movements."""
         from refillable_items_system.models import RefundedRefillableItem
         
-        queryset = RefundedRefillableItem.active_objects.select_related(
+        queryset = get_manager(RefundedRefillableItem).select_related(
             'owner',
         ).filter(Q(item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)
@@ -289,7 +293,7 @@ class ItemMovementService:
         """Get sales refund movements."""
         from refillable_items_system.models import RefilledItem
         # has an issue you should solve
-        queryset = RefilledItem.active_objects.select_related(
+        queryset = get_manager(RefilledItem).select_related(
             'employee',
         ).filter(Q(refilled_item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)
@@ -319,7 +323,7 @@ class ItemMovementService:
         """Get sales refund movements."""
         from refillable_items_system.models import RefilledItem
 
-        queryset = RefilledItem.active_objects.select_related(
+        queryset = get_manager(RefilledItem).select_related(
             'employee',
         ).filter(Q(used_item__item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)
@@ -349,7 +353,7 @@ class ItemMovementService:
         """Get sales refund movements."""
         from items.models import DamagedItems
 
-        queryset = DamagedItems.active_objects.select_related(
+        queryset = get_manager(DamagedItems).select_related(
             'owner',
         ).filter(Q(item=self.item) if self.item else Q())
         queryset = self._apply_date_filter(queryset, start_date, end_date)

@@ -1,4 +1,4 @@
-from rest_framework import generics, mixins, status
+from rest_framework import generics, status
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -11,16 +11,20 @@ from .serializers import MaintenanceSerializer
 from .services.filters import MaintenanceFilter
 from common.encoder import MixedRadixEncoder
 from django.http import Http404
+from common.views.CustomQuerysetManager import CustomQuerysetManager
 
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db import transaction
 
 
 
-class MaintenanceView(mixins.CreateModelMixin, mixins.ListModelMixin, generics.GenericAPIView):
-	queryset = Maintenance.active_objects.select_related(
-		'client', 'item', 'maintained_by', 'created_by', 'last_updated_by'
-	).prefetch_related('parts')
+class MaintenanceView(CustomQuerysetManager, generics.ListCreateAPIView):
+	CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					Maintenance,
+        "select_related_fields": 	('client', 'item', 'maintained_by', 'created_by', 'last_updated_by', ),
+        "prefetch_related_fields":	('parts', ),
+    }
+
 	metadata_class = CompositeMetadata
 	serializer_class = MaintenanceSerializer
 	# filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -61,15 +65,13 @@ class MaintenanceView(mixins.CreateModelMixin, mixins.ListModelMixin, generics.G
 		return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class MaintenanceDetailView(
-	mixins.RetrieveModelMixin,
-	mixins.UpdateModelMixin,
-	mixins.DestroyModelMixin,
-	generics.GenericAPIView
-):
-	queryset = Maintenance.active_objects.select_related(
-		'client', 'item', 'maintained_by', 'created_by', 'last_updated_by'
-	).prefetch_related('parts')
+class MaintenanceDetailView(CustomQuerysetManager, generics.RetrieveUpdateDestroyAPIView):
+	CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					Maintenance,
+        "select_related_fields": 	('client', 'item', 'maintained_by', 'created_by', 'last_updated_by', ),
+        "prefetch_related_fields":	('parts', ),
+    }
+
 	serializer_class = MaintenanceSerializer
 
 

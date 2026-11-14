@@ -1,23 +1,21 @@
 from django.http import Http404
 from common.encoder import MixedRadixEncoder
+from common.views.CustomQuerysetManager import CustomQuerysetManager
 from .models import DebtSettlement
 from .serializers import DebtSettlementSerializer
-from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
-from rest_framework.generics import GenericAPIView
+from rest_framework import generics
 from django_filters.rest_framework import DjangoFilterBackend
 from .services.filters import DebtSettlementFilter
 
 
 
-class ListCreateDebtSettlementView(
-    ListModelMixin,
-    CreateModelMixin,
-    GenericAPIView
-):
-    queryset = DebtSettlement.active_objects.select_related(
-        'owner',
-        'by',
-    ).all()
+class ListCreateDebtSettlementView(CustomQuerysetManager, generics.ListCreateAPIView, ):
+    CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					DebtSettlement,
+        "select_related_fields": 	('owner', 'by', ),
+        "prefetch_related_fields":	(),
+    }
+
     serializer_class = DebtSettlementSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = DebtSettlementFilter
@@ -30,16 +28,13 @@ class ListCreateDebtSettlementView(
         return self.create(request, *args, **kwargs)
 
 
-class DetailDebtSettlementView(
-    RetrieveModelMixin,
-    UpdateModelMixin,
-    DestroyModelMixin,
-    GenericAPIView
-):
-    queryset = DebtSettlement.active_objects.select_related(
-        'owner',
-        'by',
-    ).all()
+class DetailDebtSettlementView(CustomQuerysetManager, generics.RetrieveUpdateDestroyAPIView, ):
+    CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					DebtSettlement,
+        "select_related_fields": 	('owner', 'by', ),
+        "prefetch_related_fields":	(),
+    }
+
     serializer_class = DebtSettlementSerializer
 
     def get_object(self):

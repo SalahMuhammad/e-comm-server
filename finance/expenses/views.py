@@ -1,9 +1,9 @@
 from django.http import Http404
 # 
 from common.encoder import MixedRadixEncoder
+from common.views.CustomQuerysetManager import CustomQuerysetManager
 # 
-from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
-from rest_framework.generics import GenericAPIView
+from rest_framework import generics
 # 
 from .models import Expense, Category
 from .serializers import ExpensesSerializers, CategorysSerializers
@@ -13,18 +13,13 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 
-class ExpenseListCreateView(
-	ListModelMixin,
-	CreateModelMixin,
-	GenericAPIView
-):
-	queryset = Expense.active_objects.select_related(
-		'category',
-		'business_account',
-		'business_account__account_type',
-		'created_by',
-		'last_updated_by',
-	).all()
+class ExpenseListCreateView(CustomQuerysetManager, generics.ListCreateAPIView):
+	CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					Expense,
+        "select_related_fields": 	('category', 'business_account', 'business_account__account_type', 'created_by', 'last_updated_by', ),
+        "prefetch_related_fields":	(),
+    }
+ 
 	serializer_class = ExpensesSerializers
 	filter_backends = [DjangoFilterBackend]
 	filterset_class = ExpensesFilter
@@ -41,19 +36,13 @@ class ExpenseListCreateView(
 
 
 
-class ExpenseDetailView(
-	RetrieveModelMixin,
-	UpdateModelMixin,
-	DestroyModelMixin,
-	GenericAPIView
-):
-	queryset = Expense.active_objects.select_related(
-		'category',
-		'business_account',
-		'business_account__account_type',
-		'created_by',
-		'last_updated_by',
-	).all()
+class ExpenseDetailView(CustomQuerysetManager, generics.RetrieveUpdateDestroyAPIView):
+	CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					Expense,
+        "select_related_fields": 	('category', 'business_account', 'business_account__account_type', 'created_by', 'last_updated_by', ),
+        "prefetch_related_fields":	(),
+    }
+
 	serializer_class = ExpensesSerializers
 
 	def get_object(self):
@@ -99,11 +88,7 @@ class ExpenseDetailView(
 
 
 
-class CategoryListCreateView(
-	ListModelMixin,
-	CreateModelMixin,
-	GenericAPIView
-):
+class CategoryListCreateView(generics.ListCreateAPIView):
 	queryset = Category.objects.select_related(
 		'created_by',
 		'last_updated_by',
@@ -124,12 +109,7 @@ class CategoryListCreateView(
 
 
 
-class CategoryDetailView(
-	RetrieveModelMixin,
-	UpdateModelMixin,
-	DestroyModelMixin,
-	GenericAPIView
-):
+class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Category.objects.select_related(
 		'created_by',
 		'last_updated_by',

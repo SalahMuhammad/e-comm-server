@@ -1,5 +1,6 @@
 from django.http import Http404
 from common.encoder import MixedRadixEncoder
+from common.views.CustomQuerysetManager import CustomQuerysetManager
 # django filters
 from django_filters.rest_framework import DjangoFilterBackend
 # 
@@ -8,24 +9,17 @@ from .services.filters import TransferFilter
 # models
 from finance.transfer.models import MoneyTransfer
 # 
-from rest_framework import mixins
-from rest_framework.generics import GenericAPIView
+from rest_framework import generics
 
 
 
-class ListCreateView(
-	mixins.ListModelMixin,
-	mixins.CreateModelMixin,
-	GenericAPIView,
-):
-	queryset = MoneyTransfer.active_objects.select_related(
-		'created_by',
-		'last_updated_by',
-		'from_vault',
-		'from_vault__account_type',
-		'to_vault',
-		'to_vault__account_type',
-	).all()
+class ListCreateView(CustomQuerysetManager, generics.ListCreateAPIView):
+	CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					MoneyTransfer,
+        "select_related_fields": 	('created_by', 'last_updated_by', 'from_vault', 'from_vault__account_type', 'to_vault', 'to_vault__account_type', ),
+        "prefetch_related_fields":	(),
+    }
+
 	serializer_class = TransferSerializer
 	# Adding filtering backends
 	filter_backends = [DjangoFilterBackend]
@@ -43,20 +37,13 @@ class ListCreateView(
 
 
 
-class DetailView(
-	mixins.RetrieveModelMixin, 
-	mixins.UpdateModelMixin,
-	mixins.DestroyModelMixin,
-	GenericAPIView
-):
-	queryset = MoneyTransfer.active_objects.select_related(
-		'created_by',
-		'last_updated_by',
-		'from_vault',
-		'from_vault__account_type',
-		'to_vault',
-		'to_vault__account_type',
-	).all()
+class DetailView(CustomQuerysetManager, generics.RetrieveUpdateDestroyAPIView):
+	CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					MoneyTransfer,
+        "select_related_fields": 	('created_by', 'last_updated_by', 'from_vault', 'from_vault__account_type', 'to_vault', 'to_vault__account_type', ),
+        "prefetch_related_fields":	(),
+    }
+
 	serializer_class = TransferSerializer
 
 

@@ -3,12 +3,16 @@ from finance.reverse_payment.models import ReversePayment2
 from finance.expenses.models import Expense
 from finance.transfer.models import MoneyTransfer
 
-from django.db.models import Q, Sum, DecimalField, Value, CharField, F
-from django.db.models.functions import Coalesce
+from django.db.models import Q, F
 from decimal import Decimal
 from datetime import date
 from typing import Optional, List, Dict, Any
 from common.encoder import MixedRadixEncoder
+from common.views.CustomQuerysetManager import CustomQuerysetManager
+
+
+CQM = CustomQuerysetManager()
+
 
 
 class AccountMovementService:
@@ -60,7 +64,7 @@ class AccountMovementService:
             status_filter = Q(status__in=[2, 4])
         
         # 1. Collect Payments (Money IN)
-        payments = Payment2.active_objects.filter(
+        payments = CQM.get_manager(Payment2).filter(
             account_filter & date_filter & status_filter
         ).select_related('business_account', 'owner', 'sale').values(
             'id',
@@ -93,7 +97,7 @@ class AccountMovementService:
             })
         
 
-        reverse_payments = ReversePayment2.active_objects.filter(
+        reverse_payments = CQM.get_manager(ReversePayment2).filter(
             account_filter & date_filter & status_filter
         ).select_related('business_account', 'owner', 'purchase').values(
             'id',
@@ -126,7 +130,7 @@ class AccountMovementService:
             })
         
 
-        expenses = Expense.active_objects.filter(
+        expenses = CQM.get_manager(Expense).filter(
             account_filter & date_filter & status_filter
         ).select_related('business_account', 'category').values(
             'id',
@@ -163,7 +167,7 @@ class AccountMovementService:
         elif account_ids:
             transfer_out_filter = Q(from_vault_id__in=account_ids)
         
-        transfers_out = MoneyTransfer.active_objects.filter(
+        transfers_out = CQM.get_manager(MoneyTransfer).filter(
             transfer_out_filter & date_filter
         ).select_related('from_vault', 'to_vault').values(
             'id',
@@ -200,7 +204,7 @@ class AccountMovementService:
         elif account_ids:
             transfer_in_filter = Q(to_vault_id__in=account_ids)
         
-        transfers_in = MoneyTransfer.active_objects.filter(
+        transfers_in = CQM.get_manager(MoneyTransfer).filter(
             transfer_in_filter & date_filter
         ).select_related('from_vault', 'to_vault').values(
             'id',

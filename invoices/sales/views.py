@@ -58,14 +58,15 @@ class SalesAndRefundTotals(generics.ListAPIView):
 		except Exception as e:
 			raise Exception(f'SalesAndRefundTotals() issue: {e}')
 
+
+
 class ListCreateView(AbstractInvoiceListCreateView):
-	queryset = SalesInvoice.active_objects.select_related(
-		'by', 
-		'owner'
-	).prefetch_related(
-		's_invoice_items__item', 
-		's_invoice_items__repository'
-	)
+	CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					SalesInvoice,
+        "select_related_fields": 	('by', 'owner'),
+        "prefetch_related_fields":	('s_invoice_items__item', 's_invoice_items__repository'),
+    }
+
 	serializer_class = InvoiceSerializer
 	adjust_stock_sign = -1
 	items_relation_name = 's_invoice_items'
@@ -74,28 +75,27 @@ class ListCreateView(AbstractInvoiceListCreateView):
 	filterset_class = SalesInvoiceFilter
 
 
+
 class DetailView(AbstractInvoiceDetailView):
-	queryset = SalesInvoice.active_objects.select_related(
-		'by', 
-		'owner'
-	).prefetch_related(
-		's_invoice_items__item', 
-		's_invoice_items__repository'
-	)
+	CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					SalesInvoice,
+        "select_related_fields": 	('by', 'owner'),
+        "prefetch_related_fields":	('s_invoice_items__item', 's_invoice_items__repository'),
+    }
+	
 	serializer_class = InvoiceSerializer
 	adjust_stock_sign = -1
 	items_relation_name = 's_invoice_items'
 
 
+
 class ReturnListCreateView(AbstractInvoiceListCreateView):
-	queryset = ReturnInvoice.active_objects.select_related(
-		'by', 
-		'owner', 
-		'original_invoice'
-	).prefetch_related(
-		's_invoice_items__item', 
-		's_invoice_items__repository'
-	)
+	CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					ReturnInvoice,
+        "select_related_fields": 	('by', 'owner', 'original_invoice'),
+        "prefetch_related_fields":	('s_invoice_items__item', 's_invoice_items__repository'),
+    }
+
 	serializer_class = ReturnInvoiceSerializer
 	adjust_stock_sign = 1
 	items_relation_name = 's_invoice_items'
@@ -109,11 +109,12 @@ class RefundDetailView(
 	mixins.RetrieveModelMixin,
 	generics.GenericAPIView
 ):
-	queryset = ReturnInvoice.active_objects.select_related(
-		'by', 
-		'owner', 
-		'original_invoice'
-	).all()
+	CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					ReturnInvoice,
+        "select_related_fields": 	('by', 'owner', 'original_invoice'),
+        "prefetch_related_fields":	('s_invoice_items__item', 's_invoice_items__repository'),
+    }
+
 	serializer_class = ReturnInvoiceSerializer
 
 	def get_object(self):

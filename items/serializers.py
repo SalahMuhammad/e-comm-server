@@ -5,6 +5,7 @@ from items.models import Items, Stock, Barcode, Types, Images,InitialStock, Dama
 from common.services.MultySubModelSerializerHandler import WritableMultipleNestedSubmodelsMixin
 from items.services.__add_price_log_record import add_price_log_record
 from common.services.DynamicFileValidator import DynamicFileValidator
+from common.views.CustomQuerysetManager import CustomQuerysetManager
 
 
 
@@ -187,7 +188,9 @@ class ItemsSerializer(WritableMultipleNestedSubmodelsMixin, serializers.ModelSer
 
 	def get_item_price_log(self, obj):
 		# Pull active logs specifically for this item instance
-		active_logs = obj.item_price_log.model.active_objects.filter(item=obj)
+		manager_name = CustomQuerysetManager().get_manager_name()
+		x = getattr(obj.item_price_log.model, manager_name)
+		active_logs = x.filter(item=obj)
 		return PriceLogSerializer(active_logs, many=True, context=self.context).data
 
 

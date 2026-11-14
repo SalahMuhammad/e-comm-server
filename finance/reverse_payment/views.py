@@ -1,5 +1,6 @@
 from django.http import Http404
 from common.encoder import MixedRadixEncoder
+from common.views.CustomQuerysetManager import CustomQuerysetManager
 # django filters
 from django_filters.rest_framework import DjangoFilterBackend
 #
@@ -9,25 +10,18 @@ from .services.filters import ReversePaymentFilter
 # models
 from .models import ReversePayment2
 # 
-from rest_framework import mixins
-from rest_framework.generics import GenericAPIView
+from rest_framework import generics
 from rest_framework.response import Response
 
 
 
-class ListCreateView(
-	mixins.ListModelMixin,
-	mixins.CreateModelMixin,
-	GenericAPIView,
-):
-	queryset = ReversePayment2.active_objects.select_related(
-		'owner',
-		'created_by',
-		'last_updated_by',
-		'business_account',
-		'business_account__account_type',
-		'purchase'
-	).all()
+class ListCreateView(CustomQuerysetManager, generics.ListCreateAPIView, ):
+	CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					ReversePayment2,
+        "select_related_fields": 	('owner', 'created_by', 'last_updated_by', 'business_account', 'business_account__account_type', 'purchase', ),
+        "prefetch_related_fields":	(),
+    }
+
 	serializer_class = ReversePaymentSerializer
 	# Adding filtering backends
 	filter_backends = [DjangoFilterBackend]
@@ -54,20 +48,13 @@ class ListCreateView(
 
 
 
-class DetailView(
-	mixins.RetrieveModelMixin, 
-	mixins.UpdateModelMixin,
-	mixins.DestroyModelMixin,
-	GenericAPIView
-):
-	queryset = ReversePayment2.active_objects.select_related(
-		'owner',
-		'created_by',
-		'last_updated_by',
-		'business_account',
-		'business_account__account_type',
-		'purchase'
-	).all()
+class DetailView(CustomQuerysetManager, generics.RetrieveUpdateDestroyAPIView, ):
+	CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					ReversePayment2,
+        "select_related_fields": 	('owner', 'created_by', 'last_updated_by', 'business_account', 'business_account__account_type', 'purchase', ),
+        "prefetch_related_fields":	(),
+    }
+
 	serializer_class = ReversePaymentSerializer
 
 

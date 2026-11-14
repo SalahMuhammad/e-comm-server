@@ -10,6 +10,10 @@ from finance.transfer.models import MoneyTransfer
 from django.db.models import Q
 # exceptions
 from rest_framework.exceptions import ValidationError
+from common.views.CustomQuerysetManager import CustomQuerysetManager
+
+
+CQM = CustomQuerysetManager()
 
 
 
@@ -64,33 +68,33 @@ class AccountBalance():
 
 		# payments
 		total = self._to_decimal(
-			Payment2.active_objects.select_related('business_account')\
+			CQM.get_manager(Payment2).select_related('business_account')\
 			.filter(payment_types_filter)\
 			.aggregate(total=Sum('amount'))['total'] or '0'
 		)
 
 		# reverse payments
 		total -= self._to_decimal(
-			ReversePayment2.active_objects.select_related('business_account')\
+			CQM.get_manager(ReversePayment2).select_related('business_account')\
 			.filter(payment_types_filter)\
 			.aggregate(total=Sum('amount'))['total'] or '0'
 		)
 
 		# expensees
 		total -= self._to_decimal(
-			Expense.active_objects.select_related('business_account')\
+			CQM.get_manager(Expense).select_related('business_account')\
 			.filter(payment_types_filter)\
 			.aggregate(total=Sum('amount'))['total'] or '0'
 		)
 
 		total += self._to_decimal(
-			MoneyTransfer.active_objects\
+			CQM.get_manager(MoneyTransfer)\
 			.filter(self._get_filters(is_for_transfer_in=True))\
 			.aggregate(total=Sum('amount'))['total'] or '0'
 		)
 
 		total -= self._to_decimal(
-			MoneyTransfer.active_objects\
+			CQM.get_manager(MoneyTransfer)\
 			.filter(self._get_filters(is_for_transfer_out=True))\
 			.aggregate(total=Sum('amount'))['total'] or '0'
 		)

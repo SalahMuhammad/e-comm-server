@@ -6,13 +6,13 @@ from invoices.purchase.utilities import update_items_prices
 from common.utilities import set_request_items_totals, insert_invoice_items, adjust_stock
 from django.db import transaction
 from common.encoder import MixedRadixEncoder
+from .CustomQuerysetManager import CustomQuerysetManager
 
 
 
 class AbstractInvoiceListCreateView(
-	mixins.ListModelMixin, 
-	mixins.CreateModelMixin,
-	generics.GenericAPIView
+	CustomQuerysetManager,
+	generics.ListCreateAPIView,
 ):
 	# def get_serializer(self, *args, **kwargs):
 	# 	kwargs['fieldss'] = self.request.query_params.get('fields', None)
@@ -46,10 +46,8 @@ class AbstractInvoiceListCreateView(
 
 
 class AbstractInvoiceDetailView(
-	mixins.RetrieveModelMixin,
-	mixins.UpdateModelMixin,
-	mixins.DestroyModelMixin,
-	generics.GenericAPIView
+	CustomQuerysetManager,
+	generics.RetrieveUpdateDestroyAPIView
 ):
 
 	def get_object(self):

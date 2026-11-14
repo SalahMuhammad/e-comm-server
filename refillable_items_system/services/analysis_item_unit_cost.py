@@ -6,6 +6,11 @@ from refillable_items_system.models import (
 from items.models import ItemPriceLog
 from decimal import Decimal
 from django.db.models import Q
+from common.views.CustomQuerysetManager import CustomQuerysetManager
+
+
+CQM = CustomQuerysetManager()
+
 
 
 class RefillableItemPriceCalculator:
@@ -30,7 +35,7 @@ class RefillableItemPriceCalculator:
         Returns:
             Decimal: The price of the item at that date, or item.price1 if no log found
         """
-        price_log = ItemPriceLog.active_objects.filter(
+        price_log = CQM.get_manager(ItemPriceLog).filter(
             item=item,
             date__lte=transaction_date
         ).order_by('-date').first()

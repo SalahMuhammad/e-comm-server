@@ -1,6 +1,7 @@
 from django.http import Http404, JsonResponse
 from django.contrib.admin.views.decorators import staff_member_required
 from common.encoder import MixedRadixEncoder
+from common.views.CustomQuerysetManager import CustomQuerysetManager
 # django filters
 from django_filters.rest_framework import DjangoFilterBackend
 # 
@@ -12,32 +13,28 @@ from finance.payment.models import Payment2
 from invoices.sales.models import SalesInvoice
 # 
 from rest_framework import mixins
-from rest_framework.generics import GenericAPIView
+from rest_framework import generics
 from rest_framework.response import Response
+
+CQM = CustomQuerysetManager()
 
 
 
 @staff_member_required
 def get_sales_for_owner(request):
 	owner_id = request.GET.get('owner_id')
-	sales = SalesInvoice.active_objects.filter(owner_id=owner_id).values('id', 'reference', 'total_amount')
+	sales = CQM.get_manager(SalesInvoice).filter(owner_id=owner_id).values('id', 'reference', 'total_amount')
 	return JsonResponse(list(sales), safe=False)
 
 
 
-class ListCreateView(
-	mixins.ListModelMixin,
-	mixins.CreateModelMixin,
-	GenericAPIView,
-):
-	queryset = Payment2.active_objects.select_related(
-		'owner',
-		'created_by',
-		'last_updated_by',
-		'business_account',
-		'business_account__account_type',
-		'sale'
-	).all()
+class ListCreateView(CustomQuerysetManager, generics.ListCreateAPIView, ):
+	CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					Payment2,
+        "select_related_fields": 	('owner', 'created_by', 'last_updated_by', 'business_account', 'business_account__account_type', 'sale', ),
+        "prefetch_related_fields":	(),
+    }
+ 
 	serializer_class = PaymentSerializer
 	# Adding filtering backends
 	filter_backends = [DjangoFilterBackend]
@@ -65,20 +62,13 @@ class ListCreateView(
 
 
 
-class DetailView(
-	mixins.RetrieveModelMixin, 
-	mixins.UpdateModelMixin,
-	mixins.DestroyModelMixin,
-	GenericAPIView
-):
-	queryset = Payment2.active_objects.select_related(
-		'owner',
-		'created_by',
-		'last_updated_by',
-		'business_account',
-		'business_account__account_type',
-		'sale'
-	).all()
+class DetailView(CustomQuerysetManager, generics.RetrieveUpdateDestroyAPIView):
+	CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					Payment2,
+        "select_related_fields": 	('owner', 'created_by', 'last_updated_by', 'business_account', 'business_account__account_type', 'sale', ),
+        "prefetch_related_fields":	(),
+    }
+	
 	serializer_class = PaymentSerializer
 
 

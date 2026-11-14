@@ -11,6 +11,11 @@ from datetime import datetime, timedelta
 from refillable_items_system.models import RefilledItem
 from refillable_items_system.services.analysis_item_unit_cost import RefillableItemPriceCalculator
 import csv
+from common.views.CustomQuerysetManager import CustomQuerysetManager
+
+manager_name = CustomQuerysetManager().get_manager_name()
+def get_manager(obj): return getattr(obj, manager_name)
+
 
 
 class Command(BaseCommand):
@@ -71,7 +76,7 @@ class Command(BaseCommand):
             )
 
         # Get refilled items
-        queryset = RefilledItem.active_objects.select_related(
+        queryset = get_manager(RefilledItem).select_related(
             'refilled_item',
             'used_item',
             'used_item__item',

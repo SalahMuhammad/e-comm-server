@@ -11,7 +11,6 @@ from rest_framework.mixins import (
 )
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import RefundedRefillableItemFilter, RefilledItemFilter
-from rest_framework.permissions import AllowAny
 # 
 from refillable_items_system.models import ItemTransformer, OreItem, RefundedRefillableItem, RefilledItem
 from invoices.buyer_supplier_party.models import Party
@@ -31,6 +30,10 @@ from django.db.models.deletion import ProtectedError
 from decimal import Decimal
 # 
 import logging
+from common.views.CustomQuerysetManager import CustomQuerysetManager
+
+
+CQM = CustomQuerysetManager()
 
 logger = logging.getLogger(__name__)
 
@@ -167,7 +170,7 @@ class AnalysisItemUnitCostView(APIView):
         if date_to:
             filters['date__lte'] = date_to
 
-        date = RefilledItem.active_objects.select_related(
+        date = CQM.get_manager(RefilledItem).select_related(
             'used_item__item',
             'refilled_item',
         ).prefetch_related(
@@ -190,7 +193,7 @@ class ListCreateRefundedRefillableItemsView(
     generics.GenericAPIView
 ):
     serializer_class = RefundedRefillableItemSerializer
-    queryset = RefundedRefillableItem.active_objects.select_related(
+    queryset = CQM.get_manager(RefundedRefillableItem).select_related(
         'item',
         'repository',
         'owner',
@@ -228,7 +231,7 @@ class DetialRefundedRefillableItemsView(
     DestroyModelMixin,
     generics.GenericAPIView
 ):
-    queryset = RefundedRefillableItem.active_objects.select_related(
+    queryset = CQM.get_manager(RefundedRefillableItem).select_related(
         'item',
         'repository',
         'owner',
@@ -265,7 +268,7 @@ class ListCreateRefilledItemsView(
     CreateModelMixin,
     generics.GenericAPIView
 ):
-    queryset = RefilledItem.active_objects.select_related(
+    queryset = CQM.get_manager(RefilledItem).select_related(
         'refilled_item',
         'used_item__item',
         'repository',
@@ -319,7 +322,7 @@ class DetialRefilledItemsView(
     DestroyModelMixin,
     generics.GenericAPIView
 ):
-    queryset = RefilledItem.active_objects.select_related(
+    queryset = CQM.get_manager(RefilledItem).select_related(
         'refilled_item',
         'used_item__item',
         'repository',

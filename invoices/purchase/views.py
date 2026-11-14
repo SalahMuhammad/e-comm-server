@@ -37,13 +37,12 @@ def toggle_repository_permit(request, *args, **kwargs):
 	})
 
 class ListCreateView(AbstractInvoiceListCreateView):
-	queryset = PurchaseInvoices.active_objects.select_related(
-		'by', 
-		'owner', 
-	).prefetch_related(
-		'p_invoice_items__item', 
-		'p_invoice_items__repository'
-	)
+	CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					PurchaseInvoices,
+        "select_related_fields": 	('by', 'owner', ),
+        "prefetch_related_fields":	('p_invoice_items__item', 'p_invoice_items__repository', ),
+    }
+
 	serializer_class = InvoiceSerializer
 	adjust_stock_sign = 1
 	items_relation_name = 'p_invoice_items'
@@ -53,13 +52,12 @@ class ListCreateView(AbstractInvoiceListCreateView):
 
 
 class DetailView(AbstractInvoiceDetailView):
-	queryset = PurchaseInvoices.active_objects.select_related(
-		'by', 
-		'owner', 
-	).prefetch_related(
-		'p_invoice_items__item', 
-		'p_invoice_items__repository'
-	)
+	CUSTOME_QUERYSET_MANAGER_CONFIG = {
+        "model": 					PurchaseInvoices,
+        "select_related_fields": 	('by', 'owner', ),
+        "prefetch_related_fields":	('p_invoice_items__item', 'p_invoice_items__repository', ),
+    }
+
 	serializer_class = InvoiceSerializer
 	adjust_stock_sign = 1
 	items_relation_name = 'p_invoice_items'
