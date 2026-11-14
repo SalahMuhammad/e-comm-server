@@ -4,6 +4,7 @@ from datetime import datetime
 from pathlib import Path
 from django.forms.models import model_to_dict
 from django.urls import resolve
+from django.conf import settings
 
 
 
@@ -172,6 +173,9 @@ class RequestLogMiddleware:
             pass
 
     def __call__(self, request):
+        if not settings.CONFIGJSON['is_active_reqeust_log']:
+            return self.get_response(request)
+
         path = request.path
 
         if path.lower().endswith(self.IGNORED_EXTENSIONS):
