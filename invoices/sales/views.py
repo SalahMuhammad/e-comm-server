@@ -15,7 +15,7 @@ from items.services.validate_items_stock import ValidateItemsStock
 from auth._permissions.CustomeViewsPermission import ConfigurationBasedCustomeViewsPermission
 # 
 from common.encoder import MixedRadixEncoder
-from common.views import AbstractInvoiceDetailView, AbstractInvoiceListCreateView
+from common.views.CommonInvoiceViews import AbstractInvoiceDetailView, AbstractInvoiceListCreateView
 from common.utilities import adjust_stock
 from .serializers import InvoiceSerializer, ReturnInvoiceSerializer
 # django filters

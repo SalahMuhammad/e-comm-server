@@ -6,7 +6,7 @@ from django.db import transaction
 # 
 from .serializers import InvoiceSerializer
 from items.services.validate_items_stock import ValidateItemsStock
-from common.views import AbstractInvoiceDetailView, AbstractInvoiceListCreateView
+from common.views.CommonInvoiceViews import AbstractInvoiceDetailView, AbstractInvoiceListCreateView
 # 
 from rest_framework.decorators import api_view
 # django filters

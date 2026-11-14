@@ -1,47 +1,3 @@
-# from rest_framework import status, mixins, generics
-# from rest_framework.response import Response
-
-
-# class AbstractInvoicesOwnersListCreateView(
-#     mixins.ListModelMixin,
-#     mixins.CreateModelMixin,
-#     generics.GenericAPIView
-# ):
-#     def get_queryset(self):
-#         name_param = self.request.query_params.get('s')
-
-#         if name_param:
-#             q = self.queryset.filter(name__contains=name_param)
-#             return q
-
-#         return self.queryset
-
-#     def get(self, request, *args, **kwargs):
-#         return self.list(request, *args, **kwargs)
-
-#     def post(self, request, *args, **kwargs):
-#         return self.create(request, *args, **kwargs)
-
-
-# class AbstractInvoicesOwnersDetailView(
-#     mixins.RetrieveModelMixin, 
-#     mixins.UpdateModelMixin,
-#     mixins.DestroyModelMixin,
-#     generics.GenericAPIView
-# ):
-#     def get(self, request, *args, **kwargs):
-#         return self.retrieve(request, *args, **kwargs)
-
-#     def put(self, request,*args, **kwargs):
-#         return super().partial_update(request, *args, **kwargs)
-
-#     def delete(self, request, *args, **kwargs):
-#         # try:
-#         return super().destroy(request, *args, **kwargs)
-#         # except ProtectedError as e:
-#         #     return Response({'detail': 'لا يمكن حذف هذا العنصر قبل حذف المعاملات المرتبطه به اولا 😵...'}, status=status.HTTP_400_BAD_REQUEST)
-  
-
 from django.http import Http404
 from rest_framework import mixins, generics
 from rest_framework.response import Response
@@ -49,8 +5,8 @@ from rest_framework import status
 from invoices.purchase.utilities import update_items_prices
 from common.utilities import set_request_items_totals, insert_invoice_items, adjust_stock
 from django.db import transaction
-from django.db.models import Q
 from common.encoder import MixedRadixEncoder
+
 
 
 class AbstractInvoiceListCreateView(
@@ -86,6 +42,8 @@ class AbstractInvoiceListCreateView(
 				update_items_prices(request.data[self.items_relation_name], request.data['by'])
 
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
 
 class AbstractInvoiceDetailView(
 	mixins.RetrieveModelMixin,
