@@ -20,11 +20,15 @@ import os, csv
 from finance.vault_and_methods.services.calculate_owner_credit_balance import calculate_owner_credit_balance, creidt_equation
 from django.shortcuts import get_object_or_404
 from year_closure.models import ClosurePeriod
+from auth._permissions.CustomeViewsPermission import ConfigurationBasedCustomeViewsPermission
 
 
 
 class ItemInventorySummaryAPIView(APIView):
-	def get(self, request):
+	permission_classes = (ConfigurationBasedCustomeViewsPermission, )
+
+
+	def get(self, request, *args, **kwargs):
 		exclude_list_param = request.GET.get('exclude-types')
 		exclude_list_filter = ["spare_parts"]
 		if exclude_list_param is not None:
