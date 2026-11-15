@@ -31,6 +31,7 @@ class RefillableItemsInitialStockClientHas(UpdatedCreatedBy, YearClosureUtilClas
     owner = models.ForeignKey(Party, related_name='refillable_initial_stock', on_delete=models.CASCADE)
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
+    year_closure = models.ForeignKey('year_closure.ClosurePeriod', on_delete=models.CASCADE, null=True, related_name="ycriisch")
 
     def clean(self):
         # Call the parent class's clean method
