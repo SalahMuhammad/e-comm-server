@@ -1,0 +1,18 @@
+{
+    "name": "abc",
+    "logo": "/media/logo/02.png",
+    "description": "GENERAL TRADING L.L.C",
+    "address": "abc, xyz, 2",
+    "addressDetails": "20 Block 2, ",
+    "websitee": "www.abc.com",
+    "contact": {
+        "emails": [
+		    "info@abc-corp.com"
+        ],
+        "phonee": "321111",
+        "mobiles": [
+            "+20 312324",
+            "+20 654654"
+        ]
+    }
+}
