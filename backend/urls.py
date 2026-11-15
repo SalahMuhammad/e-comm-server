@@ -69,6 +69,8 @@ urlpatterns += [
 
 
     path('api/reports/', include('reports.urls')),
+
+    path('api/year-closure/', include('year_closure.urls')),
     
     
     path('__debug__/', include('debug_toolbar.urls')),
