@@ -61,6 +61,7 @@ class ConfigurationRetrieveUpdateAPIView(RetrieveUpdateAPIView):
                         "refillableItems_refundableItemsClientHas": ["استنفار"],
                         "refillableItems_itemUnitCost": ["استنفار"],
                         "services_configuration": [],
+                        "inventory_summary": [],
                     },
                     "serializers": {
                         "hideFields": {

@@ -6,9 +6,9 @@ from services.my_views.ItemInventorySummaryAPIViewFromCSV.InventorySummaryAPIVie
 
 
 urlpatterns = [
-    path('inventory-summary/', ItemInventorySummaryAPIView.as_view(), name='inventory-summary'),
-    path('inventory-summary-from-csvs/', InventorySummaryAPIView.as_view(), name='inventory-summary'),
-    path('inventory/detailed/<path:safe_item_name>/', InventoryDetailAPIView.as_view(), name='inventory-detail-api'),
+    path('inventory-summary/', ItemInventorySummaryAPIView.as_view(), {'___view_id': 'inventory_summary'}, name='inventory-summary'),
+    # path('inventory-summary-from-csvs/', InventorySummaryAPIView.as_view(), name='inventory-summary'),
+    # path('inventory/detailed/<path:safe_item_name>/', InventoryDetailAPIView.as_view(), name='inventory-detail-api'),
 
 	path('media-browser/', MediaBrowser().as_view()),
     path('create-db-backup/', CreateDbBackup().as_view()),
