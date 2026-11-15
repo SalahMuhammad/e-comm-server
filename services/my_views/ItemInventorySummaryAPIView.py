@@ -25,28 +25,17 @@ from year_closure.models import ClosurePeriod
 
 class ItemInventorySummaryAPIView(APIView):
 	def get(self, request):
-		# Option to filter by repository_permit (True, False, or None/All)
-		permit_param = request.GET.get('repository-permit')
-		permit_filter = None
-		if permit_param is not None:
-			permit_filter = permit_param.lower() in ['true', '1', 'yes']
-
-		exclude_list_param = request.GET.get('repository-permit')
+		exclude_list_param = request.GET.get('exclude-types')
 		exclude_list_filter = ["spare_parts"]
-		if permit_param is not None:
+		if exclude_list_param is not None:
 			exclude_list_filter = exclude_list_param.lower().split(',')
 
 		order_by = request.GET.get('order-by')
 		order_by_sort = ["name", "-id"]
-		if permit_param is not None:
+		if order_by is not None:
 			order_by_sort = order_by.lower().split(',')
 
 		period_instance = get_object_or_404(ClosurePeriod, pk=request.GET.get('instance_id'))
-
-		# permit_param = request.GET.get('repository_permit')
-		# permit_filter = None
-		# if permit_param is not None:
-		#     permit_filter = permit_param.lower() in ['true', '1', 'yes']
 
 		items = Items.objects.exclude(type__name__in=exclude_list_filter).order_by(*order_by_sort)
 		repositories = Repositories.objects.all()
@@ -83,9 +72,9 @@ class ItemInventorySummaryAPIView(APIView):
 		refilled_refillable_items_details   = row_dataset(RefilledItem, start_date, end_date, "refilled_quantity", ("refilled_item_id", "repository_id", ))
 		used_refillable_items_details       = row_dataset(RefilledItem, start_date, end_date, "used_quantity", ("used_item_id", "repository_id", ))
 		# invoice based(multiple rows)
-		purchased_items_details             = invoice_dataset(PurchaseInvoiceItems, permit_filter, start_date, end_date)
-		sold_items_details                  = invoice_dataset(SalesInvoiceItem, permit_filter, start_date, end_date)
-		sold_refund_items_details           = invoice_dataset(ReturnInvoiceItem, permit_filter, start_date, end_date)
+		purchased_items_details             = invoice_dataset(PurchaseInvoiceItems, None, start_date, end_date)
+		sold_items_details                  = invoice_dataset(SalesInvoiceItem, None, start_date, end_date)
+		sold_refund_items_details           = invoice_dataset(ReturnInvoiceItem, None, start_date, end_date)
 
 		sales_items_datatset = sold_refund_items(SalesInvoiceItem, start_date, end_date)
 		sales_refund_items_dataset = sold_refund_items(ReturnInvoiceItem, start_date, end_date)
