@@ -11,4 +11,4 @@ class Repositories(UpdatedCreatedBy):
 
 
     class Meta:
-        ordering = ['name']
+        ordering = ['id']
