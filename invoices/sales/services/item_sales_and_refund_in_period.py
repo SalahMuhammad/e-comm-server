@@ -2,6 +2,10 @@ from invoices.sales.models import SalesInvoiceItem, ReturnInvoiceItem
 from django.db.models import Sum
 from decimal import Decimal
 from rest_framework.response import Response
+from common.views.CustomQuerysetManager import CustomQuerysetManager
+
+
+CQM = CustomQuerysetManager()
 
 
 
@@ -34,7 +38,7 @@ def get_sold_and_refund_items_totals_withen_period(date_from, date_to):
         return {"invoice__date__gte": date_from, "invoice__date__lte": date_to}
 
     # aggregate sales
-    sold_qs = SalesInvoiceItem.active_objects.filter(**date_filter_kwargs(SalesInvoiceItem))
+    sold_qs = CQM.get_manager(SalesInvoiceItem).filter(**date_filter_kwargs(SalesInvoiceItem))
     sold_values = sold_qs.values(
         "item_id", 
         "item__id", 
@@ -46,7 +50,7 @@ def get_sold_and_refund_items_totals_withen_period(date_from, date_to):
     )
 
     # aggregate returns
-    return_qs = ReturnInvoiceItem.active_objects.filter(**date_filter_kwargs(ReturnInvoiceItem))
+    return_qs = CQM.get_manager(ReturnInvoiceItem).filter(**date_filter_kwargs(ReturnInvoiceItem))
     return_values = return_qs.values(
         "item_id", 
         "item__id", 
