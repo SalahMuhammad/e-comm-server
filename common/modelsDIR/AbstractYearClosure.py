@@ -171,6 +171,23 @@ class _SpecificPeriodManager(models.Manager):
 
 
 
+class _AllManager(models.Manager):
+	def get_queryset(self):
+		return MyQuerySet(self.model, using=self._db)
+
+	def optimized(self, select_fields=None, prefetch_fields=None, use_select=True, use_prefetch=True):
+		return self.get_queryset().optimized(
+			select_fields=select_fields, 
+			prefetch_fields=prefetch_fields, 
+			use_select=use_select, 
+			use_prefetch=use_prefetch
+		)
+
+	def date_range(self, start_date, end_date, field_name='date'):
+		return self.get_queryset().date_range(start_date, end_date, field_name)
+
+
+
 def _check_if_period_is_locked(model, action='create'):
 	"""
 	Checks if a record's date falls within a locked closure period.
@@ -216,7 +233,7 @@ def _key_name_lookup(instance):
 
 
 class YearClosureUtilClass(models.Model):
-	objects             = models.Manager()
+	objects             = _AllManager()
 	specific_objects    = _SpecificPeriodManager()
 	active_objects      = _ActiveManager()
 
