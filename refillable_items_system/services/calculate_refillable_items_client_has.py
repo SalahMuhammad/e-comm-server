@@ -65,7 +65,7 @@ def calculateRefillableItemsClientHas(client_id):
 
 def get_refillable_items_totals(model, client_id, item_ids):
     """Get totals for refillable items - returns aggregated results."""
-    return CQM.get_manager(model).filter(
+    return model.objects.filter(
         owner_id=client_id,
         item_id__in=item_ids
     ).values(
@@ -83,7 +83,7 @@ def get_sales_refillable_items_totals(model, client_id, empty_item_ids=None, fil
     
     is_empty_items = True if empty_item_ids else False
 
-    return CQM.get_manager(model).filter(
+    return model.objects.filter(
         invoice__owner_id=client_id,
         invoice__repository_permit=True,
         item_id__in=empty_item_ids if is_empty_items else filled_item_ids
