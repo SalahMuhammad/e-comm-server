@@ -1,8 +1,11 @@
-from invoices.sales.models import ReturnInvoiceItem as SalesRefundItem, ReturnInvoice, SalesInvoiceItem, SalesInvoice
-from items.models import DamagedItems, Items
+from invoices.sales.models import ReturnInvoiceItem as SalesRefundItem, SalesInvoiceItem
+from items.models import DamagedItems
 from refillable_items_system.models import ItemTransformer, RefillableItemsInitialStockClientHas, RefundedRefillableItem
+from common.views.CustomQuerysetManager import CustomQuerysetManager
 # 
 from django.db.models import Sum, Q, F, Case, When, F, IntegerField
+
+CQM = CustomQuerysetManager()
 
 
 def calculateRefillableItemsClientHas(client_id):
@@ -62,7 +65,7 @@ def calculateRefillableItemsClientHas(client_id):
 
 def get_refillable_items_totals(model, client_id, item_ids):
     """Get totals for refillable items - returns aggregated results."""
-    return model.objects.filter(
+    return CQM.get_manager(model).filter(
         owner_id=client_id,
         item_id__in=item_ids
     ).values(
@@ -80,7 +83,7 @@ def get_sales_refillable_items_totals(model, client_id, empty_item_ids=None, fil
     
     is_empty_items = True if empty_item_ids else False
 
-    return model.objects.filter(
+    return CQM.get_manager(model).filter(
         invoice__owner_id=client_id,
         invoice__repository_permit=True,
         item_id__in=empty_item_ids if is_empty_items else filled_item_ids
