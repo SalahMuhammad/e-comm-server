@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
-import os
+import os, json
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -95,6 +95,9 @@ INSTALLED_APPS = [
 
     'debug_toolbar',
     'services.apps.ServicesConfig',
+
+    # 
+    'year_closure.apps.YearClosureConfig',
 ]
 
 #################################
@@ -312,3 +315,19 @@ APPEND_SLASH = False
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+
+# ########### load year closure settings from media/config.json ########
+
+CONFIG_FILE_PATH = BASE_DIR / 'media/config.json'
+
+if CONFIG_FILE_PATH.exists():
+    with open(CONFIG_FILE_PATH, 'r', encoding='utf-8') as f:
+        json_data = json.load(f)
+else:
+    json_data = {}
+
+CONFIGJSON                  = json_data
+YEAR_COLSEURE_SETTINGS      = CONFIGJSON.get("year_closeure_settings", None).get("fetch", None)
+ACTIVE_ONLY                 = YEAR_COLSEURE_SETTINGS['active_only']
+CLOSEURE_PERIOD_INSTANCE_ID = YEAR_COLSEURE_SETTINGS['period_instance_id']
